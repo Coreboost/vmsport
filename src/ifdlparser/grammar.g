@@ -3,8 +3,8 @@ import df_classes
 stack = []
 
 def push(item):
-  if len(stack) > 0
-    stack.tail().add_child(item)
+  if len(stack) > 0:
+    stack[-1].add_child(item)
   stack.append(item)
 
 def pop():
@@ -27,17 +27,17 @@ parser IFDL:
     token LAYOUT:         "LAYOUT"
     token END_LAYOUT:     "END[ \t]+LAYOUT"
 
-    rule form_declaration:        FORM NAME {{ push(Form(NAME)) }}
+    rule form_declaration:        FORM NAME {{ push(df_classes.Form(NAME)) }}
                                     form_data_declaration*
                                     form_record_declaration*
                                     layout_declaration*
                                   END_FORM {{ pop() }}
 
-    rule form_data_declaration:   FORM_DATA {{ push(Form_data()) }}
+    rule form_data_declaration:   FORM_DATA {{ push(df_classes.Form_data()) }}
                                   END_DATA {{ pop() }}
 
-    rule form_record_declaration: FORM_RECORD NAME {{ push(Form_record(NAME)) }}
+    rule form_record_declaration: FORM_RECORD NAME {{ push(df_classes.Form_record(NAME)) }}
                                   END_RECORD {{ pop() }}
 
-    rule layout_declaration:      LAYOUT NAME {{ push(Layout(NAME)) }}
+    rule layout_declaration:      LAYOUT NAME {{ push(df_classes.Layout(NAME)) }}
                                   END_LAYOUT {{ pop() }}
