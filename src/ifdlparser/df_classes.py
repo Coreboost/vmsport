@@ -128,17 +128,28 @@ class Integer_data(NamedSymbol):
             suffix = " PACKED"
         print self.name + " INTEGER(" + self.length + ")" + suffix
 
-class Decimal(Symbol):
+class Decimal_data(NamedSymbol):
+    def __init__(self, name, whole_places, dec_places, packed):
+        NamedSymbol.__init__(self, name)
+        self.whole_places = whole_places
+        self.dec_places = dec_places
+        self.packed = packed
     def generate(self):
-        print "DECIMAL"
+        suffix = ""
+        if (self.packed):
+            suffix = " PACKED"
+        print self.name + " DECIMAL(" + self.whole_places + ", " + self.dec_places + ")" + suffix
 
-class Float(Symbol):
+class Float_data(NamedSymbol):
+    def __init__(self, name, base_places, exponent_places):
+        NamedSymbol.__init__(self, name)
+        self.base_places = base_places
+        self.exponent_places = exponent_places
     def generate(self):
-        print "FLOAT"
-
-class Packed(Symbol):
-    def generate(self):
-        print "PACKED"
+        exp_part = ""
+        if (self.exponent_places != -1):
+            exp_part = ", " + self.exponent_places
+        print self.name + " FLOAT(" + self.base_places + exp_part + ")"
 
 class Adt(Symbol):
     def generate(self):

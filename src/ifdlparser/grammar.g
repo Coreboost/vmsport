@@ -82,8 +82,8 @@ parser IFDL:
 
     rule text_data_clause<<NM>>:      CHARACTER "\(" INTEGER_LITERAL "\)" [ NULL_TERMINATED | VARYING ] {{push(df_classes.Character_data(NM, INTEGER_LITERAL, "VARYING" in locals(), "NULL_TERMINATED" in locals())); pop()}} |
                                       INTEGER "\(" INTEGER_LITERAL "\)" [PACKED] {{push(df_classes.Integer_data(NM, INTEGER_LITERAL, "PACKED" in locals())); pop()}}|
-                                      DECIMAL {{push(df_classes.Decimal()); pop()}} "\(" INTEGER_LITERAL {{push(df_classes.Integer_literal(INTEGER_LITERAL)); pop()}} "," INTEGER_LITERAL {{push(df_classes.Integer_literal(INTEGER_LITERAL)); pop()}} "\)" [PACKED {{push(df_classes.Packed()); pop()}}] |
-                                      FLOAT {{push(df_classes.Float()); pop()}} "\(" INTEGER_LITERAL {{push(df_classes.Integer_literal(INTEGER_LITERAL)); pop()}} ["," INTEGER_LITERAL {{push(df_classes.Integer_literal(INTEGER_LITERAL)); pop()}} ] "\)"
+                                      DECIMAL "\(" INTEGER_LITERAL {{ integer_3 = INTEGER_LITERAL}} "," INTEGER_LITERAL {{ integer_4 = INTEGER_LITERAL}} "\)" [PACKED] {{push(df_classes.Decimal_data(NM, integer_3, integer_4, "PACKED" in locals())); pop()}} |
+                                      FLOAT "\(" INTEGER_LITERAL {{ integer_5 = INTEGER_LITERAL; integer_6 = -1}} ["," INTEGER_LITERAL {{integer_6 = INTEGER_LITERAL}} ] "\)" {{push(df_classes.Float_data(NM, integer_5, integer_6)); pop()}}
 
     rule atomic_clause<<NM>>:         BYTE_INTEGER {{push(df_classes.Byte_integer()); pop()}} |
                                       DFLOATING {{push(df_classes.Dfloating()); pop()}} |

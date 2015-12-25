@@ -1,5 +1,8 @@
 FORM FOO
   Form Data
+    FOO Decimal(7, 4)
+    BAR Float(7)
+    SPAM Float(28, 3)
     EMPLOYEE_NAME Character(32)
     BADGE_NUMBER Integer(6) PACKED
     COST_CENTER Character(3)
