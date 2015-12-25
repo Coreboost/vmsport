@@ -1,10 +1,10 @@
 FORM FOO
   Form Data
     EMPLOYEE_NAME Character(32)
-    BADGE_NUMBER Integer(6)
+    BADGE_NUMBER Integer(6) PACKED
     COST_CENTER Character(3)
     ADDRESS Character(120)
-    REASON Character(64) NULL TERMInated
+    REASON Character(64) VARYING
     N Unsigned Longword
     BLANK_DATE Datetime(8)
     TOTAL_MILES Longword Integer

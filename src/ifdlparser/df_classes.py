@@ -103,8 +103,9 @@ class Xfloating(Symbol):
     def generate(self):
         print "XFLOATING"
 
-class Character_data(Symbol):
-    def __init__(self, length, varying, null_terminated):
+class Character_data(NamedSymbol):
+    def __init__(self, name, length, varying, null_terminated):
+        NamedSymbol.__init__(self, name)
         self.length = length
         self.varying = varying
         self.null_terminated = null_terminated
@@ -114,11 +115,18 @@ class Character_data(Symbol):
             suffix = " VARYING"
         if (self.null_terminated):
             suffix = " NULL TERMINATED"
-        print "CHARACTER(" + self.length + ")" + suffix
+        print self.name + " CHARACTER(" + self.length + ")" + suffix
 
-class Integer(Symbol):
+class Integer_data(NamedSymbol):
+    def __init__(self, name, length, packed):
+        NamedSymbol.__init__(self, name)
+        self.length = length
+        self.packed = packed
     def generate(self):
-        print "INTEGER"
+        suffix = ""
+        if (self.packed):
+            suffix = " PACKED"
+        print self.name + " INTEGER(" + self.length + ")" + suffix
 
 class Decimal(Symbol):
     def generate(self):

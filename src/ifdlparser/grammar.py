@@ -26,7 +26,6 @@ class IFDLScanner(runtime.Scanner):
         ('[ \r\t\n]+', re.compile('[ \r\t\n]+')),
         ('FORM', re.compile('(?i)FORM')),
         ('END_FORM', re.compile('(?i)END[ \t]+FORM')),
-        ('NAME', re.compile('\\w+')),
         ('FORM_DATA', re.compile('(?i)FORM[ \t]+DATA')),
         ('END_DATA', re.compile('(?i)END[ \t]+DATA')),
         ('FORM_RECORD', re.compile('(?i)FORM[ \t]+RECORD')),
@@ -68,6 +67,7 @@ class IFDLScanner(runtime.Scanner):
         ('DECIMAL_LITERAL', re.compile('\\d*\\.\\d+(E\\d+)?')),
         ('DATETIME_LITERAL', re.compile('\\d+')),
         ('TEXT_LITERAL', re.compile('"[^"\r\n]|"""|\'[^\'\r\n]|\'\'\'')),
+        ('NAME', re.compile('\\w+')),
     ]
     def __init__(self, str,*args,**kw):
         runtime.Scanner.__init__(self,None,{'[ \r\t\n]+':None,},str,*args,**kw)
@@ -114,11 +114,11 @@ class IFDL(runtime.Parser):
         NAME = self._scan('NAME', context=_context)
         _token = self._peek('CHARACTER', 'INTEGER', 'DECIMAL', 'FLOAT', 'BYTE_INTEGER', 'DFLOATING', 'FFLOATING', 'GFLOATING', 'HFLOATING', 'LONG_FLOAT', 'LONGWORD_INTEGER', 'QUADWORD_INTEGER', 'SFLOATING', 'SHORT_FLOAT', 'TFLOATING', 'UNSIGNED_BYTE', 'UNSIGNED_LONGWORD', 'UNSIGNED_WORD', 'WORD_INTEGER', 'XFLOATING', 'ADT', 'DATE', 'TIME', 'DATETIME', context=_context)
         if _token in ['CHARACTER', 'INTEGER', 'DECIMAL', 'FLOAT']:
-            text_data_clause = self.text_data_clause(_context)
+            text_data_clause = self.text_data_clause(NAME, _context)
         elif _token not in ['ADT', 'DATE', 'TIME', 'DATETIME']:
-            atomic_clause = self.atomic_clause(_context)
+            atomic_clause = self.atomic_clause(NAME, _context)
         else: # in ['ADT', 'DATE', 'TIME', 'DATETIME']
-            datetime_data_clause = self.datetime_data_clause(_context)
+            datetime_data_clause = self.datetime_data_clause(NAME, _context)
         if self._peek('VALUE', 'END_DATA', 'NAME', context=_context) == 'VALUE':
             VALUE = self._scan('VALUE', context=_context)
             literal = self.literal(_context)
@@ -135,8 +135,8 @@ class IFDL(runtime.Parser):
         else: # == 'TEXT_LITERAL'
             TEXT_LITERAL = self._scan('TEXT_LITERAL', context=_context)
 
-    def text_data_clause(self, _parent=None):
-        _context = self.Context(_parent, self._scanner, 'text_data_clause', [])
+    def text_data_clause(self, NM, _parent=None):
+        _context = self.Context(_parent, self._scanner, 'text_data_clause', [NM])
         _token = self._peek('CHARACTER', 'INTEGER', 'DECIMAL', 'FLOAT', context=_context)
         if _token == 'CHARACTER':
             CHARACTER = self._scan('CHARACTER', context=_context)
@@ -149,17 +149,15 @@ class IFDL(runtime.Parser):
                     NULL_TERMINATED = self._scan('NULL_TERMINATED', context=_context)
                 else: # == 'VARYING'
                     VARYING = self._scan('VARYING', context=_context)
-            push(df_classes.Character_data(INTEGER_LITERAL, "VARYING" in locals(), "NULL_TERMINATED" in locals())); pop()
+            push(df_classes.Character_data(NM, INTEGER_LITERAL, "VARYING" in locals(), "NULL_TERMINATED" in locals())); pop()
         elif _token == 'INTEGER':
             INTEGER = self._scan('INTEGER', context=_context)
-            push(df_classes.Integer()); pop()
             self._scan('"\\("', context=_context)
             INTEGER_LITERAL = self._scan('INTEGER_LITERAL', context=_context)
-            push(df_classes.Integer_literal(INTEGER_LITERAL)); pop()
             self._scan('"\\)"', context=_context)
             if self._peek('PACKED', 'VALUE', 'END_DATA', 'NAME', context=_context) == 'PACKED':
                 PACKED = self._scan('PACKED', context=_context)
-                push(df_classes.Packed()); pop()
+            push(df_classes.Integer_data(NM, INTEGER_LITERAL, "PACKED" in locals())); pop()
         elif _token == 'DECIMAL':
             DECIMAL = self._scan('DECIMAL', context=_context)
             push(df_classes.Decimal()); pop()
@@ -185,8 +183,8 @@ class IFDL(runtime.Parser):
                 push(df_classes.Integer_literal(INTEGER_LITERAL)); pop()
             self._scan('"\\)"', context=_context)
 
-    def atomic_clause(self, _parent=None):
-        _context = self.Context(_parent, self._scanner, 'atomic_clause', [])
+    def atomic_clause(self, NM, _parent=None):
+        _context = self.Context(_parent, self._scanner, 'atomic_clause', [NM])
         _token = self._peek('BYTE_INTEGER', 'DFLOATING', 'FFLOATING', 'GFLOATING', 'HFLOATING', 'LONG_FLOAT', 'LONGWORD_INTEGER', 'QUADWORD_INTEGER', 'SFLOATING', 'SHORT_FLOAT', 'TFLOATING', 'UNSIGNED_BYTE', 'UNSIGNED_LONGWORD', 'UNSIGNED_WORD', 'WORD_INTEGER', 'XFLOATING', context=_context)
         if _token == 'BYTE_INTEGER':
             BYTE_INTEGER = self._scan('BYTE_INTEGER', context=_context)
@@ -237,8 +235,8 @@ class IFDL(runtime.Parser):
             XFLOATING = self._scan('XFLOATING', context=_context)
             push(df_classes.Xfloating()); pop()
 
-    def datetime_data_clause(self, _parent=None):
-        _context = self.Context(_parent, self._scanner, 'datetime_data_clause', [])
+    def datetime_data_clause(self, NM, _parent=None):
+        _context = self.Context(_parent, self._scanner, 'datetime_data_clause', [NM])
         _token = self._peek('ADT', 'DATE', 'TIME', 'DATETIME', context=_context)
         if _token == 'ADT':
             ADT = self._scan('ADT', context=_context)

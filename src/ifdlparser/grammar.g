@@ -19,7 +19,6 @@ parser IFDL:
     ignore: '[ \r\t\n]+'
     token FORM:                 "(?i)FORM"
     token END_FORM:             "(?i)END[ \t]+FORM"
-    token NAME:                 "\\w+"
     token FORM_DATA:            "(?i)FORM[ \t]+DATA"
     token END_DATA:             "(?i)END[ \t]+DATA"
     token FORM_RECORD:          "(?i)FORM[ \t]+RECORD"
@@ -61,6 +60,7 @@ parser IFDL:
     token DECIMAL_LITERAL:      "\d*\.\d+(E\d+)?"
     token DATETIME_LITERAL:     "\d+"
     token TEXT_LITERAL:         "\"[^\"\r\n]|\"\"\"|\'[^\'\r\n]|\'\'\'"
+    token NAME:                 "\\w+"
 
     rule form_declaration:            FORM NAME {{ push(df_classes.Form(NAME)) }}
                                         form_data_declaration*
@@ -76,16 +76,16 @@ parser IFDL:
     rule track_clause_1:              TRACKED {{push(df_classes.Tracked()); pop()}} |
                                       UNTRACKED {{push(df_classes.Untracked()); pop()}}
 
-    rule form_data_item_declaration:  NAME (text_data_clause | atomic_clause | datetime_data_clause) [VALUE literal]
+    rule form_data_item_declaration:  NAME (text_data_clause<<NAME>> | atomic_clause<<NAME>> | datetime_data_clause<<NAME>>) [VALUE literal]
 
     rule literal:                     INTEGER_LITERAL | DECIMAL_LITERAL | DATETIME_LITERAL | TEXT_LITERAL
 
-    rule text_data_clause:            CHARACTER "\(" INTEGER_LITERAL "\)" [ NULL_TERMINATED | VARYING ] {{push(df_classes.Character_data(INTEGER_LITERAL, "VARYING" in locals(), "NULL_TERMINATED" in locals())); pop()}} |
-                                      INTEGER {{push(df_classes.Integer()); pop()}} "\(" INTEGER_LITERAL {{push(df_classes.Integer_literal(INTEGER_LITERAL)); pop()}} "\)" [PACKED {{push(df_classes.Packed()); pop()}}] |
+    rule text_data_clause<<NM>>:      CHARACTER "\(" INTEGER_LITERAL "\)" [ NULL_TERMINATED | VARYING ] {{push(df_classes.Character_data(NM, INTEGER_LITERAL, "VARYING" in locals(), "NULL_TERMINATED" in locals())); pop()}} |
+                                      INTEGER "\(" INTEGER_LITERAL "\)" [PACKED] {{push(df_classes.Integer_data(NM, INTEGER_LITERAL, "PACKED" in locals())); pop()}}|
                                       DECIMAL {{push(df_classes.Decimal()); pop()}} "\(" INTEGER_LITERAL {{push(df_classes.Integer_literal(INTEGER_LITERAL)); pop()}} "," INTEGER_LITERAL {{push(df_classes.Integer_literal(INTEGER_LITERAL)); pop()}} "\)" [PACKED {{push(df_classes.Packed()); pop()}}] |
                                       FLOAT {{push(df_classes.Float()); pop()}} "\(" INTEGER_LITERAL {{push(df_classes.Integer_literal(INTEGER_LITERAL)); pop()}} ["," INTEGER_LITERAL {{push(df_classes.Integer_literal(INTEGER_LITERAL)); pop()}} ] "\)"
 
-    rule atomic_clause:               BYTE_INTEGER {{push(df_classes.Byte_integer()); pop()}} |
+    rule atomic_clause<<NM>>:         BYTE_INTEGER {{push(df_classes.Byte_integer()); pop()}} |
                                       DFLOATING {{push(df_classes.Dfloating()); pop()}} |
                                       FFLOATING {{push(df_classes.Ffloating()); pop()}} |
                                       GFLOATING {{push(df_classes.Gfloating()); pop()}} |
@@ -102,7 +102,7 @@ parser IFDL:
                                       WORD_INTEGER {{push(df_classes.Word_integer()); pop()}} |
                                       XFLOATING {{push(df_classes.Xfloating()); pop()}}
 
-    rule datetime_data_clause:        ADT {{push(df_classes.Adt()); pop()}} [ CURRENT {{push(df_classes.Current()); pop()}} ] |
+    rule datetime_data_clause<<NM>>:  ADT {{push(df_classes.Adt()); pop()}} [ CURRENT {{push(df_classes.Current()); pop()}} ] |
                                       DATE {{push(df_classes.Date()); pop()}} [ CURRENT {{push(df_classes.Current()); pop()}} ] |
                                       TIME {{push(df_classes.Time()); pop()}} [ CURRENT {{push(df_classes.Current()); pop()}} ] |
                                       DATETIME "\(" INTEGER_LITERAL "\)" {{push(df_classes.Datetime(INTEGER_LITERAL)); pop()}}
