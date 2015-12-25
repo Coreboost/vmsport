@@ -1,48 +1,62 @@
-class Form:
-    def __init__(self, name):
-        self.name = name
-        self.contents = []
-    def add_child(self, child):
-        self.contents.append(child)
+class Symbol:
     def generate(self):
-        print "FORM " + self.name
-        for item in self.contents:
-            item.generate()
-        print "END FORM"
+        raise NotImplementedError("Error: generate/ must be implemented for sub-classes.")
 
-class Form_data:
+class ContainerSymbol(Symbol):
     def __init__(self):
         self.contents = []
     def add_child(self, child):
         self.contents.append(child)
+    def generate_children(self):
+        for item in self.contents:
+            item.generate()
+
+class NamedSymbol(Symbol):
+    def __init__(self, name):
+        self.name = name
+
+class Form(NamedSymbol, ContainerSymbol):
+    def __init__(self, name):
+        ContainerSymbol.__init__(self)
+        NamedSymbol.__init__(self, name)
+
+    def generate(self):
+        print "FORM " + self.name
+        self.generate_children()
+        print "END FORM"
+
+class Form_data(ContainerSymbol):
     def generate(self):
         print "FORM DATA"
-        for item in self.contents:
-            item.generate()
+        self.generate_children()
         print "END DATA"
 
-class Form_record:
+class Tracked(Symbol):
+    def generate(self):
+        print "TRACKED"
+
+class Untracked(Symbol):
+    def generate(self):
+        print "UNTRACKED"
+
+class Form_record(NamedSymbol, ContainerSymbol):
     def __init__(self, name):
-        self.name = name
-        self.contents = []
-    def add_child(self, child):
-        self.contents.append(child)
+        ContainerSymbol.__init__(self)
+        NamedSymbol.__init__(self, name)
+
     def generate(self):
         print "FORM RECORD " + self.name
-        for item in self.contents:
-            item.generate()
+        self.generate_children()
         print "END RECORD"
 
-class Layout:
+class Layout(NamedSymbol, ContainerSymbol):
     def __init__(self, name):
-        self.name = name
-        self.contents = []
-    def add_child(self, child):
-        self.contents.append(child)
+        ContainerSymbol.__init__(self)
+        NamedSymbol.__init__(self, name)
+
     def generate(self):
         print "LAYOUT " + self.name
-        for item in self.contents:
-            item.generate()
+        self.generate_children()
         print "END LAYOUT"
 
 def test():

@@ -26,6 +26,8 @@ parser IFDL:
     token END_RECORD:     "END[ \t]+RECORD"
     token LAYOUT:         "LAYOUT"
     token END_LAYOUT:     "END[ \t]+LAYOUT"
+    token TRACKED:        "TRACKED"
+    token UNTRACKED:      "UNTRACKED"
 
     rule form_declaration:        FORM NAME {{ push(df_classes.Form(NAME)) }}
                                     form_data_declaration*
@@ -34,7 +36,11 @@ parser IFDL:
                                   END_FORM {{ pop() }}
 
     rule form_data_declaration:   FORM_DATA {{ push(df_classes.Form_data()) }}
+                                    track_clause_1
                                   END_DATA {{ pop() }}
+
+    rule track_clause_1:          [ TRACKED {{push(df_classes.Tracked()); pop()}} |
+                                    UNTRACKED {{push(df_classes.Untracked()); pop()}} ]
 
     rule form_record_declaration: FORM_RECORD NAME {{ push(df_classes.Form_record(NAME)) }}
                                   END_RECORD {{ pop() }}
