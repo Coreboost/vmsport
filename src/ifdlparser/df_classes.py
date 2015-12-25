@@ -39,11 +39,131 @@ class Untracked(Symbol):
     def generate(self):
         print "UNTRACKED"
 
+class Byte_integer(Symbol):
+    def generate(self):
+        print "BYTE INTEGER"
+
+class Dfloating(Symbol):
+    def generate(self):
+        print "DFLOATING"
+
+class Ffloating(Symbol):
+    def generate(self):
+        print "FFLOATING"
+
+class Gfloating(Symbol):
+    def generate(self):
+        print "GFLOATING"
+
+class HFloating(Symbol):
+    def generate(self):
+        print "HFLOATING"
+
+class Long_float(Symbol):
+    def generate(self):
+        print "LONG FLOAT"
+
+class Longword_integer(Symbol):
+    def generate(self):
+        print "LONGWORD INTEGER"
+
+class Quadword_integer(Symbol):
+    def generate(self):
+        print "QUADWORD INTEGER"
+
+class Sfloating(Symbol):
+    def generate(self):
+        print "SFLOATING"
+
+class Short_float(Symbol):
+    def generate(self):
+        print "SHORT FLOAT"
+
+class Tfloating(Symbol):
+    def generate(self):
+        print "TFLOATING"
+
+class Unsigned_byte(Symbol):
+    def generate(self):
+        print "UNSIGNED BYTE"
+
+class Unsigned_longword(Symbol):
+    def generate(self):
+        print "UNSIGNED LONGWORD"
+
+class Unsigned_word(Symbol):
+    def generate(self):
+        print "UNSIGNED WORD"
+
+class Word_integer(Symbol):
+    def generate(self):
+        print "WORD INTEGER"
+
+class Xfloating(Symbol):
+    def generate(self):
+        print "XFLOATING"
+
+class Character_data(Symbol):
+    def __init__(self, length, varying, null_terminated):
+        self.length = length
+        self.varying = varying
+        self.null_terminated = null_terminated
+    def generate(self):
+        suffix = ""
+        if (self.varying):
+            suffix = " VARYING"
+        if (self.null_terminated):
+            suffix = " NULL TERMINATED"
+        print "CHARACTER(" + self.length + ")" + suffix
+
+class Integer(Symbol):
+    def generate(self):
+        print "INTEGER"
+
+class Decimal(Symbol):
+    def generate(self):
+        print "DECIMAL"
+
+class Float(Symbol):
+    def generate(self):
+        print "FLOAT"
+
+class Packed(Symbol):
+    def generate(self):
+        print "PACKED"
+
+class Adt(Symbol):
+    def generate(self):
+        print "ADT"
+
+class Date(Symbol):
+    def generate(self):
+        print "DATE"
+
+class Time(Symbol):
+    def generate(self):
+        print "Time"
+
+class Current(Symbol):
+    def generate(self):
+        print "CURRENT"
+
+class Datetime(Symbol):
+    def __init__(self, int_value):
+        self.value = int_value
+    def generate(self):
+        print "DATETIME(" + self.value + ")"
+
+class Integer_literal(Symbol):
+    def __init__(self, int_value):
+        self.value = int_value
+    def generate(self):
+        print self.value
+
 class Form_record(NamedSymbol, ContainerSymbol):
     def __init__(self, name):
         ContainerSymbol.__init__(self)
         NamedSymbol.__init__(self, name)
-
     def generate(self):
         print "FORM RECORD " + self.name
         self.generate_children()
@@ -53,7 +173,6 @@ class Layout(NamedSymbol, ContainerSymbol):
     def __init__(self, name):
         ContainerSymbol.__init__(self)
         NamedSymbol.__init__(self, name)
-
     def generate(self):
         print "LAYOUT " + self.name
         self.generate_children()

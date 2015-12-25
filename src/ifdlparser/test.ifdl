@@ -1,7 +1,17 @@
 FORM FOO
-  FORM DATA
-    UNTRACKED
-  END DATA
+  Form Data
+    EMPLOYEE_NAME Character(32)
+    BADGE_NUMBER Integer(6)
+    COST_CENTER Character(3)
+    ADDRESS Character(120)
+    REASON Character(64) NULL TERMInated
+    N Unsigned Longword
+    BLANK_DATE Datetime(8)
+    TOTAL_MILES Longword Integer
+    TOTAL_AMOUNT Longword Integer
+    TOTAL_TOLLS Longword Integer
+    FORM_TOTAL Longword Integer
+  End Data
   FORM RECORD BAR
   END RECORD
   FORM RECORD BAZ
