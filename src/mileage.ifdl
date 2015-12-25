@@ -9,15 +9,15 @@ Form MRF_FORM
     N Unsigned Longword
     BLANK_DATE Datetime(8)
     Group TRIP
-    Occurs 36
-    Current N
-    TRIP_DATE Datetime(8)
-    TRIP_FROM Character(3)
-    TRIP_TO Character(3)
-    MILES Longword Integer
-    AMOUNT Longword Integer
-    TOLL Longword Integer
-    SUBTOTAL Longword Integer
+      Occurs 36
+      Current N
+      TRIP_DATE Datetime(8)
+      TRIP_FROM Character(3)
+      TRIP_TO Character(3)
+      MILES Longword Integer
+      AMOUNT Longword Integer
+      TOLL Longword Integer
+      SUBTOTAL Longword Integer
     End Group
     TOTAL_MILES Longword Integer
     TOTAL_AMOUNT Longword Integer
