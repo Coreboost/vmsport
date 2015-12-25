@@ -2,7 +2,7 @@ class Symbol:
     def generate(self):
         raise NotImplementedError("Error: generate/ must be implemented for sub-classes.")
 
-class ContainerSymbol(Symbol):
+class Container_symbol(Symbol):
     def __init__(self):
         self.contents = []
     def add_child(self, child):
@@ -11,21 +11,21 @@ class ContainerSymbol(Symbol):
         for item in self.contents:
             item.generate()
 
-class NamedSymbol(Symbol):
+class Named_symbol(Symbol):
     def __init__(self, name):
         self.name = name
 
-class Form(NamedSymbol, ContainerSymbol):
+class Form(Named_symbol, Container_symbol):
     def __init__(self, name):
-        ContainerSymbol.__init__(self)
-        NamedSymbol.__init__(self, name)
+        Container_symbol.__init__(self)
+        Named_symbol.__init__(self, name)
 
     def generate(self):
         print "FORM " + self.name
         self.generate_children()
         print "END FORM"
 
-class Form_data(ContainerSymbol):
+class Form_data(Container_symbol):
     def generate(self):
         print "FORM DATA"
         self.generate_children()
@@ -39,73 +39,80 @@ class Untracked(Symbol):
     def generate(self):
         print "UNTRACKED"
 
-class Byte_integer(Symbol):
+class Atomic_type(Named_symbol):
+    def __init__(self, name, symbol_name):
+        Named_symbol.__init__(self, name)
+        self.symbol_name = symbol_name
     def generate(self):
-        print "BYTE INTEGER"
+        print self.name + " " + self.symbol_name
 
-class Dfloating(Symbol):
-    def generate(self):
-        print "DFLOATING"
+class Byte_integer(Atomic_type):
+    def __init__(self, name):
+        Atomic_type.__init__(self, name, "BYTE INTEGER")
 
-class Ffloating(Symbol):
-    def generate(self):
-        print "FFLOATING"
+class Dfloating(Atomic_type):
+    def __init__(self, name):
+        Atomic_type.__init__(self, name, "DFLOATING")
 
-class Gfloating(Symbol):
-    def generate(self):
-        print "GFLOATING"
+class Ffloating(Atomic_type):
+    def __init__(self, name):
+        Atomic_type.__init__(self, name, "FFLOATING")
 
-class HFloating(Symbol):
-    def generate(self):
-        print "HFLOATING"
+class Gfloating(Atomic_type):
+    def __init__(self, name):
+        Atomic_type.__init__(self, name, "GFLOATING")
 
-class Long_float(Symbol):
-    def generate(self):
-        print "LONG FLOAT"
+class HFloating(Atomic_type):
+    def __init__(self, name):
+        Atomic_type.__init__(self, name, "HFLOATING")
 
-class Longword_integer(Symbol):
-    def generate(self):
-        print "LONGWORD INTEGER"
+class Long_float(Atomic_type):
+    def __init__(self, name):
+        Atomic_type.__init__(self, name, "LONG FLOAT")
 
-class Quadword_integer(Symbol):
-    def generate(self):
-        print "QUADWORD INTEGER"
+class Longword_integer(Atomic_type):
+    def __init__(self, name):
+        Atomic_type.__init__(self, name, "LONGWORD INTEGER")
 
-class Sfloating(Symbol):
-    def generate(self):
-        print "SFLOATING"
+class Quadword_integer(Atomic_type):
+    def __init__(self, name):
+        Atomic_type.__init__(self, name, "QUADWORD INTEGER")
 
-class Short_float(Symbol):
-    def generate(self):
-        print "SHORT FLOAT"
+class Sfloating(Atomic_type):
+    def __init__(self, name):
+        Atomic_type.__init__(self, name, "SFLOATING")
 
-class Tfloating(Symbol):
-    def generate(self):
-        print "TFLOATING"
+class Short_float(Atomic_type):
+    def __init__(self, name):
+        Atomic_type.__init__(self, name, "SHORT FLOAT")
 
-class Unsigned_byte(Symbol):
-    def generate(self):
-        print "UNSIGNED BYTE"
+class Tfloating(Atomic_type):
+    def __init__(self, name):
+        Atomic_type.__init__(self, name, "TFLOATING")
 
-class Unsigned_longword(Symbol):
-    def generate(self):
-        print "UNSIGNED LONGWORD"
+class Unsigned_byte(Atomic_type):
+    def __init__(self, name):
+        Atomic_type.__init__(self, name, "UNSIGNED BYTE")
 
-class Unsigned_word(Symbol):
-    def generate(self):
-        print "UNSIGNED WORD"
+class Unsigned_longword(Atomic_type):
+    def __init__(self, name):
+        Atomic_type.__init__(self, name, "UNSIGNED LONGWORD")
 
-class Word_integer(Symbol):
-    def generate(self):
-        print "WORD INTEGER"
+class Unsigned_word(Atomic_type):
+    def __init__(self, name):
+        Atomic_type.__init__(self, name, "UNSIGNED WORD")
 
-class Xfloating(Symbol):
-    def generate(self):
-        print "XFLOATING"
+class Word_integer(Atomic_type):
+    def __init__(self, name):
+        Atomic_type.__init__(self, name, "WORD INTEGER")
 
-class Character_data(NamedSymbol):
+class Xfloating(Atomic_type):
+    def __init__(self, name):
+        Atomic_type.__init__(self, name, "XFLOATING")
+
+class Character_data(Named_symbol):
     def __init__(self, name, length, varying, null_terminated):
-        NamedSymbol.__init__(self, name)
+        Named_symbol.__init__(self, name)
         self.length = length
         self.varying = varying
         self.null_terminated = null_terminated
@@ -117,9 +124,9 @@ class Character_data(NamedSymbol):
             suffix = " NULL TERMINATED"
         print self.name + " CHARACTER(" + self.length + ")" + suffix
 
-class Integer_data(NamedSymbol):
+class Integer_data(Named_symbol):
     def __init__(self, name, length, packed):
-        NamedSymbol.__init__(self, name)
+        Named_symbol.__init__(self, name)
         self.length = length
         self.packed = packed
     def generate(self):
@@ -128,9 +135,9 @@ class Integer_data(NamedSymbol):
             suffix = " PACKED"
         print self.name + " INTEGER(" + self.length + ")" + suffix
 
-class Decimal_data(NamedSymbol):
+class Decimal_data(Named_symbol):
     def __init__(self, name, whole_places, dec_places, packed):
-        NamedSymbol.__init__(self, name)
+        Named_symbol.__init__(self, name)
         self.whole_places = whole_places
         self.dec_places = dec_places
         self.packed = packed
@@ -140,9 +147,9 @@ class Decimal_data(NamedSymbol):
             suffix = " PACKED"
         print self.name + " DECIMAL(" + self.whole_places + ", " + self.dec_places + ")" + suffix
 
-class Float_data(NamedSymbol):
+class Float_data(Named_symbol):
     def __init__(self, name, base_places, exponent_places):
-        NamedSymbol.__init__(self, name)
+        Named_symbol.__init__(self, name)
         self.base_places = base_places
         self.exponent_places = exponent_places
     def generate(self):
@@ -179,19 +186,19 @@ class Integer_literal(Symbol):
     def generate(self):
         print self.value
 
-class Form_record(NamedSymbol, ContainerSymbol):
+class Form_record(Named_symbol, Container_symbol):
     def __init__(self, name):
-        ContainerSymbol.__init__(self)
-        NamedSymbol.__init__(self, name)
+        Container_symbol.__init__(self)
+        Named_symbol.__init__(self, name)
     def generate(self):
         print "FORM RECORD " + self.name
         self.generate_children()
         print "END RECORD"
 
-class Layout(NamedSymbol, ContainerSymbol):
+class Layout(Named_symbol, Container_symbol):
     def __init__(self, name):
-        ContainerSymbol.__init__(self)
-        NamedSymbol.__init__(self, name)
+        Container_symbol.__init__(self)
+        Named_symbol.__init__(self, name)
     def generate(self):
         print "LAYOUT " + self.name
         self.generate_children()

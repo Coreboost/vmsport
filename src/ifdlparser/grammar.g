@@ -85,22 +85,22 @@ parser IFDL:
                                       DECIMAL "\(" INTEGER_LITERAL {{ integer_3 = INTEGER_LITERAL}} "," INTEGER_LITERAL {{ integer_4 = INTEGER_LITERAL}} "\)" [PACKED] {{push(df_classes.Decimal_data(NM, integer_3, integer_4, "PACKED" in locals())); pop()}} |
                                       FLOAT "\(" INTEGER_LITERAL {{ integer_5 = INTEGER_LITERAL; integer_6 = -1}} ["," INTEGER_LITERAL {{integer_6 = INTEGER_LITERAL}} ] "\)" {{push(df_classes.Float_data(NM, integer_5, integer_6)); pop()}}
 
-    rule atomic_clause<<NM>>:         BYTE_INTEGER {{push(df_classes.Byte_integer()); pop()}} |
-                                      DFLOATING {{push(df_classes.Dfloating()); pop()}} |
-                                      FFLOATING {{push(df_classes.Ffloating()); pop()}} |
-                                      GFLOATING {{push(df_classes.Gfloating()); pop()}} |
-                                      HFLOATING {{push(df_classes.HFloating()); pop()}} |
-                                      LONG_FLOAT {{push(df_classes.Long_float()); pop()}} |
-                                      LONGWORD_INTEGER {{push(df_classes.Longword_integer()); pop()}} |
-                                      QUADWORD_INTEGER {{push(df_classes.Quadword_integer()); pop()}} |
-                                      SFLOATING {{push(df_classes.Sfloating()); pop()}} |
-                                      SHORT_FLOAT {{push(df_classes.Short_float()); pop()}} |
-                                      TFLOATING {{push(df_classes.Tfloating()); pop()}} |
-                                      UNSIGNED_BYTE {{push(df_classes.Unsigned_byte()); pop()}} |
-                                      UNSIGNED_LONGWORD {{push(df_classes.Unsigned_longword()); pop()}} |
-                                      UNSIGNED_WORD {{push(df_classes.Unsigned_word()); pop()}} |
-                                      WORD_INTEGER {{push(df_classes.Word_integer()); pop()}} |
-                                      XFLOATING {{push(df_classes.Xfloating()); pop()}}
+    rule atomic_clause<<NM>>:         BYTE_INTEGER {{push(df_classes.Byte_integer(NM)); pop()}} |
+                                      DFLOATING {{push(df_classes.Dfloating(NM)); pop()}} |
+                                      FFLOATING {{push(df_classes.Ffloating(NM)); pop()}} |
+                                      GFLOATING {{push(df_classes.Gfloating(NM)); pop()}} |
+                                      HFLOATING {{push(df_classes.HFloating(NM)); pop()}} |
+                                      LONG_FLOAT {{push(df_classes.Long_float(NM)); pop()}} |
+                                      LONGWORD_INTEGER {{push(df_classes.Longword_integer(NM)); pop()}} |
+                                      QUADWORD_INTEGER {{push(df_classes.Quadword_integer(NM)); pop()}} |
+                                      SFLOATING {{push(df_classes.Sfloating(NM)); pop()}} |
+                                      SHORT_FLOAT {{push(df_classes.Short_float(NM)); pop()}} |
+                                      TFLOATING {{push(df_classes.Tfloating(NM)); pop()}} |
+                                      UNSIGNED_BYTE {{push(df_classes.Unsigned_byte(NM)); pop()}} |
+                                      UNSIGNED_LONGWORD {{push(df_classes.Unsigned_longword(NM)); pop()}} |
+                                      UNSIGNED_WORD {{push(df_classes.Unsigned_word(NM)); pop()}} |
+                                      WORD_INTEGER {{push(df_classes.Word_integer(NM)); pop()}} |
+                                      XFLOATING {{push(df_classes.Xfloating(NM)); pop()}}
 
     rule datetime_data_clause<<NM>>:  ADT {{push(df_classes.Adt()); pop()}} [ CURRENT {{push(df_classes.Current()); pop()}} ] |
                                       DATE {{push(df_classes.Date()); pop()}} [ CURRENT {{push(df_classes.Current()); pop()}} ] |
