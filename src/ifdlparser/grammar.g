@@ -10,8 +10,7 @@ def push(item):
 def pop():
   popped = stack.pop()
   if len(stack) == 0:
-    popped.generate()
-
+    popped.generate(0)
 
 %%
 
