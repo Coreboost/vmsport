@@ -2,9 +2,12 @@ import df_classes
 
 stack = []
 
-def push(item):
+def add_child(item):
   if len(stack) > 0:
     stack[-1].add_child(item)
+
+def push(item):
+  add_child(item)
   stack.append(item)
 
 def pop():
@@ -72,39 +75,39 @@ parser IFDL:
                                         form_data_item_declaration*
                                       END_DATA {{ pop() }}
 
-    rule track_clause_1:              TRACKED {{push(df_classes.Tracked()); pop()}} |
-                                      UNTRACKED {{push(df_classes.Untracked()); pop()}}
+    rule track_clause_1:              TRACKED {{add_child(df_classes.Tracked())}} |
+                                      UNTRACKED {{add_child(df_classes.Untracked())}}
 
     rule form_data_item_declaration:  NAME (text_data_clause<<NAME>> | atomic_clause<<NAME>> | datetime_data_clause<<NAME>>) [VALUE literal]
 
     rule literal:                     INTEGER_LITERAL | DECIMAL_LITERAL | DATETIME_LITERAL | TEXT_LITERAL
 
-    rule text_data_clause<<NM>>:      CHARACTER "\(" INTEGER_LITERAL "\)" [ NULL_TERMINATED | VARYING ] {{push(df_classes.Character_data(NM, INTEGER_LITERAL, "VARYING" in locals(), "NULL_TERMINATED" in locals())); pop()}} |
-                                      INTEGER "\(" INTEGER_LITERAL "\)" [PACKED] {{push(df_classes.Integer_data(NM, INTEGER_LITERAL, "PACKED" in locals())); pop()}}|
-                                      DECIMAL "\(" INTEGER_LITERAL {{ integer_3 = INTEGER_LITERAL}} "," INTEGER_LITERAL {{ integer_4 = INTEGER_LITERAL}} "\)" [PACKED] {{push(df_classes.Decimal_data(NM, integer_3, integer_4, "PACKED" in locals())); pop()}} |
-                                      FLOAT "\(" INTEGER_LITERAL {{ integer_5 = INTEGER_LITERAL; integer_6 = -1}} ["," INTEGER_LITERAL {{integer_6 = INTEGER_LITERAL}} ] "\)" {{push(df_classes.Float_data(NM, integer_5, integer_6)); pop()}}
+    rule text_data_clause<<NM>>:      CHARACTER "\(" INTEGER_LITERAL "\)" [ NULL_TERMINATED | VARYING ] {{add_child(df_classes.Character_data(NM, INTEGER_LITERAL, "VARYING" in locals(), "NULL_TERMINATED" in locals()))}} |
+                                      INTEGER "\(" INTEGER_LITERAL "\)" [PACKED] {{add_child(df_classes.Integer_data(NM, INTEGER_LITERAL, "PACKED" in locals()))}}|
+                                      DECIMAL "\(" INTEGER_LITERAL {{ integer_3 = INTEGER_LITERAL}} "," INTEGER_LITERAL {{ integer_4 = INTEGER_LITERAL}} "\)" [PACKED] {{add_child(df_classes.Decimal_data(NM, integer_3, integer_4, "PACKED" in locals()))}} |
+                                      FLOAT "\(" INTEGER_LITERAL {{ integer_5 = INTEGER_LITERAL; integer_6 = -1}} ["," INTEGER_LITERAL {{integer_6 = INTEGER_LITERAL}} ] "\)" {{add_child(df_classes.Float_data(NM, integer_5, integer_6))}}
 
-    rule atomic_clause<<NM>>:         BYTE_INTEGER {{push(df_classes.Byte_integer(NM)); pop()}} |
-                                      DFLOATING {{push(df_classes.Dfloating(NM)); pop()}} |
-                                      FFLOATING {{push(df_classes.Ffloating(NM)); pop()}} |
-                                      GFLOATING {{push(df_classes.Gfloating(NM)); pop()}} |
-                                      HFLOATING {{push(df_classes.HFloating(NM)); pop()}} |
-                                      LONG_FLOAT {{push(df_classes.Long_float(NM)); pop()}} |
-                                      LONGWORD_INTEGER {{push(df_classes.Longword_integer(NM)); pop()}} |
-                                      QUADWORD_INTEGER {{push(df_classes.Quadword_integer(NM)); pop()}} |
-                                      SFLOATING {{push(df_classes.Sfloating(NM)); pop()}} |
-                                      SHORT_FLOAT {{push(df_classes.Short_float(NM)); pop()}} |
-                                      TFLOATING {{push(df_classes.Tfloating(NM)); pop()}} |
-                                      UNSIGNED_BYTE {{push(df_classes.Unsigned_byte(NM)); pop()}} |
-                                      UNSIGNED_LONGWORD {{push(df_classes.Unsigned_longword(NM)); pop()}} |
-                                      UNSIGNED_WORD {{push(df_classes.Unsigned_word(NM)); pop()}} |
-                                      WORD_INTEGER {{push(df_classes.Word_integer(NM)); pop()}} |
-                                      XFLOATING {{push(df_classes.Xfloating(NM)); pop()}}
+    rule atomic_clause<<NM>>:         BYTE_INTEGER {{add_child(df_classes.Byte_integer(NM))}} |
+                                      DFLOATING {{add_child(df_classes.Dfloating(NM))}} |
+                                      FFLOATING {{add_child(df_classes.Ffloating(NM))}} |
+                                      GFLOATING {{add_child(df_classes.Gfloating(NM))}} |
+                                      HFLOATING {{add_child(df_classes.HFloating(NM))}} |
+                                      LONG_FLOAT {{add_child(df_classes.Long_float(NM))}} |
+                                      LONGWORD_INTEGER {{add_child(df_classes.Longword_integer(NM))}} |
+                                      QUADWORD_INTEGER {{add_child(df_classes.Quadword_integer(NM))}} |
+                                      SFLOATING {{add_child(df_classes.Sfloating(NM))}} |
+                                      SHORT_FLOAT {{add_child(df_classes.Short_float(NM))}} |
+                                      TFLOATING {{add_child(df_classes.Tfloating(NM))}} |
+                                      UNSIGNED_BYTE {{add_child(df_classes.Unsigned_byte(NM))}} |
+                                      UNSIGNED_LONGWORD {{add_child(df_classes.Unsigned_longword(NM))}} |
+                                      UNSIGNED_WORD {{add_child(df_classes.Unsigned_word(NM))}} |
+                                      WORD_INTEGER {{add_child(df_classes.Word_integer(NM))}} |
+                                      XFLOATING {{add_child(df_classes.Xfloating(NM))}}
 
-    rule datetime_data_clause<<NM>>:  ADT [CURRENT] {{push(df_classes.Adt_data(NM, "CURRENT" in locals())); pop()}} |
-                                      DATE [CURRENT] {{push(df_classes.Date_data(NM, "CURRENT" in locals())); pop()}} |
-                                      TIME [CURRENT] {{push(df_classes.Time_data(NM, "CURRENT" in locals())); pop()}} |
-                                      DATETIME "\(" INTEGER_LITERAL "\)" {{push(df_classes.Datetime(NM, INTEGER_LITERAL)); pop()}}
+    rule datetime_data_clause<<NM>>:  ADT [CURRENT] {{add_child(df_classes.Adt_data(NM, "CURRENT" in locals()))}} |
+                                      DATE [CURRENT] {{add_child(df_classes.Date_data(NM, "CURRENT" in locals()))}} |
+                                      TIME [CURRENT] {{add_child(df_classes.Time_data(NM, "CURRENT" in locals()))}} |
+                                      DATETIME "\(" INTEGER_LITERAL "\)" {{add_child(df_classes.Datetime(NM, INTEGER_LITERAL))}}
 
     rule form_record_declaration:     FORM_RECORD NAME {{ push(df_classes.Form_record(NAME)) }}
                                       END_RECORD {{ pop() }}
