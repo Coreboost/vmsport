@@ -1,15 +1,21 @@
 FORM FOO
   Form Data
-    FOO Decimal(7, 4)
-    BAR Float(7)
-    SPAM Float(28, 3)
     EMPLOYEE_NAME Character(32)
-    BADGE_NUMBER Integer(6) PACKED
+    BADGE_NUMBER Integer(6)
     COST_CENTER Character(3)
     ADDRESS Character(120)
-    REASON Character(64) VARYING
+    REASON Character(64)
     N Unsigned Longword
     BLANK_DATE Datetime(8)
+    Group TRIP
+      TRIP_DATE Datetime(8)
+      TRIP_FROM Character(3)
+      TRIP_TO Character(3)
+      MILES Longword Integer
+      AMOUNT Longword Integer
+      TOLL Longword Integer
+      SUBTOTAL Longword Integer
+    End Group
     TOTAL_MILES Longword Integer
     TOTAL_AMOUNT Longword Integer
     TOTAL_TOLLS Longword Integer

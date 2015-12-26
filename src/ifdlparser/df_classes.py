@@ -33,13 +33,15 @@ class Form_data(Container_symbol):
         self.generate_children(indent)
         self.print_indented("END DATA", indent)
 
-class Tracked(Symbol):
-    def generate(self, indent):
-        self.print_indented("TRACKED", indent)
+class Group(Named_symbol, Container_symbol):
+    def __init__(self, name):
+        Container_symbol.__init__(self)
+        Named_symbol.__init__(self, name)
 
-class Untracked(Symbol):
     def generate(self, indent):
-        self.print_indented("UNTRACKED", indent)
+        self.print_indented("GROUP " + self.name, indent)
+        self.generate_children(indent)
+        self.print_indented("END GROUP", indent)
 
 class Atomic_type(Named_symbol):
     def __init__(self, name, symbol_name):
@@ -48,154 +50,34 @@ class Atomic_type(Named_symbol):
     def generate(self, indent):
         self.print_indented(self.name + " " + self.symbol_name, indent)
 
-class Byte_integer(Atomic_type):
-    def __init__(self, name):
-        Atomic_type.__init__(self, name, "BYTE INTEGER")
-
-class Dfloating(Atomic_type):
-    def __init__(self, name):
-        Atomic_type.__init__(self, name, "DFLOATING")
-
-class Ffloating(Atomic_type):
-    def __init__(self, name):
-        Atomic_type.__init__(self, name, "FFLOATING")
-
-class Gfloating(Atomic_type):
-    def __init__(self, name):
-        Atomic_type.__init__(self, name, "GFLOATING")
-
-class HFloating(Atomic_type):
-    def __init__(self, name):
-        Atomic_type.__init__(self, name, "HFLOATING")
-
-class Long_float(Atomic_type):
-    def __init__(self, name):
-        Atomic_type.__init__(self, name, "LONG FLOAT")
-
 class Longword_integer(Atomic_type):
     def __init__(self, name):
         Atomic_type.__init__(self, name, "LONGWORD INTEGER")
-
-class Quadword_integer(Atomic_type):
-    def __init__(self, name):
-        Atomic_type.__init__(self, name, "QUADWORD INTEGER")
-
-class Sfloating(Atomic_type):
-    def __init__(self, name):
-        Atomic_type.__init__(self, name, "SFLOATING")
-
-class Short_float(Atomic_type):
-    def __init__(self, name):
-        Atomic_type.__init__(self, name, "SHORT FLOAT")
-
-class Tfloating(Atomic_type):
-    def __init__(self, name):
-        Atomic_type.__init__(self, name, "TFLOATING")
-
-class Unsigned_byte(Atomic_type):
-    def __init__(self, name):
-        Atomic_type.__init__(self, name, "UNSIGNED BYTE")
 
 class Unsigned_longword(Atomic_type):
     def __init__(self, name):
         Atomic_type.__init__(self, name, "UNSIGNED LONGWORD")
 
-class Unsigned_word(Atomic_type):
-    def __init__(self, name):
-        Atomic_type.__init__(self, name, "UNSIGNED WORD")
-
-class Word_integer(Atomic_type):
-    def __init__(self, name):
-        Atomic_type.__init__(self, name, "WORD INTEGER")
-
-class Xfloating(Atomic_type):
-    def __init__(self, name):
-        Atomic_type.__init__(self, name, "XFLOATING")
-
 class Character_data(Named_symbol):
-    def __init__(self, name, length, varying, null_terminated):
+    def __init__(self, name, length):
         Named_symbol.__init__(self, name)
         self.length = length
-        self.varying = varying
-        self.null_terminated = null_terminated
     def generate(self, indent):
-        suffix = ""
-        if (self.varying):
-            suffix = " VARYING"
-        if (self.null_terminated):
-            suffix = " NULL TERMINATED"
-        self.print_indented(self.name + " CHARACTER(" + self.length + ")" + suffix, indent)
+        self.print_indented(self.name + " CHARACTER(" + self.length + ")", indent)
 
 class Integer_data(Named_symbol):
-    def __init__(self, name, length, packed):
+    def __init__(self, name, length):
         Named_symbol.__init__(self, name)
         self.length = length
-        self.packed = packed
     def generate(self, indent):
-        suffix = ""
-        if (self.packed):
-            suffix = " PACKED"
-        self.print_indented(self.name + " INTEGER(" + self.length + ")" + suffix, indent)
+        self.print_indented(self.name + " INTEGER(" + self.length + ")", indent)
 
-class Decimal_data(Named_symbol):
-    def __init__(self, name, whole_places, dec_places, packed):
-        Named_symbol.__init__(self, name)
-        self.whole_places = whole_places
-        self.dec_places = dec_places
-        self.packed = packed
-    def generate(self, indent):
-        suffix = ""
-        if (self.packed):
-            suffix = " PACKED"
-        self.print_indented(self.name + " DECIMAL(" + self.whole_places + ", " + self.dec_places + ")" + suffix, indent)
-
-class Float_data(Named_symbol):
-    def __init__(self, name, base_places, exponent_places):
-        Named_symbol.__init__(self, name)
-        self.base_places = base_places
-        self.exponent_places = exponent_places
-    def generate(self, indent):
-        exp_part = ""
-        if (self.exponent_places != -1):
-            exp_part = ", " + self.exponent_places
-        self.print_indented(self.name + " FLOAT(" + self.base_places + exp_part + ")", indent)
-
-class Adt_data(Named_symbol):
-    def __init__(self, name, current):
-        Named_symbol.__init__(self, name)
-        self.current = current
-    def generate(self, indent):
-        suffix = ""
-        if (self.current):
-            suffix = " CURRENT"
-        self.print_indented(self.name + " ADT" + suffix, indent)
-
-class Date_data(Named_symbol):
-    def __init__(self, name, current):
-        Named_symbol.__init__(self, name)
-        self.current = current
-    def generate(self, indent):
-        suffix = ""
-        if (self.current):
-            suffix = " CURRENT"
-        self.print_indented(self.name + " DATE" + suffix, indent)
-
-class Time_data(Named_symbol):
-    def __init__(self, name, current):
-        Named_symbol.__init__(self, name)
-        self.current = current
-    def generate(self, indent):
-        suffix = ""
-        if (self.current):
-            suffix = " CURRENT"
-        self.print_indented(self.name + " TIME" + suffix, indent)
-
-class Datetime(Named_symbol):
+class Datetime_data(Named_symbol):
     def __init__(self, name, int_value):
         Named_symbol.__init__(self, name)
-        self.value = int_value
+        self.int_value = int_value
     def generate(self, indent):
-        self.print_indented(self.name + " DATETIME(" + self.value + ")", indent)
+        self.print_indented(self.name + " DATETIME(" + self.int_value + ")", indent)
 
 class Integer_literal(Symbol):
     def __init__(self, int_value):
