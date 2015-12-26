@@ -8,6 +8,8 @@ FORM FOO
     N Unsigned Longword
     BLANK_DATE Datetime(8)
     Group TRIP
+      Occurs 36
+      Current N
       TRIP_DATE Datetime(8)
       TRIP_FROM Character(3)
       TRIP_TO Character(3)

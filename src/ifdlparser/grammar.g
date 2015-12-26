@@ -1,19 +1,24 @@
 import df_classes
 
 stack = []
+last_added = None
 
 def add_child(item):
+  last_added = item
   if len(stack) > 0:
     stack[-1].add_child(item)
+  return item
 
 def push(item):
   add_child(item)
   stack.append(item)
+  return item
 
 def pop():
   popped = stack.pop()
   if len(stack) == 0:
     popped.generate(0)
+  return popped
 
 %%
 
@@ -25,6 +30,7 @@ parser IFDL:
     token END_DATA:             "(?i)END[ \t]+DATA"
     token GROUP:                "(?i)GROUP"
     token END_GROUP:            "(?i)END[ \t]+GROUP"
+    token OCCURS:               "(?i)OCCURS"
     token CURRENT:              "(?i)CURRENT"
     token FORM_RECORD:          "(?i)FORM[ \t]+RECORD"
     token END_RECORD:           "(?i)END[ \t]+RECORD"
@@ -59,8 +65,8 @@ parser IFDL:
                                         (form_data_item_declaration | form_data_group_declaration)*
                                       END_GROUP {{ pop() }}
 
-    rule occurs_clause:               OCCURS INTEGER_LITERAL
-                                      [CURRENT]
+    rule occurs_clause:               OCCURS INTEGER_LITERAL {{occurs = add_child(df_classes.Occurs(INTEGER_LITERAL))}}
+                                      [CURRENT NAME {{occurs.set_current(NAME)}}]
 
     rule text_data_clause<<NM>>:      CHARACTER "\(" INTEGER_LITERAL "\)" {{add_child(df_classes.Character_data(NM, INTEGER_LITERAL))}} |
                                       INTEGER "\(" INTEGER_LITERAL "\)" {{add_child(df_classes.Integer_data(NM, INTEGER_LITERAL))}}

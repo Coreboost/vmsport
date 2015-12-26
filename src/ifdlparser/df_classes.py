@@ -37,11 +37,21 @@ class Group(Named_symbol, Container_symbol):
     def __init__(self, name):
         Container_symbol.__init__(self)
         Named_symbol.__init__(self, name)
-
     def generate(self, indent):
         self.print_indented("GROUP " + self.name, indent)
         self.generate_children(indent)
         self.print_indented("END GROUP", indent)
+
+class Occurs(Symbol):
+    def __init__(self, length):
+        self.length = length
+        self.name = None
+    def set_current(self, name):
+        self.name = name
+    def generate(self, indent):
+        self.print_indented("OCCURS " + self.length , indent)
+        if (self.name):
+            self.print_indented("CURRENT " + self.name , indent+1)
 
 class Atomic_type(Named_symbol):
     def __init__(self, name, symbol_name):
