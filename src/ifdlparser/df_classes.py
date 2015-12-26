@@ -158,27 +158,42 @@ class Float_data(Named_symbol):
             exp_part = ", " + self.exponent_places
         print self.name + " FLOAT(" + self.base_places + exp_part + ")"
 
-class Adt(Symbol):
+class Adt_data(Named_symbol):
+    def __init__(self, name, current):
+        Named_symbol.__init__(self, name)
+        self.current = current
     def generate(self):
-        print "ADT"
+        suffix = ""
+        if (self.current):
+            suffix = " CURRENT"
+        print self.name + " ADT" + suffix
 
-class Date(Symbol):
+class Date_data(Named_symbol):
+    def __init__(self, name, current):
+        Named_symbol.__init__(self, name)
+        self.current = current
     def generate(self):
-        print "DATE"
+        suffix = ""
+        if (self.current):
+            suffix = " CURRENT"
+        print self.name + " DATE" + suffix
 
-class Time(Symbol):
+class Time_data(Named_symbol):
+    def __init__(self, name, current):
+        Named_symbol.__init__(self, name)
+        self.current = current
     def generate(self):
-        print "Time"
+        suffix = ""
+        if (self.current):
+            suffix = " CURRENT"
+        print self.name + " TIME" + suffix
 
-class Current(Symbol):
-    def generate(self):
-        print "CURRENT"
-
-class Datetime(Symbol):
-    def __init__(self, int_value):
+class Datetime(Named_symbol):
+    def __init__(self, name, int_value):
+        Named_symbol.__init__(self, name)
         self.value = int_value
     def generate(self):
-        print "DATETIME(" + self.value + ")"
+        print self.name + " DATETIME(" + self.value + ")"
 
 class Integer_literal(Symbol):
     def __init__(self, int_value):

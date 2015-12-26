@@ -102,10 +102,10 @@ parser IFDL:
                                       WORD_INTEGER {{push(df_classes.Word_integer(NM)); pop()}} |
                                       XFLOATING {{push(df_classes.Xfloating(NM)); pop()}}
 
-    rule datetime_data_clause<<NM>>:  ADT {{push(df_classes.Adt()); pop()}} [ CURRENT {{push(df_classes.Current()); pop()}} ] |
-                                      DATE {{push(df_classes.Date()); pop()}} [ CURRENT {{push(df_classes.Current()); pop()}} ] |
-                                      TIME {{push(df_classes.Time()); pop()}} [ CURRENT {{push(df_classes.Current()); pop()}} ] |
-                                      DATETIME "\(" INTEGER_LITERAL "\)" {{push(df_classes.Datetime(INTEGER_LITERAL)); pop()}}
+    rule datetime_data_clause<<NM>>:  ADT [CURRENT] {{push(df_classes.Adt_data(NM, "CURRENT" in locals())); pop()}} |
+                                      DATE [CURRENT] {{push(df_classes.Date_data(NM, "CURRENT" in locals())); pop()}} |
+                                      TIME [CURRENT] {{push(df_classes.Time_data(NM, "CURRENT" in locals())); pop()}} |
+                                      DATETIME "\(" INTEGER_LITERAL "\)" {{push(df_classes.Datetime(NM, INTEGER_LITERAL)); pop()}}
 
     rule form_record_declaration:     FORM_RECORD NAME {{ push(df_classes.Form_record(NAME)) }}
                                       END_RECORD {{ pop() }}
