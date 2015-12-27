@@ -81,9 +81,9 @@ FORM FOO
           Type %VT100
         End Device
 
-        /*
-
         Size 24 Lines by 80 Columns
+
+        /*
 
         List LOCATION_CODES
           "ACT"

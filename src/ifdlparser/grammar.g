@@ -52,6 +52,9 @@ parser IFDL:
     token TYPE:                 "(?i)TYPE"
     token VT100:                "(?i)%VT100"
     token VT400:                "(?i)%VT400"
+    token SIZE:                 "(?i)SIZE"
+    token LINES_BY:             "(?i)LINES[ \t]+BY"
+    token COLUMNS:              "(?i)COLUMNS"
     token VALUE:                "(?i)VALUE"
     token LONGWORD_INTEGER:     "(?i)LONGWORD[ \t]+INTEGER"
     token UNSIGNED_LONGWORD:    "(?i)UNSIGNED[ \t]+LONGWORD"
@@ -112,9 +115,12 @@ parser IFDL:
 
     rule layout_declaration:          LAYOUT NAME {{ push(df_classes.Layout(NAME)) }}
                                         device_declaration
+                                        size_declaration
                                       END_LAYOUT {{ pop() }}
 
     rule device_declaration:          DEVICE TERMINAL {{ device = df_classes.Device(None) }}
                                         [NAME {{device.set_name(NAME)}}]
                                         TYPE (VT100 {{ device.set_type(VT100) }} | VT400 {{ device.set_type(VT400) }})
                                       END_DEVICE {{ add_child(device) }}
+
+    rule size_declaration:            SIZE INTEGER_LITERAL {{lines = INTEGER_LITERAL}} LINES_BY INTEGER_LITERAL {{columns = INTEGER_LITERAL}} COLUMNS {{add_child(df_classes.Size(lines, columns))}}

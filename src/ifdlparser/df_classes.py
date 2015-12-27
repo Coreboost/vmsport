@@ -145,6 +145,13 @@ class Device(Named_symbol):
         self.print_indented("TYPE " + self.type, indent+1)
         self.print_indented("END DEVICE", indent)
 
+class Size(Symbol):
+    def __init__(self, lines, columns):
+        self.lines = lines
+        self.columns = columns
+    def generate(self, indent):
+        self.print_indented("SIZE " + self.lines + " LINES BY " + self.columns + " COLUMNS", indent)
+
 def test():
     form = Form("My form")
     form.add_child(Form_data())
