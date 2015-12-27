@@ -57,6 +57,11 @@ parser IFDL:
     token COLUMNS:              "(?i)COLUMNS"
     token LIST:                 "(?i)LIST"
     token END_LIST:             "(?i)END[ \t]+LIST"
+    token VIEWPORT:             "(?i)VIEWPORT"
+    token END_VIEWPORT:         "(?i)END[ \t]+VIEWPORT"
+    token THROUGH:              "(?i)THROUGH"
+    token LINES:                "(?i)LINES"
+    token THRU:                 "(?i)THRU"
     token VALUE:                "(?i)VALUE"
     token LONGWORD_INTEGER:     "(?i)LONGWORD[ \t]+INTEGER"
     token UNSIGNED_LONGWORD:    "(?i)UNSIGNED[ \t]+LONGWORD"
@@ -118,7 +123,8 @@ parser IFDL:
     rule layout_declaration:          LAYOUT NAME {{ push(df_classes.Layout(NAME)) }}
                                         device_declaration
                                         size_declaration
-                                        (list_declaration)*
+                                        list_declaration*
+                                        viewport_declaration*
                                       END_LAYOUT {{ pop() }}
 
     rule device_declaration:          DEVICE TERMINAL {{ device = df_classes.Device(None) }}
@@ -131,3 +137,8 @@ parser IFDL:
     rule list_declaration:            LIST NAME {{list = df_classes.List(NAME)}}
                                         (TEXT_LITERAL {{list.add_list_item(TEXT_LITERAL[1:-1])}})*
                                       END_LIST {{add_child(list)}}
+
+    rule viewport_declaration:        VIEWPORT NAME
+                                        LINES INTEGER_LITERAL {{lines_start=INTEGER_LITERAL}} (THROUGH|THRU) INTEGER_LITERAL {{lines_end=INTEGER_LITERAL}}
+                                        COLUMNS INTEGER_LITERAL {{columns_start=INTEGER_LITERAL}} (THROUGH|THRU) INTEGER_LITERAL {{columns_end=INTEGER_LITERAL}}
+                                      END_VIEWPORT {{add_child(df_classes.Viewport(NAME, lines_start, lines_end, columns_start, columns_end))}}

@@ -1,4 +1,5 @@
-FORM FOO
+Form MRF_FORM
+
   Form Data
     EMPLOYEE_NAME Character(32)
     BADGE_NUMBER Integer(6)
@@ -32,82 +33,114 @@ FORM FOO
     REASON Character(64)
   End Record
 
+  Form Record TRIP_ROW_RECORD
+    Group TRIP
+      TRIP_DATE Datetime(8)
+      Using TRIP(N).TRIP_DATE
+      TRIP_FROM Character(3)
+      Using TRIP(N).TRIP_FROM
+      TRIP_TO Character(3)
+      Using TRIP(N).TRIP_TO
+      MILES Longword Integer
+      Using TRIP(N).MILES
+      AMOUNT Longword Integer
+      Using TRIP(N).AMOUNT
+      TOLL Longword Integer
+      Using TRIP(N).TOLL
+      SUBTOTAL Longword Integer
+      Using TRIP(N).SUBTOTAL
+    End Group
+  End Record
 
-    Form Record TRIP_ROW_RECORD
-      Group TRIP
-        TRIP_DATE Datetime(8)
-        Using TRIP(N).TRIP_DATE
-        TRIP_FROM Character(3)
-        Using TRIP(N).TRIP_FROM
-        TRIP_TO Character(3)
-        Using TRIP(N).TRIP_TO
-        MILES Longword Integer
-        Using TRIP(N).MILES
-        AMOUNT Longword Integer
-        Using TRIP(N).AMOUNT
-        TOLL Longword Integer
-        Using TRIP(N).TOLL
-        SUBTOTAL Longword Integer
-        Using TRIP(N).SUBTOTAL
-      End Group
-    End Record
+  Form Record TRIPS_RECORD
+    Group TRIP
+      Occurs 36
+      TRIP_DATE Datetime(8)
+      TRIP_FROM Character(3)
+      TRIP_TO Character(3)
+      MILES Longword Integer
+      AMOUNT Longword Integer
+      TOLL Longword Integer
+      SUBTOTAL Longword Integer
+    End Group
+  End Record
+
+  Form Record TOTALS_RECORD
+    TOTAL_MILES Longword Integer
+    TOTAL_AMOUNT Longword Integer
+    TOTAL_TOLLS Longword Integer
+    FORM_TOTAL Longword Integer
+  End Record
+
+  Layout VT_LAYOUT
+    Device
+      Terminal
+      Type %VT100
+    End Device
+
+    Size 24 Lines by 80 Columns
+
+    List LOCATION_CODES
+      "ACT"
+      "BXB"
+      "LTN"
+      "MKO"
+      "ZKO"
+    End List
+
+    Viewport MAIN_VIEWPORT
+      Lines 1 Through 22
+      Columns 1 Through 80
+    End Viewport
+
+    Viewport DEFAULT_MESSAGE_VIEWPORT
+      Lines 23 Through 24
+      Columns 1 Through 80
+    End Viewport
+
+    Viewport HELP_VIEWPORT
+      Lines 1 Through 22
+      Columns 1 Through 80
+    End Viewport
+
+    Function DO_TOTALS
+      Is %DO
+      (%PF1 %KP_PERIOD)
+    End Function
+
+    Function DISCARD
+      Is %F8
+      (%PF1 %KP_8)
+    End Function
+
+    Function INSERT LINE
+      Is %CARRIAGE_RETURN
+    End Function
+
+    Function EXIT GROUP NEXT
+      Is (%PF4 %HORIZONTAL_TAB)
+        (%PF4 %CARRIAGE_RETURN)
+        (%PF4 %ENTER)
+        (%PF1 %DOWN)
+    End Function
+
+    Function MOVE_UP
+      Is %UP
+    End Function
+
+    Function MOVE_DOWN
+      Is %DOWN
+    End Function
+
+    Function SELECT
+      Is %SELECT
+      %KP_PERIOD
+    End Function
+
+    Function PRINT_FILE
+      Is %CONTROL_P
+    End Function
 
 
-      Form Record TRIPS_RECORD
-        Group TRIP
-          Occurs 36
-          TRIP_DATE Datetime(8)
-          TRIP_FROM Character(3)
-          TRIP_TO Character(3)
-          MILES Longword Integer
-          AMOUNT Longword Integer
-          TOLL Longword Integer
-          SUBTOTAL Longword Integer
-        End Group
-      End Record
-
-      Form Record TOTALS_RECORD
-        TOTAL_MILES Longword Integer
-        TOTAL_AMOUNT Longword Integer
-        TOTAL_TOLLS Longword Integer
-        FORM_TOTAL Longword Integer
-      End Record
-
-
-      Layout VT_LAYOUT
-
-        Device
-          Terminal
-          Type %VT100
-        End Device
-
-        Size 24 Lines by 80 Columns
-
-
-        List LOCATION_CODES
-          "ACT"
-          "BXB"
-          "LTN"
-          "MKO"
-          "ZKO"
-        End List
-
-        /*
-
-        Viewport MAIN_VIEWPORT
-          Lines 1 Through 22
-          Columns 1 Through 80
-        End Viewport
-
-        Viewport DEFAULT_MESSAGE_VIEWPORT
-          Lines 23 Through 24
-          Columns 1 Through 80
-        End Viewport
-
-        Viewport HELP_VIEWPORT
-          Lines 1 Through 22
-          Columns 1 Through 80
-        End Viewport
-*/
-      End Layout
+  End Layout
 END FORM

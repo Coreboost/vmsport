@@ -164,6 +164,20 @@ class List(Named_symbol):
             self.print_indented('"' + item + '"', indent+1)
         self.print_indented("END LIST", indent)
 
+class Viewport(Named_symbol):
+    def __init__(self, name, lines_start, lines_end, columns_start, columns_end):
+        Named_symbol.__init__(self, name)
+        self.lines_start = lines_start
+        self.lines_end = lines_end
+        self.columns_start = columns_start
+        self. columns_end = columns_end
+    def generate(self, indent):
+        self.print_indented("VIEWPORT " + self.name, indent)
+        self.print_indented("LINES " + self.lines_start + " THROUGH " + self.lines_end, indent+1)
+        self.print_indented("COLUMNS " + self.columns_start + " THROUGH " + self.columns_end, indent+1)
+        self.print_indented("END VIEWPORT", indent)
+
+
 def test():
     form = Form("My form")
     form.add_child(Form_data())
