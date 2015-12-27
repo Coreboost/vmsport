@@ -15,6 +15,8 @@ class Container_symbol(Symbol):
 
 class Named_symbol(Symbol):
     def __init__(self, name):
+        self.set_name(name)
+    def set_name(self, name):
         self.name = name
 
 class Form(Named_symbol, Container_symbol):
@@ -127,6 +129,21 @@ class Layout(Named_symbol, Container_symbol):
         self.print_indented("LAYOUT " + self.name, indent)
         self.generate_children(indent)
         self.print_indented("END LAYOUT", indent)
+
+class Device(Named_symbol):
+    def __init__(self, name):
+        Named_symbol.__init__(self, name)
+        self.type = None
+    def set_type(self, type):
+        self.type = type
+    def generate(self, indent):
+        name_part = ""
+        if (self.name):
+            name_part = " " + self.name
+        self.print_indented("DEVICE", indent)
+        self.print_indented("TERMINAL" + name_part, indent+1)
+        self.print_indented("TYPE " + self.type, indent+1)
+        self.print_indented("END DEVICE", indent)
 
 def test():
     form = Form("My form")

@@ -46,6 +46,12 @@ parser IFDL:
     token USING:                "(?i)USING"
     token LAYOUT:               "(?i)LAYOUT"
     token END_LAYOUT:           "(?i)END[ \t]+LAYOUT"
+    token DEVICE:               "(?i)DEVICE"
+    token END_DEVICE:           "(?i)END[ \t]+DEVICE"
+    token TERMINAL:             "(?i)TERMINAL"
+    token TYPE:                 "(?i)TYPE"
+    token VT100:                "(?i)%VT100"
+    token VT400:                "(?i)%VT400"
     token VALUE:                "(?i)VALUE"
     token LONGWORD_INTEGER:     "(?i)LONGWORD[ \t]+INTEGER"
     token UNSIGNED_LONGWORD:    "(?i)UNSIGNED[ \t]+LONGWORD"
@@ -105,4 +111,10 @@ parser IFDL:
                                       END_GROUP {{ pop() }}
 
     rule layout_declaration:          LAYOUT NAME {{ push(df_classes.Layout(NAME)) }}
+                                        device_declaration
                                       END_LAYOUT {{ pop() }}
+
+    rule device_declaration:          DEVICE TERMINAL {{ device = df_classes.Device(None) }}
+                                        [NAME {{device.set_name(NAME)}}]
+                                        TYPE (VT100 {{ device.set_type(VT100) }} | VT400 {{ device.set_type(VT400) }})
+                                      END_DEVICE {{ add_child(device) }}

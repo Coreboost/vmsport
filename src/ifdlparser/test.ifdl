@@ -75,11 +75,13 @@ FORM FOO
 
 
       Layout VT_LAYOUT
-/*
+
         Device
           Terminal
           Type %VT100
         End Device
+
+        /*
 
         Size 24 Lines by 80 Columns
 
