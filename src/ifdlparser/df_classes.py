@@ -53,12 +53,15 @@ class Occurs(Symbol):
         if (self.name):
             self.print_indented("CURRENT " + self.name , indent+1)
 
-class Atomic_type(Named_symbol):
+class Atomic_type(Named_symbol, Container_symbol):
     def __init__(self, name, symbol_name):
         Named_symbol.__init__(self, name)
+        Container_symbol.__init__(self)
         self.symbol_name = symbol_name
     def generate(self, indent):
         self.print_indented(self.name + " " + self.symbol_name, indent)
+        self.generate_children(indent)
+
 
 class Longword_integer(Atomic_type):
     def __init__(self, name):
@@ -68,26 +71,32 @@ class Unsigned_longword(Atomic_type):
     def __init__(self, name):
         Atomic_type.__init__(self, name, "UNSIGNED LONGWORD")
 
-class Character_data(Named_symbol):
+class Character_data(Named_symbol, Container_symbol):
     def __init__(self, name, length):
         Named_symbol.__init__(self, name)
+        Container_symbol.__init__(self)
         self.length = length
     def generate(self, indent):
         self.print_indented(self.name + " CHARACTER(" + self.length + ")", indent)
+        self.generate_children(indent)
 
-class Integer_data(Named_symbol):
+class Integer_data(Named_symbol, Container_symbol):
     def __init__(self, name, length):
         Named_symbol.__init__(self, name)
+        Container_symbol.__init__(self)
         self.length = length
     def generate(self, indent):
         self.print_indented(self.name + " INTEGER(" + self.length + ")", indent)
+        self.generate_children(indent)
 
-class Datetime_data(Named_symbol):
+class Datetime_data(Named_symbol, Container_symbol):
     def __init__(self, name, int_value):
         Named_symbol.__init__(self, name)
+        Container_symbol.__init__(self)
         self.int_value = int_value
     def generate(self, indent):
         self.print_indented(self.name + " DATETIME(" + self.int_value + ")", indent)
+        self.generate_children(indent)
 
 class Integer_literal(Symbol):
     def __init__(self, int_value):
@@ -103,6 +112,12 @@ class Form_record(Named_symbol, Container_symbol):
         self.print_indented("FORM RECORD " + self.name, indent)
         self.generate_children(indent)
         self.print_indented("END RECORD", indent)
+
+class Transfer_clause(Symbol):
+    def __init__(self, reference):
+        self.reference = reference
+    def generate(self, indent):
+        self.print_indented("USING " + self.reference, indent)
 
 class Layout(Named_symbol, Container_symbol):
     def __init__(self, name):

@@ -23,10 +23,58 @@ FORM FOO
     TOTAL_TOLLS Longword Integer
     FORM_TOTAL Longword Integer
   End Data
-  FORM RECORD BAR
-  END RECORD
-  FORM RECORD BAZ
-  END RECORD
+
+  Form Record HEADER_INFO_RECORD
+    EMPLOYEE_NAME Character(32)
+    BADGE_NUMBER Character(6)
+    COST_CENTER Character(3)
+    ADDRESS Character(120)
+    REASON Character(64)
+  End Record
+
+
+    Form Record TRIP_ROW_RECORD
+      Group TRIP
+        TRIP_DATE Datetime(8)
+        Using TRIP(N).TRIP_DATE
+        TRIP_FROM Character(3)
+        Using TRIP(N).TRIP_FROM
+        TRIP_TO Character(3)
+        Using TRIP(N).TRIP_TO
+        MILES Longword Integer
+        Using TRIP(N).MILES
+        AMOUNT Longword Integer
+        Using TRIP(N).AMOUNT
+        TOLL Longword Integer
+        Using TRIP(N).TOLL
+        SUBTOTAL Longword Integer
+        Using TRIP(N).SUBTOTAL
+      End Group
+    End Record
+
+
+      Form Record TRIPS_RECORD
+        Group TRIP
+          Occurs 36
+          TRIP_DATE Datetime(8)
+          TRIP_FROM Character(3)
+          TRIP_TO Character(3)
+          MILES Longword Integer
+          AMOUNT Longword Integer
+          TOLL Longword Integer
+          SUBTOTAL Longword Integer
+        End Group
+      End Record
+
+      Form Record TOTALS_RECORD
+        TOTAL_MILES Longword Integer
+        TOTAL_AMOUNT Longword Integer
+        TOTAL_TOLLS Longword Integer
+        FORM_TOTAL Longword Integer
+      End Record
+
+
+
   LAYOUT SPAM
   END LAYOUT
   LAYOUT EGGS
