@@ -74,9 +74,37 @@ FORM FOO
       End Record
 
 
+      Layout VT_LAYOUT
+/*
+        Device
+          Terminal
+          Type %VT100
+        End Device
 
-  LAYOUT SPAM
-  END LAYOUT
-  LAYOUT EGGS
-  END LAYOUT
+        Size 24 Lines by 80 Columns
+
+        List LOCATION_CODES
+          "ACT"
+          "BXB"
+          "LTN"
+          "MKO"
+          "ZKO"
+        End List
+
+        Viewport MAIN_VIEWPORT
+          Lines 1 Through 22
+          Columns 1 Through 80
+        End Viewport
+
+        Viewport DEFAULT_MESSAGE_VIEWPORT
+          Lines 23 Through 24
+          Columns 1 Through 80
+        End Viewport
+
+        Viewport HELP_VIEWPORT
+          Lines 1 Through 22
+          Columns 1 Through 80
+        End Viewport
+*/
+      End Layout
 END FORM

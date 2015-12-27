@@ -32,7 +32,7 @@ def pop():
 %%
 
 parser IFDL:
-    ignore: '[ \r\t\n]+'
+    ignore: '[ \r\t\n]+|/\*(.|\n|\r)*\*/'
     token FORM:                 "(?i)FORM"
     token END_FORM:             "(?i)END[ \t]+FORM"
     token FORM_DATA:            "(?i)FORM[ \t]+DATA"
