@@ -62,6 +62,12 @@ parser IFDL:
     token THROUGH:              "(?i)THROUGH"
     token LINES:                "(?i)LINES"
     token THRU:                 "(?i)THRU"
+    token FUNCTION:             "(?i)FUNCTION"
+    token END_FUNCTION:         "(?i)END[ \t]+FUNCTION"
+    token IS:                   "(?i)IS"
+    token KEY_NAME:             "(?i)%PF1|%PF4|%F8|%KP_PERIOD|%KP_8|%CARRIAGE_RETURN|%ENTER|%DOWN|%HORIZONTAL_TAB|%UP|%DO|%SELECT|%CONTROL_P"
+    token BUILT_IN_FUNCTION:    "(?i)EXIT[ \t]+GROUP[ \t]+NEXT|INSERT[ \t]+LINE"
+    token INSERT_LINE:          "(?i)"
     token VALUE:                "(?i)VALUE"
     token LONGWORD_INTEGER:     "(?i)LONGWORD[ \t]+INTEGER"
     token UNSIGNED_LONGWORD:    "(?i)UNSIGNED[ \t]+LONGWORD"
@@ -125,6 +131,7 @@ parser IFDL:
                                         size_declaration
                                         list_declaration*
                                         viewport_declaration*
+                                        function_declaration*
                                       END_LAYOUT {{ pop() }}
 
     rule device_declaration:          DEVICE TERMINAL {{ device = df_classes.Device(None) }}
@@ -142,3 +149,8 @@ parser IFDL:
                                         LINES INTEGER_LITERAL {{lines_start=INTEGER_LITERAL}} (THROUGH|THRU) INTEGER_LITERAL {{lines_end=INTEGER_LITERAL}}
                                         COLUMNS INTEGER_LITERAL {{columns_start=INTEGER_LITERAL}} (THROUGH|THRU) INTEGER_LITERAL {{columns_end=INTEGER_LITERAL}}
                                       END_VIEWPORT {{add_child(df_classes.Viewport(NAME, lines_start, lines_end, columns_start, columns_end))}}
+
+    rule function_declaration:        FUNCTION {{function = df_classes.Function_declaration()}}
+                                        (NAME {{function.set_name(NAME)}} | BUILT_IN_FUNCTION {{function.set_builtin(BUILT_IN_FUNCTION)}})
+                                        IS (KEY_NAME {{function.set_key_1(KEY_NAME)}} | "\(" KEY_NAME {{function.set_key_1(KEY_NAME)}} [KEY_NAME {{function.set_key_2(KEY_NAME)}}] "\)")+
+                                      END_FUNCTION {{add_child(function)}}

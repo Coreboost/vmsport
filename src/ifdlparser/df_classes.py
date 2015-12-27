@@ -177,6 +177,27 @@ class Viewport(Named_symbol):
         self.print_indented("COLUMNS " + self.columns_start + " THROUGH " + self.columns_end, indent+1)
         self.print_indented("END VIEWPORT", indent)
 
+class Function_declaration(Named_symbol):
+    def __init__(self):
+        Named_symbol.__init__(self, None)
+        self.key_sequences = []
+        self.builtin = False
+    def set_builtin(self, name):
+        self.builtin = True
+        self.set_name(name)
+    def set_key_1(self, key1):
+        self.key_sequences.append([key1])
+    def set_key_2(self, key2):
+        self.key_sequences[-1].append(key2)
+    def generate(self, indent):
+        self.print_indented("FUNCTION " + self.name + " IS", indent)
+        for sequence in self.key_sequences:
+            if len(sequence) == 1:
+                self.print_indented(sequence[0], indent+1)
+            else:
+                self.print_indented ("(" + sequence[0] + " " + sequence[1] + ")", indent+1)
+        self.print_indented("END FUNCTION", indent)
+
 
 def test():
     form = Form("My form")
