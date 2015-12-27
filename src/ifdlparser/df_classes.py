@@ -152,6 +152,18 @@ class Size(Symbol):
     def generate(self, indent):
         self.print_indented("SIZE " + self.lines + " LINES BY " + self.columns + " COLUMNS", indent)
 
+class List(Named_symbol):
+    def __init__(self, name):
+        Named_symbol.__init__(self, name)
+        self.list_items = []
+    def add_list_item(self, list_item):
+        self.list_items.append(list_item)
+    def generate(self, indent):
+        self.print_indented("LIST " + self.name, indent)
+        for item in self.list_items:
+            self.print_indented('"' + item + '"', indent+1)
+        self.print_indented("END LIST", indent)
+
 def test():
     form = Form("My form")
     form.add_child(Form_data())

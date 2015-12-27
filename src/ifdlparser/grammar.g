@@ -55,6 +55,8 @@ parser IFDL:
     token SIZE:                 "(?i)SIZE"
     token LINES_BY:             "(?i)LINES[ \t]+BY"
     token COLUMNS:              "(?i)COLUMNS"
+    token LIST:                 "(?i)LIST"
+    token END_LIST:             "(?i)END[ \t]+LIST"
     token VALUE:                "(?i)VALUE"
     token LONGWORD_INTEGER:     "(?i)LONGWORD[ \t]+INTEGER"
     token UNSIGNED_LONGWORD:    "(?i)UNSIGNED[ \t]+LONGWORD"
@@ -64,7 +66,7 @@ parser IFDL:
     token INTEGER_LITERAL:      "\d+"
     token DECIMAL_LITERAL:      "\d*\.\d+(E\d+)?"
     token DATETIME_LITERAL:     "\d+"
-    token TEXT_LITERAL:         "\"[^\"\r\n]|\"\"\"|\'[^\'\r\n]|\'\'\'"
+    token TEXT_LITERAL:         "(\"([^\"\r\n]|\"\")+\")|(\'([^\'\r\n]|\'\')+\')"
     token NAME:                 "\w+"
     token DATA_REFERENCE:       "\w+(\(\w+\))?(\.\w+(\(\w+\))?)*"
 
@@ -116,6 +118,7 @@ parser IFDL:
     rule layout_declaration:          LAYOUT NAME {{ push(df_classes.Layout(NAME)) }}
                                         device_declaration
                                         size_declaration
+                                        (list_declaration)*
                                       END_LAYOUT {{ pop() }}
 
     rule device_declaration:          DEVICE TERMINAL {{ device = df_classes.Device(None) }}
@@ -124,3 +127,7 @@ parser IFDL:
                                       END_DEVICE {{ add_child(device) }}
 
     rule size_declaration:            SIZE INTEGER_LITERAL {{lines = INTEGER_LITERAL}} LINES_BY INTEGER_LITERAL {{columns = INTEGER_LITERAL}} COLUMNS {{add_child(df_classes.Size(lines, columns))}}
+
+    rule list_declaration:            LIST NAME {{list = df_classes.List(NAME)}}
+                                        (TEXT_LITERAL {{list.add_list_item(TEXT_LITERAL[1:-1])}})*
+                                      END_LIST {{add_child(list)}}

@@ -83,7 +83,6 @@ FORM FOO
 
         Size 24 Lines by 80 Columns
 
-        /*
 
         List LOCATION_CODES
           "ACT"
@@ -92,6 +91,8 @@ FORM FOO
           "MKO"
           "ZKO"
         End List
+
+        /*
 
         Viewport MAIN_VIEWPORT
           Lines 1 Through 22
