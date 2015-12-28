@@ -96,25 +96,25 @@ parser IFDL:
     token NAME:                 "\w+"
     token DATA_REFERENCE:       "\w+(\(\w+\))?(\.\w+(\(\w+\))?)*"
 
-    rule form_decl:                   FORM NAME {{ push(df_classes.Form(NAME)) }}
+    rule form_decl:                   FORM NAME {{ push(df_classes.Form_decl(NAME)) }}
                                         form_data_decl*
                                         form_record_decl*
                                         layout_decl*
                                       END_FORM {{ pop() }}
 
-    rule form_data_decl:              FORM_DATA {{ push(df_classes.Form_data()) }}
+    rule form_data_decl:              FORM_DATA {{ push(df_classes.Form_data_decl()) }}
                                         (form_data_item_decl | form_data_group_decl)*
                                       END_DATA {{ pop() }}
 
     rule form_data_item_decl:         NAME (text_data_clause<<NAME>> | atomic_clause<<NAME>> | datetime_data_clause<<NAME>>)
 
-    rule form_data_group_decl:        GROUP NAME {{ push(df_classes.Group(NAME)) }}
+    rule form_data_group_decl:        GROUP NAME {{ push(df_classes.Group_decl(NAME)) }}
                                         [occurs_clause]
                                         (form_data_item_decl | form_data_group_decl)*
                                       END_GROUP {{ pop() }}
 
-    rule occurs_clause:               OCCURS INTEGER_LITERAL {{occurs = add_child(df_classes.Occurs(INTEGER_LITERAL))}}
-                                      [CURRENT NAME {{occurs.set_current(NAME)}}]
+    rule occurs_clause:               OCCURS INTEGER_LITERAL {{occurs_clause = add_child(df_classes.Occurs_clause(INTEGER_LITERAL))}}
+                                      [CURRENT NAME {{occurs_clause.set_current(NAME)}}]
 
     rule text_data_clause<<NM>>:      CHARACTER "\(" INTEGER_LITERAL "\)" {{add_child(df_classes.Character_data(NM, INTEGER_LITERAL))}} |
                                       INTEGER "\(" INTEGER_LITERAL "\)" {{add_child(df_classes.Integer_data(NM, INTEGER_LITERAL))}}
@@ -124,7 +124,7 @@ parser IFDL:
 
     rule datetime_data_clause<<NM>>:  DATETIME "\(" INTEGER_LITERAL "\)" {{add_child(df_classes.Datetime_data(NM, INTEGER_LITERAL))}}
 
-    rule form_record_decl:            FORM_RECORD NAME {{ push(df_classes.Form_record(NAME)) }}
+    rule form_record_decl:            FORM_RECORD NAME {{ push(df_classes.Form_record_decl(NAME)) }}
                                         (record_field_description | record_group_description)*
                                       END_RECORD {{ pop() }}
 
@@ -136,12 +136,12 @@ parser IFDL:
 
     rule data_transfer_clause:        USING DATA_REFERENCE {{add_child_to_last_added(df_classes.Transfer_clause(DATA_REFERENCE))}}
 
-    rule record_group_description:    GROUP NAME {{ push(df_classes.Group(NAME)) }}
-                                        [OCCURS INTEGER_LITERAL {{add_child(df_classes.Occurs(INTEGER_LITERAL))}}]
+    rule record_group_description:    GROUP NAME {{ push(df_classes.Group_decl(NAME)) }}
+                                        [OCCURS INTEGER_LITERAL {{add_child(df_classes.Occurs_clause(INTEGER_LITERAL))}}]
                                         (record_field_description | record_group_description)*
                                       END_GROUP {{ pop() }}
 
-    rule layout_decl:                 LAYOUT NAME {{ push(df_classes.Layout(NAME)) }}
+    rule layout_decl:                 LAYOUT NAME {{ push(df_classes.Layout_decl(NAME)) }}
                                         device_decl
                                         size_decl
                                         list_decl*
@@ -150,28 +150,28 @@ parser IFDL:
                                         (internal_response_decl)*
                                       END_LAYOUT {{ pop() }}
 
-    rule device_decl:                 DEVICE TERMINAL {{ device = df_classes.Device(None) }}
-                                        [NAME {{device.set_name(NAME)}}]
-                                        TYPE (VT100 {{ device.set_type(VT100) }} | VT400 {{ device.set_type(VT400) }})
-                                      END_DEVICE {{ add_child(device) }}
+    rule device_decl:                 DEVICE TERMINAL {{ device_decl = df_classes.Device_decl(None) }}
+                                        [NAME {{device_decl.set_name(NAME)}}]
+                                        TYPE (VT100 {{ device_decl.set_type(VT100) }} | VT400 {{ device_decl.set_type(VT400) }})
+                                      END_DEVICE {{ add_child(device_decl) }}
 
-    rule size_decl:                   SIZE INTEGER_LITERAL {{lines = INTEGER_LITERAL}} LINES_BY INTEGER_LITERAL {{columns = INTEGER_LITERAL}} COLUMNS {{add_child(df_classes.Size(lines, columns))}}
+    rule size_decl:                   SIZE INTEGER_LITERAL {{lines = INTEGER_LITERAL}} LINES_BY INTEGER_LITERAL {{columns = INTEGER_LITERAL}} COLUMNS {{add_child(df_classes.Size_decl(lines, columns))}}
 
-    rule list_decl:                   LIST NAME {{list = df_classes.List(NAME)}}
-                                        (TEXT_LITERAL {{list.add_list_item(TEXT_LITERAL[1:-1])}})*
-                                      END_LIST {{add_child(list)}}
+    rule list_decl:                   LIST NAME {{list_decl = df_classes.List_decl(NAME)}}
+                                        (TEXT_LITERAL {{list_decl.add_list_item(TEXT_LITERAL[1:-1])}})*
+                                      END_LIST {{add_child(list_decl)}}
 
     rule viewport_decl:               VIEWPORT NAME
                                         LINES INTEGER_LITERAL {{lines_start=INTEGER_LITERAL}} (THROUGH|THRU) INTEGER_LITERAL {{lines_end=INTEGER_LITERAL}}
                                         COLUMNS INTEGER_LITERAL {{columns_start=INTEGER_LITERAL}} (THROUGH|THRU) INTEGER_LITERAL {{columns_end=INTEGER_LITERAL}}
-                                      END_VIEWPORT {{add_child(df_classes.Viewport(NAME, lines_start, lines_end, columns_start, columns_end))}}
+                                      END_VIEWPORT {{add_child(df_classes.Viewport_decl(NAME, lines_start, lines_end, columns_start, columns_end))}}
 
-    rule function_decl:               FUNCTION {{function = df_classes.Function_decl()}}
-                                        (NAME {{function.set_name(NAME)}} | BUILT_IN_FUNCTION {{function.set_builtin(BUILT_IN_FUNCTION)}})
-                                        IS (KEY_NAME {{function.set_key_1(KEY_NAME)}} | "\(" KEY_NAME {{function.set_key_1(KEY_NAME)}} [KEY_NAME {{function.set_key_2(KEY_NAME)}}] "\)")+
-                                      END_FUNCTION {{add_child(function)}}
+    rule function_decl:               FUNCTION {{function_decl = df_classes.Function_decl()}}
+                                        (NAME {{function_decl.set_name(NAME)}} | BUILT_IN_FUNCTION {{function_decl.set_builtin(BUILT_IN_FUNCTION)}})
+                                        IS (KEY_NAME {{function_decl.set_key_1(KEY_NAME)}} | "\(" KEY_NAME {{function_decl.set_key_1(KEY_NAME)}} [KEY_NAME {{function_decl.set_key_2(KEY_NAME)}}] "\)")+
+                                      END_FUNCTION {{add_child(function_decl)}}
 
-    rule internal_response_decl:      INTERNAL_RESPONSE NAME {{ push(df_classes.Internal_response(NAME)) }}
+    rule internal_response_decl:      INTERNAL_RESPONSE NAME {{ push(df_classes.Internal_response_decl(NAME)) }}
                                         (response_step {{add_child(response_step)}})*
                                       END_RESPONSE {{ pop() }}
 

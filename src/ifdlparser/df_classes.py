@@ -1,10 +1,10 @@
-class Symbol:
+class Clause:
     def generate(self, indent):
         raise NotImplementedError("Error: generate/ must be implemented for sub-classes.")
     def print_indented(self, str, indent):
         print indent * '  ' + str
 
-class Container_symbol(Symbol):
+class Container_clause(Clause):
     def __init__(self):
         self.contents = []
     def add_child(self, child):
@@ -13,38 +13,38 @@ class Container_symbol(Symbol):
         for item in self.contents:
             item.generate(indent+1)
 
-class Named_symbol(Symbol):
+class Named_clause(Clause):
     def __init__(self, name):
         self.set_name(name)
     def set_name(self, name):
         self.name = name
 
-class Form(Named_symbol, Container_symbol):
+class Form_decl(Named_clause, Container_clause):
     def __init__(self, name):
-        Container_symbol.__init__(self)
-        Named_symbol.__init__(self, name)
+        Container_clause.__init__(self)
+        Named_clause.__init__(self, name)
 
     def generate(self, indent):
         self.print_indented("FORM " + self.name, indent)
         self.generate_children(indent)
         self.print_indented("END FORM", indent)
 
-class Form_data(Container_symbol):
+class Form_data_decl(Container_clause):
     def generate(self, indent):
         self.print_indented("FORM DATA", indent)
         self.generate_children(indent)
         self.print_indented("END DATA", indent)
 
-class Group(Named_symbol, Container_symbol):
+class Group_decl(Named_clause, Container_clause):
     def __init__(self, name):
-        Container_symbol.__init__(self)
-        Named_symbol.__init__(self, name)
+        Container_clause.__init__(self)
+        Named_clause.__init__(self, name)
     def generate(self, indent):
         self.print_indented("GROUP " + self.name, indent)
         self.generate_children(indent)
         self.print_indented("END GROUP", indent)
 
-class Occurs(Symbol):
+class Occurs_clause(Clause):
     def __init__(self, length):
         self.length = length
         self.name = None
@@ -55,13 +55,13 @@ class Occurs(Symbol):
         if (self.name):
             self.print_indented("CURRENT " + self.name , indent+1)
 
-class Atomic_type(Named_symbol, Container_symbol):
-    def __init__(self, name, symbol_name):
-        Named_symbol.__init__(self, name)
-        Container_symbol.__init__(self)
-        self.symbol_name = symbol_name
+class Atomic_type(Named_clause, Container_clause):
+    def __init__(self, name, clause_name):
+        Named_clause.__init__(self, name)
+        Container_clause.__init__(self)
+        self.clause_name = clause_name
     def generate(self, indent):
-        self.print_indented(self.name + " " + self.symbol_name, indent)
+        self.print_indented(self.name + " " + self.clause_name, indent)
         self.generate_children(indent)
 
 
@@ -73,66 +73,66 @@ class Unsigned_longword(Atomic_type):
     def __init__(self, name):
         Atomic_type.__init__(self, name, "UNSIGNED LONGWORD")
 
-class Character_data(Named_symbol, Container_symbol):
+class Character_data(Named_clause, Container_clause):
     def __init__(self, name, length):
-        Named_symbol.__init__(self, name)
-        Container_symbol.__init__(self)
+        Named_clause.__init__(self, name)
+        Container_clause.__init__(self)
         self.length = length
     def generate(self, indent):
         self.print_indented(self.name + " CHARACTER(" + self.length + ")", indent)
         self.generate_children(indent)
 
-class Integer_data(Named_symbol, Container_symbol):
+class Integer_data(Named_clause, Container_clause):
     def __init__(self, name, length):
-        Named_symbol.__init__(self, name)
-        Container_symbol.__init__(self)
+        Named_clause.__init__(self, name)
+        Container_clause.__init__(self)
         self.length = length
     def generate(self, indent):
         self.print_indented(self.name + " INTEGER(" + self.length + ")", indent)
         self.generate_children(indent)
 
-class Datetime_data(Named_symbol, Container_symbol):
+class Datetime_data(Named_clause, Container_clause):
     def __init__(self, name, int_value):
-        Named_symbol.__init__(self, name)
-        Container_symbol.__init__(self)
+        Named_clause.__init__(self, name)
+        Container_clause.__init__(self)
         self.int_value = int_value
     def generate(self, indent):
         self.print_indented(self.name + " DATETIME(" + self.int_value + ")", indent)
         self.generate_children(indent)
 
-class Integer_literal(Symbol):
+class Integer_literal(Clause):
     def __init__(self, int_value):
         self.value = int_value
     def generate(self, indent):
         self.print_indented(self.value, indent)
 
-class Form_record(Named_symbol, Container_symbol):
+class Form_record_decl(Named_clause, Container_clause):
     def __init__(self, name):
-        Container_symbol.__init__(self)
-        Named_symbol.__init__(self, name)
+        Container_clause.__init__(self)
+        Named_clause.__init__(self, name)
     def generate(self, indent):
         self.print_indented("FORM RECORD " + self.name, indent)
         self.generate_children(indent)
         self.print_indented("END RECORD", indent)
 
-class Transfer_clause(Symbol):
+class Transfer_clause(Clause):
     def __init__(self, reference):
         self.reference = reference
     def generate(self, indent):
         self.print_indented("USING " + self.reference, indent)
 
-class Layout(Named_symbol, Container_symbol):
+class Layout_decl(Named_clause, Container_clause):
     def __init__(self, name):
-        Container_symbol.__init__(self)
-        Named_symbol.__init__(self, name)
+        Container_clause.__init__(self)
+        Named_clause.__init__(self, name)
     def generate(self, indent):
         self.print_indented("LAYOUT " + self.name, indent)
         self.generate_children(indent)
         self.print_indented("END LAYOUT", indent)
 
-class Device(Named_symbol):
+class Device_decl(Named_clause):
     def __init__(self, name):
-        Named_symbol.__init__(self, name)
+        Named_clause.__init__(self, name)
         self.type = None
     def set_type(self, type):
         self.type = type
@@ -145,16 +145,16 @@ class Device(Named_symbol):
         self.print_indented("TYPE " + self.type, indent+1)
         self.print_indented("END DEVICE", indent)
 
-class Size(Symbol):
+class Size_decl(Clause):
     def __init__(self, lines, columns):
         self.lines = lines
         self.columns = columns
     def generate(self, indent):
         self.print_indented("SIZE " + self.lines + " LINES BY " + self.columns + " COLUMNS", indent)
 
-class List(Named_symbol):
+class List_decl(Named_clause):
     def __init__(self, name):
-        Named_symbol.__init__(self, name)
+        Named_clause.__init__(self, name)
         self.list_items = []
     def add_list_item(self, list_item):
         self.list_items.append(list_item)
@@ -164,9 +164,9 @@ class List(Named_symbol):
             self.print_indented('"' + item + '"', indent+1)
         self.print_indented("END LIST", indent)
 
-class Viewport(Named_symbol):
+class Viewport_decl(Named_clause):
     def __init__(self, name, lines_start, lines_end, columns_start, columns_end):
-        Named_symbol.__init__(self, name)
+        Named_clause.__init__(self, name)
         self.lines_start = lines_start
         self.lines_end = lines_end
         self.columns_start = columns_start
@@ -177,9 +177,9 @@ class Viewport(Named_symbol):
         self.print_indented("COLUMNS " + self.columns_start + " THROUGH " + self.columns_end, indent+1)
         self.print_indented("END VIEWPORT", indent)
 
-class Function_decl(Named_symbol):
+class Function_decl(Named_clause):
     def __init__(self):
-        Named_symbol.__init__(self, None)
+        Named_clause.__init__(self, None)
         self.key_sequences = []
         self.builtin = False
     def set_builtin(self, name):
@@ -198,16 +198,16 @@ class Function_decl(Named_symbol):
                 self.print_indented ("(" + sequence[0] + " " + sequence[1] + ")", indent+1)
         self.print_indented("END FUNCTION", indent)
 
-class Internal_response(Named_symbol, Container_symbol):
+class Internal_response_decl(Named_clause, Container_clause):
     def __init__(self, name):
-        Container_symbol.__init__(self)
-        Named_symbol.__init__(self, name)
+        Container_clause.__init__(self)
+        Named_clause.__init__(self, name)
     def generate(self, indent):
         self.print_indented("INTERNAL RESPONSE " + self.name, indent)
         self.generate_children(indent)
         self.print_indented("END RESPONSE", indent)
 
-class Message_step(Symbol):
+class Message_step(Clause):
     def __init__(self):
         self.lines = []
     def add_line(self, line):
@@ -219,7 +219,7 @@ class Message_step(Symbol):
             self.print_indented('"' + line + '"', indent+1)
         return self
 
-class Signal_step(Symbol):
+class Signal_step(Clause):
     def __init__(self):
         self.bell = True
     def set_bell(self):
@@ -235,7 +235,7 @@ class Signal_step(Symbol):
             self.print_indented("SIGNAL %REVERSE", indent)
         return self
 
-class Position_step(Symbol):
+class Position_step(Clause):
     def __init__(self):
         self.panel = None
         self.target_type = None
@@ -253,7 +253,7 @@ class Position_step(Symbol):
         target_types.get(self.target_type, undefined_target_type)()
         return self
 
-class Reset_step(Symbol):
+class Reset_step(Clause):
     def __init__(self):
         self.all = False
     def set_all(self):
@@ -264,7 +264,7 @@ class Reset_step(Symbol):
             self.print_indented("RESET ALL", indent)
         return self
 
-class Return_step(Symbol):
+class Return_step(Clause):
     def __init__(self):
         self.immediate = False
     def set_immediate(self):
@@ -273,7 +273,7 @@ class Return_step(Symbol):
     def generate(self, indent):
         self.print_indented("RETURN" + " IMMEDIATE" if self.immediate else "", indent)
 
-class Call_step(Symbol):
+class Call_step(Clause):
     def __init__(self, subroutine_name):
         self.subroutine_name = subroutine_name
         self.parameters = []
