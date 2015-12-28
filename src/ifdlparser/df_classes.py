@@ -207,6 +207,42 @@ class Internal_response_decl(Named_clause, Container_clause):
         self.generate_children(indent)
         self.print_indented("END RESPONSE", indent)
 
+class Disable_response_decl(Container_clause):
+    def __init__(self):
+        Container_clause.__init__(self)
+    def generate(self, indent):
+        self.print_indented("DISABLE RESPONSE", indent)
+        self.generate_children(indent)
+        self.print_indented("END RESPONSE", indent)
+
+class Receive_response_decl(Container_clause):
+    def __init__(self, record_name):
+        Container_clause.__init__(self)
+        self.record_name = record_name
+    def generate(self, indent):
+        self.print_indented("RECEIVE RESPONSE " + self.record_name, indent)
+        self.generate_children(indent)
+        self.print_indented("END RESPONSE", indent)
+
+class Activate_step(Clause):
+    def __init__(self):
+        self.panel_name = None
+        self.target_type = None
+    def set_all(self):
+        self.target_type = "ALL"
+    def set_panel(self, panel_name):
+        self.target_type = "PANEL"
+        self.panel_name = panel_name
+    def generate(self, indent):
+        def undefined_target_type():
+            raise NotImplementedError("The specified target type for activate step not supported")
+        target_types = {
+            "ALL": lambda: self.print_indented("ACTIVATE ALL", indent),
+            "PANEL": lambda: self.print_indented("ACTIVATE PANEL " + self.panel_name, indent)
+        }
+        target_types.get(self.target_type, undefined_target_type)()
+        return self
+
 class Message_step(Clause):
     def __init__(self):
         self.lines = []
@@ -246,7 +282,6 @@ class Position_step(Clause):
     def generate(self, indent):
         def undefined_target_type():
             raise NotImplementedError("The specified target type for position step not supported")
-
         target_types = {
             "PANEL": lambda: self.print_indented("POSITION TO PANEL " + self.panel, indent)
         }
@@ -262,6 +297,17 @@ class Reset_step(Clause):
     def generate(self, indent):
         if self.all:
             self.print_indented("RESET ALL", indent)
+        return self
+
+class Remove_step(Clause):
+    def __init__(self):
+        self.all = False
+    def set_all(self):
+        self.all = True
+        return self
+    def generate(self, indent):
+        if self.all:
+            self.print_indented("REMOVE ALL", indent)
         return self
 
 class Return_step(Clause):

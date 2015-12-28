@@ -176,5 +176,21 @@ Form MRF_FORM
       Signal
     End Response
 
+    Disable Response
+      Remove All
+    End Response
+
+    Receive Response HEADER_INFO_RECORD
+      Activate
+      Panel HEADER_INFO_PANEL
+      Position To Panel HEADER_INFO_PANEL
+    End Response
+
+    Receive Response TRIPS_RECORD
+      Activate
+      Panel TRIPS_INFO_PANEL
+      Position To Panel TRIPS_INFO_PANEL
+    End Response
+
   End Layout
 END FORM

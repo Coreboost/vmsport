@@ -68,7 +68,10 @@ parser IFDL:
     token KEY_NAME:             "(?i)%PF1|%PF4|%F8|%KP_PERIOD|%KP_8|%CARRIAGE_RETURN|%ENTER|%DOWN|%HORIZONTAL_TAB|%UP|%DO|%SELECT|%CONTROL_P"
     token BUILT_IN_FUNCTION:    "(?i)EXIT[ \t]+GROUP[ \t]+NEXT|INSERT[ \t]+LINE"
     token INTERNAL_RESPONSE:    "(?i)INTERNAL[ \t]+RESPONSE"
+    token DISABLE_RESPONSE:    "(?i)DISABLE[ \t]+RESPONSE"
+    token RECEIVE_RESPONSE:    "(?i)RECEIVE[ \t]+RESPONSE"
     token END_RESPONSE:         "(?i)END[ \t]+RESPONSE"
+    token ACTIVATE:             "(?i)ACTIVATE"
     token SIGNAL:               "(?i)SIGNAL"
     token BELL_SIGNAL:          "(?i)%BELL"
     token REVERSE_SIGNAL:       "(?i)%REVERSE"
@@ -78,6 +81,7 @@ parser IFDL:
     token PANEL:                "(?i)PANEL"
     token RESET:                "(?i)RESET"
     token ALL:                  "(?i)ALL"
+    token REMOVE:               "(?i)REMOVE"
     token RETURN:               "(?i)RETURN"
     token IMMEDIATE:            "(?i)IMMEDIATE"
     token CALL:                 "(?i)CALL"
@@ -147,7 +151,7 @@ parser IFDL:
                                         list_decl*
                                         viewport_decl*
                                         function_decl*
-                                        (internal_response_decl)*
+                                        (internal_response_decl | external_response_decl)*
                                       END_LAYOUT {{ pop() }}
 
     rule device_decl:                 DEVICE TERMINAL {{ device_decl = df_classes.Device_decl(None) }}
@@ -175,21 +179,39 @@ parser IFDL:
                                         (response_step {{add_child(response_step)}})*
                                       END_RESPONSE {{ pop() }}
 
+    rule external_response_decl:      (disable_response_decl | receive_response_decl)
+
+    rule disable_response_decl:       DISABLE_RESPONSE {{ push(df_classes.Disable_response_decl()) }}
+                                        (response_step {{add_child(response_step)}})*
+                                      END_RESPONSE {{ pop() }}
+
+    rule receive_response_decl:       RECEIVE_RESPONSE NAME {{ push(df_classes.Receive_response_decl(NAME)) }}
+                                        (response_step {{add_child(response_step)}})*
+                                      END_RESPONSE {{ pop() }}
+
     rule response_step:               (signal_response_step {{step = signal_response_step}} |
                                       message_response_step {{step = message_response_step}} |
+                                      activate_response_step {{step = activate_response_step}} |
                                       position_response_step {{step = position_response_step}} |
                                       reset_response_step {{step = reset_response_step}} |
+                                      remove_response_step {{step = remove_response_step}} |
                                       return_response_step {{step = return_response_step}} |
                                       call_response_step {{step = call_response_step}})
                                       {{return step}}
 
     rule signal_response_step:        SIGNAL {{signal_step = df_classes.Signal_step()}} [BELL_SIGNAL {{signal_step.set_bell()}} | REVERSE_SIGNAL {{signal_step.set_reverse()}}] {{return signal_step}}
 
+    rule activate_response_step:      ACTIVATE {{activate_step = df_classes.Activate_step() }}(ALL {{activate_step.set_all()}}|
+                                      (PANEL NAME {{activate_step.set_panel(NAME)}})
+                                      ){{return activate_step}}
+
     rule message_response_step:       MESSAGE {{message_step = df_classes.Message_step()}} (TEXT_LITERAL{{message_step.add_line(TEXT_LITERAL[1:-1])}})* {{return message_step}}
 
     rule position_response_step:      POSITION {{position_step = df_classes.Position_step()}} TO PANEL NAME {{return position_step.set_panel(NAME)}}
 
     rule reset_response_step:         RESET {{reset_step = df_classes.Reset_step()}} ALL {{return reset_step.set_all()}}
+
+    rule remove_response_step:        REMOVE {{remove_step = df_classes.Remove_step()}} ALL {{return remove_step.set_all()}}
 
     rule return_response_step:        RETURN {{return_step = df_classes.Return_step()}} IMMEDIATE {{return return_step.set_immediate()}}
 
