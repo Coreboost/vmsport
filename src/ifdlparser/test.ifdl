@@ -141,6 +141,40 @@ Form MRF_FORM
       Is %CONTROL_P
     End Function
 
+    Internal Response BORDER_PATROL
+      Message
+        "No items in that direction."
+      Signal
+    End Response
+
+    Internal Response RESET_DATA
+      Reset All
+      Message
+        "Data discarded."
+      Signal
+      Position To Panel TRIPS_INFO_PANEL
+    End Response
+
+    Internal Response RECORD_DATA
+      Message
+        "Data received. Program exiting."
+      Signal
+      Return Immediate
+    End Response
+
+    Internal Response UPDATE_TOTALS
+      Message
+        "Computing totals..."
+      Call "DO_TOTALS" Using
+        By Reference TRIPS_RECORD
+        By Reference TOTAL_MILES
+        By Reference TOTAL_AMOUNT
+        By Reference TOTAL_TOLLS
+        By Reference FORM_TOTAL
+      Message
+        "Done computing totals."
+      Signal
+    End Response
 
   End Layout
 END FORM

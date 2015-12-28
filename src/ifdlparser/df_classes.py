@@ -177,7 +177,7 @@ class Viewport(Named_symbol):
         self.print_indented("COLUMNS " + self.columns_start + " THROUGH " + self.columns_end, indent+1)
         self.print_indented("END VIEWPORT", indent)
 
-class Function_declaration(Named_symbol):
+class Function_decl(Named_symbol):
     def __init__(self):
         Named_symbol.__init__(self, None)
         self.key_sequences = []
@@ -198,6 +198,92 @@ class Function_declaration(Named_symbol):
                 self.print_indented ("(" + sequence[0] + " " + sequence[1] + ")", indent+1)
         self.print_indented("END FUNCTION", indent)
 
+class Internal_response(Named_symbol, Container_symbol):
+    def __init__(self, name):
+        Container_symbol.__init__(self)
+        Named_symbol.__init__(self, name)
+    def generate(self, indent):
+        self.print_indented("INTERNAL RESPONSE " + self.name, indent)
+        self.generate_children(indent)
+        self.print_indented("END RESPONSE", indent)
+
+class Message_step(Symbol):
+    def __init__(self):
+        self.lines = []
+    def add_line(self, line):
+        self.lines.append(line)
+        return self
+    def generate(self, indent):
+        self.print_indented("MESSAGE", indent)
+        for line in self.lines:
+            self.print_indented('"' + line + '"', indent+1)
+        return self
+
+class Signal_step(Symbol):
+    def __init__(self):
+        self.bell = True
+    def set_bell(self):
+        self.bell = True
+        return self
+    def set_reverse(self):
+        self.bell = False
+        return self
+    def generate(self, indent):
+        if (self.bell):
+            self.print_indented("SIGNAL ", indent)
+        else:
+            self.print_indented("SIGNAL %REVERSE", indent)
+        return self
+
+class Position_step(Symbol):
+    def __init__(self):
+        self.panel = None
+        self.target_type = None
+    def set_panel(self, panel):
+        self.panel = panel
+        self.target_type = "PANEL"
+        return self
+    def generate(self, indent):
+        def undefined_target_type():
+            raise NotImplementedError("The specified target type for position step not supported")
+
+        target_types = {
+            "PANEL": lambda: self.print_indented("POSITION TO PANEL " + self.panel, indent)
+        }
+        target_types.get(self.target_type, undefined_target_type)()
+        return self
+
+class Reset_step(Symbol):
+    def __init__(self):
+        self.all = False
+    def set_all(self):
+        self.all = True
+        return self
+    def generate(self, indent):
+        if self.all:
+            self.print_indented("RESET ALL", indent)
+        return self
+
+class Return_step(Symbol):
+    def __init__(self):
+        self.immediate = False
+    def set_immediate(self):
+        self.immediate = True
+        return self
+    def generate(self, indent):
+        self.print_indented("RETURN" + " IMMEDIATE" if self.immediate else "", indent)
+
+class Call_step(Symbol):
+    def __init__(self, subroutine_name):
+        self.subroutine_name = subroutine_name
+        self.parameters = []
+    def add_parameter(self, convention, name):
+        self.parameters.append({'convention': convention, 'name': name})
+        return self
+    def generate(self, indent):
+        self.print_indented('CALL "' + self.subroutine_name + '"' + ("" if len(self.parameters) == 0 else " USING"), indent)
+        for parameter in self.parameters:
+            self.print_indented((parameter['convention'].upper() + " " if parameter['convention'] else "") + parameter['name'], indent+1)
 
 def test():
     form = Form("My form")
