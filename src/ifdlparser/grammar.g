@@ -92,6 +92,8 @@ parser IFDL:
     token END_LITERAL:          "(?i)END[ \t]+LITERAL"
     token COLUMN:               "(?i)COLUMN"
     token LINE:                 "(?i)LINE"
+    token ICON:                 "(?i)ICON"
+    token END_ICON:             "(?i)END[ \t]+ICON"
     token DISPLAY:              "(?i)DISPLAY"
     token ACTIVATE:             "(?i)ACTIVATE"
     token SIGNAL:               "(?i)SIGNAL"
@@ -103,7 +105,9 @@ parser IFDL:
     token NAMED_POSITION:       "(?i)UP[ \t]+ITEM|DOWN[ \t]+ITEM"
     token RESET:                "(?i)RESET"
     token ALL:                  "(?i)ALL"
+    token HELP:                 "(?i)HELP"
     token REMOVE:               "(?i)REMOVE"
+    token EXIT_HELP:            "(?i)EXIT[ \t]+HELP"
     token RETURN:               "(?i)RETURN"
     token IMMEDIATE:            "(?i)IMMEDIATE"
     token CALL:                 "(?i)CALL"
@@ -205,9 +209,16 @@ parser IFDL:
                                       END_PANEL {{ pop() }}
 
     rule help_panel_decl:             HELP_PANEL NAME {{panel_decl = push(df_classes.Help_panel_decl(NAME))}}
-                                      (panel_property<<panel_decl>>)*
-                                      (literal_decl)*
+                                        (panel_property<<panel_decl>>)*
+                                        (literal_decl|icon_decl)*
                                       END_PANEL {{ pop() }}
+
+    rule icon_decl:                   ICON NAME {{icon_decl = push(df_classes.Icon_decl(NAME))}}
+                                        (field_default_appl)*
+                                        (function_response_decl {{add_child(function_response_decl)}})*
+                                        (item_description_entry {{add_child(item_description_entry)}})*
+                                        literal_decl*
+                                      END_ICON {{pop()}}
 
     rule literal_decl:                text_literal_decl|polyline_literal_decl|rectangle_literal_decl
 
@@ -305,6 +316,7 @@ parser IFDL:
                                       position_response_step {{step = position_response_step}} |
                                       reset_response_step {{step = reset_response_step}} |
                                       remove_response_step {{step = remove_response_step}} |
+                                      exit_help_response_step {{step = exit_help_response_step}} |
                                       return_response_step {{step = return_response_step}} |
                                       include_response_step {{step = include_response_step}} |
                                       print_response_step {{step = print_response_step}} |
@@ -327,7 +339,9 @@ parser IFDL:
 
     rule reset_response_step:         RESET {{reset_step = df_classes.Reset_step()}} ALL {{return reset_step.set_all()}}
 
-    rule remove_response_step:        REMOVE {{remove_step = df_classes.Remove_step()}} ALL {{return remove_step.set_all()}}
+    rule remove_response_step:        REMOVE {{remove_step = df_classes.Remove_step()}} ((ALL {{return remove_step.set_all()}})|(HELP {{return remove_step.set_help()}}))
+
+    rule exit_help_response_step:     EXIT_HELP {{return df_classes.Exit_help_step()}}
 
     rule return_response_step:        RETURN {{return_step = df_classes.Return_step()}} IMMEDIATE {{return return_step.set_immediate()}}
 

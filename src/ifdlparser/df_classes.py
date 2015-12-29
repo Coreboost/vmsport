@@ -355,12 +355,23 @@ class Reset_step(Clause):
 class Remove_step(Clause):
     def __init__(self):
         self.all = False
+        self.help = False
     def set_all(self):
         self.all = True
+        return self
+    def set_help(self):
+        self.help = True
         return self
     def generate(self, indent):
         if self.all:
             self.print_indented("REMOVE ALL", indent)
+        elif self.help:
+            self.print_indented("REMOVE HELP", indent)
+        return self
+
+class Exit_help_step(Clause):
+    def generate(self, indent):
+        self.print_indented("EXIT HELP", indent)
         return self
 
 class Return_step(Clause):
@@ -532,7 +543,7 @@ class Field_default_appl(Container_clause):
     def __init__(self):
         Container_clause.__init__(self)
         self.named_default = None
-    def set_named_default(named_default):
+    def set_named_default(self, named_default):
         self.named_default = named_default
         return self
     def generate(self, indent):
@@ -679,6 +690,16 @@ class Vertical_loc_clause(Clause):
         self.value = value
     def to_string(self):
         return "LINE " + self.value
+
+class Icon_decl(Named_clause, Container_clause):
+    def __init__(self, name):
+        Container_clause.__init__(self)
+        Named_clause.__init__(self, name)
+    def generate(self, indent):
+        self.print_indented("ICON " + self.name, indent)
+        self.generate_children(indent)
+        self.print_indented("END ICON", indent)
+        return self
 
 def test():
     form = Form("My form")

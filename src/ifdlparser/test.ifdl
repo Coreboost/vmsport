@@ -44,7 +44,31 @@ Form MRF_FORM
       Literal Rectangle
         Line 4 Column 1
         Line 18 Column 80
-      End Literal    End Panel
+      End Literal
+
+      Icon MORE_HELP
+        Apply Field Default BOLD_ICON
+
+        Function Response SELECT
+          Activate
+          Panel SECOND_HELP_PANEL
+          Position To Panel SECOND_HELP_PANEL
+        End Response
+
+        Literal Rectangle
+          Line 19 Column 16
+          Line 21 Column 33
+        End Literal
+
+        Literal Text
+          Line 20
+          Column 17
+          Value "Help on Printing"
+        End Literal
+      End Icon
+
+
+  End Panel
 
   End Layout
 END FORM
