@@ -524,6 +524,24 @@ class Field_default_decl(Named_clause, Container_clause):
         self.print_indented("END DEFAULT", indent)
         return self
 
+class Field_default_appl(Container_clause):
+    def __init__(self):
+        Container_clause.__init__(self)
+        self.named_default = None
+    def set_named_default(named_default):
+        self.named_default = named_default
+        return self
+    def generate(self, indent):
+        if self.named_default:
+            self.print_indented("APPLY FIELD DEFAULT " + self.named_default, indent)
+        elif len(self.contents) == 0:
+            self.print_indented("APPLY NO FIELD DEFAULT", indent)
+        else:
+            self.print_indented("APPLY FIELD DEFAULT OF", indent)
+            self.generate_children(indent)
+            self.print_indented("END DEFAULT", indent)
+        return self
+
 class Active_highlight_clause(Clause):
     def __init__(self):
         self.elementary_attribute = None

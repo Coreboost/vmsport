@@ -77,6 +77,9 @@ parser IFDL:
     token END_RESPONSE:         "(?i)END[ \t]+RESPONSE"
     token FIELD_DEFAULT:        "(?i)FIELD[ \t]+DEFAULT"
     token END_DEFAULT:          "(?i)END[ \t]+DEFAULT"
+    token APPLY:                "(?i)APPLY"
+    token NO_FIELD_DEFAULT:     "(?i)NO[ \t]+FIELD[ \t]+DEFAULT"
+    token FIELD_DEFAULT_OF:     "(?i)FIELD[ \t]+DEFAULT[ \t]+OF"
     token ACTIVE_HIGHLIGHT:     "(?i)ACTIVE[ \t]+HIGHLIGHT"
     token NO_ACTIVE_HIGHLIGHT:  "(?i)NO[ \t]+ACTIVE[ \t]+HIGHLIGHT"
     token ACTIVATE:             "(?i)ACTIVATE"
@@ -179,7 +182,13 @@ parser IFDL:
                                         (internal_response_decl | external_response_decl | function_response_decl)*
                                         [USE_HELP_PANEL NAME {{add_child(df_classes.Help_panel_reference(NAME))}} | NO_HELP_PANEL {{add_child(df_classes.Help_panel_reference(None))}}]
                                         (field_default_decl)*
+                                        (field_default_appl)*
                                       END_LAYOUT {{ pop() }}
+
+    rule field_default_appl:          APPLY (
+                                      NO_FIELD_DEFAULT {{add_child(df_classes.Field_default_appl())}}|
+                                      FIELD_DEFAULT NAME {{add_child(df_classes.Field_default_appl().set_named_default(NAME))}}|
+                                      FIELD_DEFAULT_OF {{push(df_classes.Field_default_appl())}} (item_description_entry {{add_child(item_description_entry)}})* END_DEFAULT {{pop()}})
 
     rule field_default_decl:          FIELD_DEFAULT NAME {{push(df_classes.Field_default_decl(NAME))}}
                                         (item_description_entry {{add_child(item_description_entry)}})*
