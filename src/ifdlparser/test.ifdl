@@ -27,7 +27,24 @@ Form MRF_FORM
         Activate Panel SECOND_HELP_PANEL
         Position To Panel SECOND_HELP_PANEL
       End Response
-    End Panel
+
+      Literal Text
+        Line 1
+        Column 18
+        Value "HELP FOR THE MILEAGE REIMBURSEMENT APPLICATION"
+        Display Bold
+      End Literal
+
+      Literal Polyline
+        Line 2 Column 1
+        Line 2 Column 80
+        Display Bold
+      End Literal
+
+      Literal Rectangle
+        Line 4 Column 1
+        Line 18 Column 80
+      End Literal    End Panel
 
   End Layout
 END FORM

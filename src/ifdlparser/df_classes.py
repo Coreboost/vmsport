@@ -591,8 +591,94 @@ class Help_panel_decl(Named_clause, Container_clause):
             self.print_indented("VIEWPORT " + self.named_viewport, indent+1)
         for function_response_decl in self.function_response_decls:
             function_response_decl.generate(indent+1)
+        self.generate_children(indent)
         self.print_indented("END PANEL", indent)
         return self
+
+class Literal(Clause):
+    def __init__(self):
+        self.elementary_attribute = None
+    def set_elementary_attribute(self, elementary_attribute):
+        self.elementary_attribute=elementary_attribute
+        return self
+    def generate(self, indent):
+        if self.elementary_attribute:
+            self.print_indented("DISPLAY " + self.elementary_attribute, indent)
+        return self
+
+class Literal_text(Literal):
+    def __init__(self):
+        Literal.__init__(self)
+        self.location = None
+        self.text = None
+    def set_location(self, location):
+        self.location = location
+        return self
+    def set_text(self, text):
+        self.text = text
+        return self
+    def generate(self, indent):
+        self.print_indented("LITERAL TEXT", indent)
+        if self.location:
+            self.location.generate(indent+1)
+        self.print_indented('VALUE "' + self.text + '"', indent+1)
+        Literal.generate(self, indent+1)
+        self.print_indented("END LITERAL", indent)
+        return self
+
+class Literal_polyline(Literal):
+    def __init__(self):
+        Literal.__init__(self)
+        self.locations = []
+    def add_location(self, location):
+        self.locations.append(location)
+        return self
+    def generate(self, indent):
+        self.print_indented("LITERAL POLYLINE", indent)
+        for location in self.locations:
+            location.generate(indent+1)
+        Literal.generate(self, indent+1)
+        self.print_indented("END LITERAL", indent)
+        return self
+
+class Literal_rectangle(Literal):
+    def __init__(self):
+        Literal.__init__(self)
+        self.first_corner = None
+        self.second_corner = None
+    def set_first_corner(self, first_corner):
+        self.first_corner = first_corner
+        return self
+    def set_second_corner(self, second_corner):
+        self.second_corner = second_corner
+        return self
+    def generate(self, indent):
+        self.print_indented("LITERAL RECTANGLE", indent)
+        self.first_corner.generate(indent+1)
+        self.second_corner.generate(indent+1)
+        Literal.generate(self, indent+1)
+        self.print_indented("END LITERAL", indent)
+        return self
+
+class Full_loc_clause(Clause):
+    def __init__(self, horizontal_clause, vertical_clause):
+        self.horizontal_clause = horizontal_clause
+        self.vertical_clause = vertical_clause
+    def generate(self, indent):
+        self.print_indented(self.vertical_clause.to_string() + " " + self.horizontal_clause.to_string(), indent)
+        return self
+
+class Horizontal_loc_clause(Clause):
+    def __init__(self, value):
+        self.value = value
+    def to_string(self):
+        return "COLUMN " + self.value
+
+class Vertical_loc_clause(Clause):
+    def __init__(self, value):
+        self.value = value
+    def to_string(self):
+        return "LINE " + self.value
 
 def test():
     form = Form("My form")

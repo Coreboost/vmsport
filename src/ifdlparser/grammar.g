@@ -86,6 +86,13 @@ parser IFDL:
     token HELP_PANEL:           "(?i)HELP[ \t]+PANEL"
     token MESSAGE_PANEL:        "(?i)MESSAGE[ \t]+PANEL"
     token END_PANEL:            "(?i)END[ \t]+PANEL"
+    token LITERAL_TEXT:         "(?i)LITERAL[ \t]+TEXT"
+    token LITERAL_POLYLINE:     "(?i)LITERAL[ \t]+POLYLINE"
+    token LITERAL_RECTANGLE:    "(?i)LITERAL[ \t]+RECTANGLE"
+    token END_LITERAL:          "(?i)END[ \t]+LITERAL"
+    token COLUMN:               "(?i)COLUMN"
+    token LINE:                 "(?i)LINE"
+    token DISPLAY:              "(?i)DISPLAY"
     token ACTIVATE:             "(?i)ACTIVATE"
     token SIGNAL:               "(?i)SIGNAL"
     token BELL_SIGNAL:          "(?i)%BELL"
@@ -199,7 +206,39 @@ parser IFDL:
 
     rule help_panel_decl:             HELP_PANEL NAME {{panel_decl = push(df_classes.Help_panel_decl(NAME))}}
                                       (panel_property<<panel_decl>>)*
+                                      (literal_decl)*
                                       END_PANEL {{ pop() }}
+
+    rule literal_decl:                text_literal_decl|polyline_literal_decl|rectangle_literal_decl
+
+    rule text_literal_decl:           LITERAL_TEXT {{literal=add_child(df_classes.Literal_text())}}
+                                        [loc_clause {{literal.set_location(loc_clause)}}]
+                                        VALUE STRING_LITERAL {{literal.set_text(STRING_LITERAL[1:-1])}}
+                                        [display_clause<<literal>>]
+                                      END_LITERAL
+
+    rule polyline_literal_decl:       LITERAL_POLYLINE {{literal=add_child(df_classes.Literal_polyline())}}
+                                        full_loc_clause {{literal.add_location(full_loc_clause)}}
+                                        (full_loc_clause {{literal.add_location(full_loc_clause)}})+
+                                        [display_clause<<literal>>]
+                                      END_LITERAL
+
+    rule rectangle_literal_decl:      LITERAL_RECTANGLE {{literal=add_child(df_classes.Literal_rectangle())}}
+                                        full_loc_clause {{literal.set_first_corner(full_loc_clause)}}
+                                        full_loc_clause {{literal.set_second_corner(full_loc_clause)}}
+                                        [display_clause<<literal>>]
+                                      END_LITERAL
+
+    rule display_clause<<item>>:      DISPLAY TEXT_ATTRIBUTE {{item.set_elementary_attribute(TEXT_ATTRIBUTE)}}
+
+    rule loc_clause:                  full_loc_clause {{return full_loc_clause}}
+
+    rule full_loc_clause:             (horizontal_loc_clause vertical_loc_clause {{return df_classes.Full_loc_clause(horizontal_loc_clause, vertical_loc_clause)}})|
+                                      (vertical_loc_clause horizontal_loc_clause {{return df_classes.Full_loc_clause(horizontal_loc_clause, vertical_loc_clause)}})
+
+    rule horizontal_loc_clause:       COLUMN INTEGER_LITERAL {{return df_classes.Horizontal_loc_clause(INTEGER_LITERAL)}}
+
+    rule vertical_loc_clause:         LINE INTEGER_LITERAL {{return df_classes.Vertical_loc_clause(INTEGER_LITERAL)}}
 
     rule panel_property<<p_decl>>:    (VIEWPORT NAME) {{p_decl.set_named_viewport(NAME)}} |
                                       function_response_decl {{p_decl.add_function_response_decl(function_response_decl)}}
@@ -336,11 +375,8 @@ parser IFDL:
                                       "\(" value_expression "\)" {{ term = value_expression.set_subexpression()}}
                                       {{return term}}
 
-    rule simple_numeric_term:         INTEGER_LITERAL {{term = df_classes.Integer_Literal(INTEGER_LITERAL)}}
-                                      {{return term}}
+    rule simple_numeric_term:         INTEGER_LITERAL {{return df_classes.Integer_Literal(INTEGER_LITERAL)}}
 
-    rule string_expression:           STRING_LITERAL {{expression = df_classes.String_literal(STRING_LITERAL)}} |
-
-                                      {{ return expression}}
+    rule string_expression:           STRING_LITERAL {{return df_classes.String_literal(STRING_LITERAL)}}
 
     rule call_response_step:          CALL STRING_LITERAL {{call_step = df_classes.Call_step(STRING_LITERAL[1:-1])}} [USING (([BY_REFERENCE{{convention = BY_REFERENCE}}] NAME) {{call_step.add_parameter(convention, NAME); convention = None}})+] {{return call_step}}
