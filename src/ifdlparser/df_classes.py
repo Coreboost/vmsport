@@ -502,6 +502,17 @@ class Data_reference:
     def to_string(self):
         return self.data_reference
 
+class Help_panel_reference(Clause):
+    def __init__(self, help_panel_name):
+        self.help_panel_name = help_panel_name
+    def generate(self, indent):
+        if self.help_panel_name:
+            self.print_indented("USE HELP PANEL " + self.help_panel_name, indent)
+        else:
+            self.print_indented("NO HELP PANEL", indent)
+        return self
+
+
 def test():
     form = Form("My form")
     form.add_child(Form_data())

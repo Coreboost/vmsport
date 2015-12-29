@@ -220,6 +220,8 @@ Form MRF_FORM
       Message
         "Print file completed."
     End Response
+    
+    Use Help Panel HELP_PANEL
 
   End Layout
 END FORM

@@ -46,6 +46,8 @@ parser IFDL:
     token USING:                "(?i)USING"
     token LAYOUT:               "(?i)LAYOUT"
     token END_LAYOUT:           "(?i)END[ \t]+LAYOUT"
+    token USE_HELP_PANEL:       "(?i)USE[ \t]+HELP[ \t]+PANEL"
+    token NO_HELP_PANEL:        "(?i)NO[ \t]+HELP[ \t]+PANEL"
     token DEVICE:               "(?i)DEVICE"
     token END_DEVICE:           "(?i)END[ \t]+DEVICE"
     token TERMINAL:             "(?i)TERMINAL"
@@ -170,6 +172,7 @@ parser IFDL:
                                         viewport_decl*
                                         function_decl*
                                         (internal_response_decl | external_response_decl | function_response_decl)*
+                                        [USE_HELP_PANEL NAME {{add_child(df_classes.Help_panel_reference(NAME))}} | NO_HELP_PANEL {{add_child(df_classes.Help_panel_reference(None))}}]
                                       END_LAYOUT {{ pop() }}
 
     rule device_decl:                 DEVICE TERMINAL {{ device_decl = df_classes.Device_decl(None) }}
