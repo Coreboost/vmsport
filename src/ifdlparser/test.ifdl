@@ -192,5 +192,34 @@ Form MRF_FORM
       Position To Panel TRIPS_INFO_PANEL
     End Response
 
+    Function Response DISCARD
+      Include RESET_DATA
+    End Response
+
+    Function Response MOVE_UP
+      If ( NOT UPPERMOST ITEM) Then
+        Position To Up Item
+      Else
+        Include BORDER_PATROL
+      End If
+    End Response
+
+    Function Response MOVE_DOWN
+      If ( NOT LOWERMOST ITEM) Then
+        Position To Down Item
+      Else
+        Include BORDER_PATROL
+      End If
+    End Response
+
+    Function Response PRINT_FILE
+      Message
+        "Preparing the print file..."
+      Print
+        TRIPS_INFO_PANEL
+      Message
+        "Print file completed."
+    End Response
+
   End Layout
 END FORM

@@ -233,6 +233,17 @@ class Internal_response_decl(Named_clause, Container_clause):
         self.print_indented("END RESPONSE", indent)
         return self
 
+class Function_response_decl(Named_clause, Container_clause):
+    def __init__(self, name):
+        Container_clause.__init__(self)
+        Named_clause.__init__(self, name)
+    def generate(self, indent):
+        self.print_indented("FUNCTION RESPONSE " + self.name, indent)
+        self.generate_children(indent)
+        self.print_indented("END RESPONSE", indent)
+        return self
+
+
 class Disable_response_decl(Container_clause):
     def __init__(self):
         Container_clause.__init__(self)
@@ -305,15 +316,21 @@ class Position_step(Clause):
     def __init__(self):
         self.panel = None
         self.target_type = None
+        self.named_position = None
     def set_panel(self, panel):
         self.panel = panel
         self.target_type = "PANEL"
+        return self
+    def set_named_position(self, named_position):
+        self.named_position = named_position
+        self.target_type = "NAMED POSITION"
         return self
     def generate(self, indent):
         def undefined_target_type():
             raise NotImplementedError("The specified target type for position step not supported")
         target_types = {
-            "PANEL": lambda: self.print_indented("POSITION TO PANEL " + self.panel, indent)
+            "PANEL":          lambda: self.print_indented("POSITION TO PANEL " + self.panel, indent),
+            "NAMED POSITION": lambda: self.print_indented("POSITION TO " + self.named_position, indent)
         }
         target_types.get(self.target_type, undefined_target_type)()
         return self
@@ -362,6 +379,128 @@ class Call_step(Clause):
         for parameter in self.parameters:
             self.print_indented((parameter['convention'].upper() + " " if parameter['convention'] else "") + parameter['name'], indent+1)
         return self
+
+class Include_step(Clause):
+    def __init__(self, response_name):
+        self.response_name = response_name
+    def generate(self, indent):
+        self.print_indented("INCLUDE " + self.response_name, indent)
+        return self
+
+class Print_step(Clause):
+    def __init__(self):
+        self.immediate = False
+        self.panel_name = None
+    def set_immediate(self):
+        self.immediate = True
+        return self
+    def set_panel_name(self, panel_name):
+        self.panel_name = panel_name
+        return self
+    def generate(self, indent):
+        self.print_indented("PRINT " + ("IMMEDIATE " if self.immediate else "") + self.panel_name, indent)
+        return self
+
+class If_step(Clause):
+    def __init__(self, conditional):
+        self.conditional = conditional
+        self.then_steps = []
+        self.else_steps = []
+    def add_then_step(self, step):
+        self.then_steps.append(step)
+        return self
+    def add_else_step(self, step):
+        self.else_steps.append(step)
+        return self
+    def generate(self, indent):
+        self.print_indented("IF " + self.conditional.to_string() + " THEN", indent)
+        for step in self.then_steps:
+            step.generate(indent+1)
+        if len(self.else_steps) > 0:
+            self.print_indented("ELSE", indent)
+            for step in self.else_steps:
+                step.generate(indent+1)
+        self.print_indented("END IF", indent)
+        return self
+
+class Conditional_expression:
+    def __init__(self, term_1):
+        self.term_1 = term_1
+        self.logical_op = None
+        self.term_2 = None
+        self.subexpression = False
+        self.negated = False
+    def set_logical_op(self, logical_op, term_2):
+        self.logical_op = logical_op
+        self.term_2 = term_2
+        return self
+    def set_subexpression(self):
+        self.subexpression = True
+        return self
+    def set_negated(self, value):
+        self.negated = value
+        return self
+    def to_string(self):
+        lead = ("NOT " if self.negated else "") + "(" if self.subexpression else ""
+        trail = ")" if self.subexpression else ""
+        term_1 = self.term_1.to_string()
+        term_2 = (" " + self.logical_op + " " + self.term_2.to_string()) if self.logical_op else ""
+        return lead + term_1 + term_2 + trail
+
+class Relational_expression:
+    def __init__(self, expression_1, relational_op, expression_2):
+        self.negated = False
+        self.expression_1 = expression_1
+        self.relational_op = relational_op
+        self.expression_2 = expression_2
+    def set_negated(self, value):
+        self.negated = value
+        return self
+    def to_string(self):
+        return ("NOT " if self.negated else "") + self.expression_1.to_string() + self.relational_op + self.expression_2.to_string()
+
+class Elementary_condition:
+    def __init__(self, elementary_condition):
+        self.negated = False
+        self.elementary_condition = elementary_condition
+    def set_negated(self, value):
+        self.negated = value
+        return self
+    def to_string(self):
+        return ("NOT " if self.negated else "") + self.elementary_condition
+
+class Numeric_expression:
+    def __init__(self, sign, term_1):
+        self.sign = sign
+        self.term_1 = term_1
+        self.arithmetic_op = None
+        self.term_2 = None
+    def set_arithmetic_op(self, arithmetic_op, term_2):
+        self.arithmetic_op = arithmetic_op
+        self.term_2 = term_2
+        return self
+    def to_string(self):
+        lead = self.sign if self.sign else ""
+        trail = (self.arithmetic_op + self.term_2.to_string()) if self.arithmetic_op else ""
+        return lead + self.term_1.to_string() + trail
+
+class Integer_literal:
+    def __init__(self, integer_literal):
+        self.integer_literal = integer_literal
+    def to_string(self):
+        return self.integer_literal
+
+class String_literal:
+    def __init__(self, string_literal):
+        self.string_literal = string_literal
+    def to_string(self):
+        return self.string_literal
+
+class Data_reference:
+    def __init__(self, data_reference):
+        self.data_reference = data_reference
+    def to_string(self):
+        return self.data_reference
 
 def test():
     form = Form("My form")

@@ -68,8 +68,9 @@ parser IFDL:
     token KEY_NAME:             "(?i)%PF1|%PF4|%F8|%KP_PERIOD|%KP_8|%CARRIAGE_RETURN|%ENTER|%DOWN|%HORIZONTAL_TAB|%UP|%DO|%SELECT|%CONTROL_P"
     token BUILT_IN_FUNCTION:    "(?i)EXIT[ \t]+GROUP[ \t]+NEXT|INSERT[ \t]+LINE"
     token INTERNAL_RESPONSE:    "(?i)INTERNAL[ \t]+RESPONSE"
-    token DISABLE_RESPONSE:    "(?i)DISABLE[ \t]+RESPONSE"
-    token RECEIVE_RESPONSE:    "(?i)RECEIVE[ \t]+RESPONSE"
+    token DISABLE_RESPONSE:     "(?i)DISABLE[ \t]+RESPONSE"
+    token RECEIVE_RESPONSE:     "(?i)RECEIVE[ \t]+RESPONSE"
+    token FUNCTION_RESPONSE:    "(?i)FUNCTION[ \t]+RESPONSE"
     token END_RESPONSE:         "(?i)END[ \t]+RESPONSE"
     token ACTIVATE:             "(?i)ACTIVATE"
     token SIGNAL:               "(?i)SIGNAL"
@@ -79,6 +80,7 @@ parser IFDL:
     token POSITION:             "(?i)POSITION"
     token TO:                   "(?i)TO"
     token PANEL:                "(?i)PANEL"
+    token NAMED_POSITION:       "(?i)UP[ \t]+ITEM|DOWN[ \t]+ITEM"
     token RESET:                "(?i)RESET"
     token ALL:                  "(?i)ALL"
     token REMOVE:               "(?i)REMOVE"
@@ -87,6 +89,22 @@ parser IFDL:
     token CALL:                 "(?i)CALL"
     token USING:                "(?i)USING"
     token BY_REFERENCE:         "(?i)BY[ \t]+REFERENCE"
+    token INCLUDE:              "(?i)INCLUDE"
+    token PRINT:                "(?i)PRINT"
+    token IF:                   "(?i)IF"
+    token THEN:                 "(?i)THEN"
+    token ELSE:                 "(?i)ELSE"
+    token END_IF:               "(?i)END[ \t]+IF"
+    token AND:                  "(?i)AND"
+    token OR:                   "(?i)OR"
+    token XOR:                  "(?i)XOR"
+    token NOT:                  "NOT"
+    token LOGICAL_OP:            "(?i)AND|OR|XOR"
+    token RELATIONAL_OP:        "<=|<>|<|>=|>|="
+    token SIGN:                 "-|\+"
+    token ARITHMETIC_OP:        "-|\+|\*|/"
+    token LOWERMOST_ITEM:       "(?i)LOWERMOST[ \t]+ITEM"
+    token UPPERMOST_ITEM:       "(?i)UPPERMOST[ \t]+ITEM"
     token VALUE:                "(?i)VALUE"
     token LONGWORD_INTEGER:     "(?i)LONGWORD[ \t]+INTEGER"
     token UNSIGNED_LONGWORD:    "(?i)UNSIGNED[ \t]+LONGWORD"
@@ -96,7 +114,7 @@ parser IFDL:
     token INTEGER_LITERAL:      "\d+"
     token DECIMAL_LITERAL:      "\d*\.\d+(E\d+)?"
     token DATETIME_LITERAL:     "\d+"
-    token TEXT_LITERAL:         "(\"([^\"\r\n]|\"\")+\")|(\'([^\'\r\n]|\'\')+\')"
+    token STRING_LITERAL:         "(\"([^\"\r\n]|\"\")+\")|(\'([^\'\r\n]|\'\')+\')"
     token NAME:                 "\w+"
     token DATA_REFERENCE:       "\w+(\(\w+\))?(\.\w+(\(\w+\))?)*"
 
@@ -134,7 +152,7 @@ parser IFDL:
 
     rule record_field_description:    NAME (text_record_field<<NAME>> | atomic_clause<<NAME>> | datetime_field_clause<<NAME>>) [data_transfer_clause]
 
-    rule datetime_field_clause<<NM>>:  DATETIME "\(" INTEGER_LITERAL "\)" {{add_child(df_classes.Datetime_data(NM, INTEGER_LITERAL))}}
+    rule datetime_field_clause<<NM>>: DATETIME "\(" INTEGER_LITERAL "\)" {{add_child(df_classes.Datetime_data(NM, INTEGER_LITERAL))}}
 
     rule text_record_field<<NM>>:     CHARACTER "\(" INTEGER_LITERAL "\)" {{add_child(df_classes.Character_data(NM, INTEGER_LITERAL))}}
 
@@ -151,7 +169,7 @@ parser IFDL:
                                         list_decl*
                                         viewport_decl*
                                         function_decl*
-                                        (internal_response_decl | external_response_decl)*
+                                        (internal_response_decl | external_response_decl | function_response_decl)*
                                       END_LAYOUT {{ pop() }}
 
     rule device_decl:                 DEVICE TERMINAL {{ device_decl = df_classes.Device_decl(None) }}
@@ -162,7 +180,7 @@ parser IFDL:
     rule size_decl:                   SIZE INTEGER_LITERAL {{lines = INTEGER_LITERAL}} LINES_BY INTEGER_LITERAL {{columns = INTEGER_LITERAL}} COLUMNS {{add_child(df_classes.Size_decl(lines, columns))}}
 
     rule list_decl:                   LIST NAME {{list_decl = df_classes.List_decl(NAME)}}
-                                        (TEXT_LITERAL {{list_decl.add_list_item(TEXT_LITERAL[1:-1])}})*
+                                        (STRING_LITERAL {{list_decl.add_list_item(STRING_LITERAL[1:-1])}})*
                                       END_LIST {{add_child(list_decl)}}
 
     rule viewport_decl:               VIEWPORT NAME
@@ -189,6 +207,10 @@ parser IFDL:
                                         (response_step {{add_child(response_step)}})*
                                       END_RESPONSE {{ pop() }}
 
+    rule function_response_decl:      FUNCTION_RESPONSE NAME {{ push(df_classes.Function_response_decl(NAME)) }}
+                                        (response_step {{add_child(response_step)}})*
+                                      END_RESPONSE {{ pop() }}
+
     rule response_step:               (signal_response_step {{step = signal_response_step}} |
                                       message_response_step {{step = message_response_step}} |
                                       activate_response_step {{step = activate_response_step}} |
@@ -196,6 +218,9 @@ parser IFDL:
                                       reset_response_step {{step = reset_response_step}} |
                                       remove_response_step {{step = remove_response_step}} |
                                       return_response_step {{step = return_response_step}} |
+                                      include_response_step {{step = include_response_step}} |
+                                      print_response_step {{step = print_response_step}} |
+                                      if_response_step {{step = if_response_step}} |
                                       call_response_step {{step = call_response_step}})
                                       {{return step}}
 
@@ -205,9 +230,12 @@ parser IFDL:
                                       (PANEL NAME {{activate_step.set_panel(NAME)}})
                                       ){{return activate_step}}
 
-    rule message_response_step:       MESSAGE {{message_step = df_classes.Message_step()}} (TEXT_LITERAL{{message_step.add_line(TEXT_LITERAL[1:-1])}})* {{return message_step}}
+    rule message_response_step:       MESSAGE {{message_step = df_classes.Message_step()}} (STRING_LITERAL{{message_step.add_line(STRING_LITERAL[1:-1])}})* {{return message_step}}
 
-    rule position_response_step:      POSITION {{position_step = df_classes.Position_step()}} TO PANEL NAME {{return position_step.set_panel(NAME)}}
+    rule position_response_step:      POSITION {{position_step = df_classes.Position_step()}} TO
+                                        (PANEL NAME {{position_step.set_panel(NAME)}} |
+                                        NAMED_POSITION {{position_step.set_named_position(NAMED_POSITION)}})
+                                        {{return position_step}}
 
     rule reset_response_step:         RESET {{reset_step = df_classes.Reset_step()}} ALL {{return reset_step.set_all()}}
 
@@ -215,4 +243,55 @@ parser IFDL:
 
     rule return_response_step:        RETURN {{return_step = df_classes.Return_step()}} IMMEDIATE {{return return_step.set_immediate()}}
 
-    rule call_response_step:          CALL TEXT_LITERAL {{call_step = df_classes.Call_step(TEXT_LITERAL[1:-1])}} [USING (([BY_REFERENCE{{convention = BY_REFERENCE}}] NAME) {{call_step.add_parameter(convention, NAME); convention = None}})+] {{return call_step}}
+    rule include_response_step:       INCLUDE NAME {{return df_classes.Include_step(NAME)}}
+
+    rule print_response_step:         PRINT {{print_step = df_classes.Print_step()}} [IMMEDIATE {{print_step.set_immediate()}}] NAME {{return print_step.set_panel_name(NAME)}}
+
+    rule if_response_step:            IF conditional_expression THEN {{if_step = df_classes.If_step(conditional_expression)}}
+                                        (response_step {{if_step.add_then_step(response_step)}})*
+                                      [ELSE
+                                        (response_step {{if_step.add_else_step(response_step)}})*
+                                      ]
+                                      END_IF {{return if_step}}
+
+    rule conditional_expression:      conditional_term {{conditional_expression = df_classes.Conditional_expression(conditional_term)}}
+                                      [LOGICAL_OP
+                                      conditional_term {{conditional_expression.set_logical_op(LOGICAL_OP, conditional_term)}}]
+                                      {{return conditional_expression}}
+
+    rule conditional_term:            {{negated=False}}[NOT {{negated=True}}] (
+                                      elementary_condition {{term = elementary_condition}} |
+                                      relational_expression {{term = relational_expression}} |
+                                      "\(" conditional_expression {{term = conditional_expression.set_subexpression()}} "\)")
+                                      {{return term.set_negated(negated)}}
+
+    rule relational_expression:       (value_expression {{expression_1 = value_expression}})
+                                      RELATIONAL_OP
+                                      (value_expression {{expression_2 = value_expression}})
+                                      {{return df_classes.Relational_expression(expression_1, RELATIONAL_OP, expression_2)}}
+
+    rule value_expression:            (numeric_expression {{expression = numeric_expression}} |
+                                      string_expression {{expression = string_expression}} |
+                                      DATA_REFERENCE {{expression = df_classes.Data_reference(DATA_REFERENCE)}})
+                                      {{return expression}}
+
+    rule elementary_condition:        (LOWERMOST_ITEM {{ condition=df_classes.Elementary_condition(LOWERMOST_ITEM) }} |
+                                      UPPERMOST_ITEM {{ condition=df_classes.Elementary_condition(UPPERMOST_ITEM) }} )
+                                      {{ return condition }}
+
+    rule numeric_expression:          [SIGN] simple_numeric_term {{sign = SIGN if SIGN in locals() else None; expression = df_classes.Numeric_expression(sign, simple_numeric_term)}}
+                                      [ARITHMETIC_OP simple_numeric_term {{term=simple_numeric_term}} {{expression.set_arithmetic_op(ARITHMETIC_OP, term)}}]
+                                      {{return numeric_expression}}
+
+    rule numeric_term:                INTEGER_LITERAL {{term = df_classes.Integer_Literal(INTEGER_LITERAL)}} |
+                                      "\(" value_expression "\)" {{ term = value_expression.set_subexpression()}}
+                                      {{return term}}
+
+    rule simple_numeric_term:         INTEGER_LITERAL {{term = df_classes.Integer_Literal(INTEGER_LITERAL)}}
+                                      {{return term}}
+
+    rule string_expression:           STRING_LITERAL {{expression = df_classes.String_literal(STRING_LITERAL)}} |
+
+                                      {{ return expression}}
+
+    rule call_response_step:          CALL STRING_LITERAL {{call_step = df_classes.Call_step(STRING_LITERAL[1:-1])}} [USING (([BY_REFERENCE{{convention = BY_REFERENCE}}] NAME) {{call_step.add_parameter(convention, NAME); convention = None}})+] {{return call_step}}
