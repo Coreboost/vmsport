@@ -236,9 +236,13 @@ class Internal_response_decl(Named_clause, Container_clause):
         return self
 
 class Function_response_decl(Named_clause, Container_clause):
-    def __init__(self, name):
+    def __init__(self):
         Container_clause.__init__(self)
-        Named_clause.__init__(self, name)
+        self.builtin = False
+    def set_builtin(self, name):
+        self.builtin = True
+        self.set_name(name)
+        return self
     def generate(self, indent):
         self.print_indented("FUNCTION RESPONSE " + self.name, indent)
         self.generate_children(indent)
@@ -566,6 +570,27 @@ class Message_panel_decl(Named_clause):
         self.print_indented("MESSAGE PANEL " + self.name, indent)
         if self.named_viewport:
             self.print_indented("VIEWPORT " + self.named_viewport, indent+1)
+        self.print_indented("END PANEL", indent)
+        return self
+
+class Help_panel_decl(Named_clause, Container_clause):
+    def __init__(self, name):
+        Named_clause.__init__(self, name)
+        Container_clause.__init__(self)
+        self.named_viewport = None
+        self.function_response_decls = []
+    def set_named_viewport(self, named_viewport):
+        self.named_viewport = named_viewport
+        return self
+    def add_function_response_decl(self, function_response_decl):
+        self.function_response_decls.append(function_response_decl)
+        return self
+    def generate(self, indent):
+        self.print_indented("HEL PANEL " + self.name, indent)
+        if self.named_viewport:
+            self.print_indented("VIEWPORT " + self.named_viewport, indent+1)
+        for function_response_decl in self.function_response_decls:
+            function_response_decl.generate(indent+1)
         self.print_indented("END PANEL", indent)
         return self
 

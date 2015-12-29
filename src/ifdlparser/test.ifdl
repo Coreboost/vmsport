@@ -21,5 +21,13 @@ Form MRF_FORM
       Viewport DEFAULT_MESSAGE_VIEWPORT
     End Panel
 
+    Help Panel HELP_PANEL
+      Viewport HELP_VIEWPORT
+      Function Response NEXT HELP
+        Activate Panel SECOND_HELP_PANEL
+        Position To Panel SECOND_HELP_PANEL
+      End Response
+    End Panel
+
   End Layout
 END FORM

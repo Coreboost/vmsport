@@ -69,7 +69,7 @@ parser IFDL:
     token IS:                   "(?i)IS"
     token KEY_NAME:             "(?i)%PF1|%PF4|%F8|%KP_PERIOD|%KP_8|%CARRIAGE_RETURN|%ENTER|%DOWN|%HORIZONTAL_TAB|%UP|%DO|%SELECT|%CONTROL_P"
     token TEXT_ATTRIBUTE:       "(?i)BOLD|UNDERLINED"
-    token BUILT_IN_FUNCTION:    "(?i)EXIT[ \t]+GROUP[ \t]+NEXT|INSERT[ \t]+LINE"
+    token BUILT_IN_FUNCTION:    "(?i)EXIT[ \t]+GROUP[ \t]+NEXT|INSERT[ \t]+LINE|NEXT[ \t]+HELP|CURSOR[ \t]+UP|CURSOR[ \t]+DOWN|TRANSMIT"
     token INTERNAL_RESPONSE:    "(?i)INTERNAL[ \t]+RESPONSE"
     token DISABLE_RESPONSE:     "(?i)DISABLE[ \t]+RESPONSE"
     token RECEIVE_RESPONSE:     "(?i)RECEIVE[ \t]+RESPONSE"
@@ -182,7 +182,7 @@ parser IFDL:
                                         list_decl*
                                         viewport_decl*
                                         function_decl*
-                                        (internal_response_decl | external_response_decl | function_response_decl)*
+                                        (internal_response_decl | external_response_decl | function_response_decl {{add_child(function_response_decl)}})*
                                         [USE_HELP_PANEL NAME {{add_child(df_classes.Help_panel_reference(NAME))}} | NO_HELP_PANEL {{add_child(df_classes.Help_panel_reference(None))}}]
                                         (field_default_decl)*
                                         (field_default_appl)*
@@ -197,8 +197,12 @@ parser IFDL:
     rule panel_decl:                  PANEL NAME {{push(df_classes.Panel_decl(NAME))}}
                                       END_PANEL {{ pop() }}
 
-    rule help_panel_decl:             HELP_PANEL NAME {{push(df_classes.Help_panel_decl(NAME))}}
+    rule help_panel_decl:             HELP_PANEL NAME {{panel_decl = push(df_classes.Help_panel_decl(NAME))}}
+                                      (panel_property<<panel_decl>>)*
                                       END_PANEL {{ pop() }}
+
+    rule panel_property<<p_decl>>:    (VIEWPORT NAME) {{p_decl.set_named_viewport(NAME)}} |
+                                      function_response_decl {{p_decl.add_function_response_decl(function_response_decl)}}
 
     rule field_default_appl:          APPLY (
                                       NO_FIELD_DEFAULT {{add_child(df_classes.Field_default_appl())}}|
@@ -233,7 +237,7 @@ parser IFDL:
                                       END_VIEWPORT {{add_child(df_classes.Viewport_decl(NAME, lines_start, lines_end, columns_start, columns_end))}}
 
     rule function_decl:               FUNCTION {{function_decl = df_classes.Function_decl()}}
-                                        (NAME {{function_decl.set_name(NAME)}} | BUILT_IN_FUNCTION {{function_decl.set_builtin(BUILT_IN_FUNCTION)}})
+                                        ((BUILT_IN_FUNCTION {{function_decl.set_builtin(BUILT_IN_FUNCTION)}})|(NAME {{function_decl.set_name(NAME)}}))
                                         IS (KEY_NAME {{function_decl.set_key_1(KEY_NAME)}} | "\(" KEY_NAME {{function_decl.set_key_1(KEY_NAME)}} [KEY_NAME {{function_decl.set_key_2(KEY_NAME)}}] "\)")+
                                       END_FUNCTION {{add_child(function_decl)}}
 
@@ -251,9 +255,10 @@ parser IFDL:
                                         (response_step {{add_child(response_step)}})*
                                       END_RESPONSE {{ pop() }}
 
-    rule function_response_decl:      FUNCTION_RESPONSE NAME {{ push(df_classes.Function_response_decl(NAME)) }}
-                                        (response_step {{add_child(response_step)}})*
-                                      END_RESPONSE {{ pop() }}
+    rule function_response_decl:      FUNCTION_RESPONSE {{function_response_decl = df_classes.Function_response_decl()}}
+                                        ((BUILT_IN_FUNCTION {{function_response_decl.set_builtin(BUILT_IN_FUNCTION)}})|(NAME {{function_response_decl.set_name(NAME)}}))
+                                        (response_step {{function_response_decl.add_child(response_step)}})*
+                                      END_RESPONSE {{ return function_response_decl }}
 
     rule response_step:               (signal_response_step {{step = signal_response_step}} |
                                       message_response_step {{step = message_response_step}} |
