@@ -555,6 +555,20 @@ class Active_highlight_clause(Clause):
             self.print_indented("NO ACTIVE HIGHLIGHT", indent)
         return self
 
+class Message_panel_decl(Named_clause):
+    def __init__(self, name):
+        Named_clause.__init__(self, name)
+        self.named_viewport = None
+    def set_named_viewport(self, named_viewport):
+        self.named_viewport = named_viewport
+        return self
+    def generate(self, indent):
+        self.print_indented("MESSAGE PANEL " + self.name, indent)
+        if self.named_viewport:
+            self.print_indented("VIEWPORT " + self.named_viewport, indent+1)
+        self.print_indented("END PANEL", indent)
+        return self
+
 def test():
     form = Form("My form")
     form.add_child(Form_data())

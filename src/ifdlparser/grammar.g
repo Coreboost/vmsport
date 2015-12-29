@@ -82,6 +82,10 @@ parser IFDL:
     token FIELD_DEFAULT_OF:     "(?i)FIELD[ \t]+DEFAULT[ \t]+OF"
     token ACTIVE_HIGHLIGHT:     "(?i)ACTIVE[ \t]+HIGHLIGHT"
     token NO_ACTIVE_HIGHLIGHT:  "(?i)NO[ \t]+ACTIVE[ \t]+HIGHLIGHT"
+    token PANEL:                "(?i)PANEL"
+    token HELP_PANEL:           "(?i)HELP[ \t]+PANEL"
+    token MESSAGE_PANEL:        "(?i)MESSAGE[ \t]+PANEL"
+    token END_PANEL:            "(?i)END[ \t]+PANEL"
     token ACTIVATE:             "(?i)ACTIVATE"
     token SIGNAL:               "(?i)SIGNAL"
     token BELL_SIGNAL:          "(?i)%BELL"
@@ -89,7 +93,6 @@ parser IFDL:
     token MESSAGE:              "(?i)MESSAGE"
     token POSITION:             "(?i)POSITION"
     token TO:                   "(?i)TO"
-    token PANEL:                "(?i)PANEL"
     token NAMED_POSITION:       "(?i)UP[ \t]+ITEM|DOWN[ \t]+ITEM"
     token RESET:                "(?i)RESET"
     token ALL:                  "(?i)ALL"
@@ -183,7 +186,19 @@ parser IFDL:
                                         [USE_HELP_PANEL NAME {{add_child(df_classes.Help_panel_reference(NAME))}} | NO_HELP_PANEL {{add_child(df_classes.Help_panel_reference(None))}}]
                                         (field_default_decl)*
                                         (field_default_appl)*
+                                        [message_panel_decl]
+                                        (panel_decl|help_panel_decl)*
                                       END_LAYOUT {{ pop() }}
+
+    rule message_panel_decl:          MESSAGE_PANEL NAME {{panel_decl = df_classes.Message_panel_decl(NAME)}}
+                                        VIEWPORT NAME {{panel_decl.set_named_viewport(NAME)}}
+                                      END_PANEL {{add_child(panel_decl)}}
+
+    rule panel_decl:                  PANEL NAME {{push(df_classes.Panel_decl(NAME))}}
+                                      END_PANEL {{ pop() }}
+
+    rule help_panel_decl:             HELP_PANEL NAME {{push(df_classes.Help_panel_decl(NAME))}}
+                                      END_PANEL {{ pop() }}
 
     rule field_default_appl:          APPLY (
                                       NO_FIELD_DEFAULT {{add_child(df_classes.Field_default_appl())}}|
