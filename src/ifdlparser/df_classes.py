@@ -61,7 +61,7 @@ class Occurs_clause(Clause):
         return self
     def generate(self, indent):
         self.print_indented("OCCURS " + self.length , indent)
-        if (self.name):
+        if self.name:
             self.print_indented("CURRENT " + self.name , indent+1)
         return self
 
@@ -156,7 +156,7 @@ class Device_decl(Named_clause):
         return self
     def generate(self, indent):
         name_part = ""
-        if (self.name):
+        if self.name:
             name_part = " " + self.name
         self.print_indented("DEVICE", indent)
         self.print_indented("TERMINAL" + name_part, indent+1)
@@ -308,7 +308,7 @@ class Signal_step(Clause):
         self.bell = False
         return self
     def generate(self, indent):
-        if (self.bell):
+        if self.bell:
             self.print_indented("SIGNAL ", indent)
         else:
             self.print_indented("SIGNAL %REVERSE", indent)
