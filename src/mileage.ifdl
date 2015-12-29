@@ -221,25 +221,24 @@ Form MRF_FORM
         "Print file completed."
     End Response
 
-    Use Help Panel
-      HELP_PANEL
-      Field Default BOLD_ICON
-        Active Highlight
-        Bold
-      End Default
-      Apply Field Default Of
-        Active Highlight
-        Underlined
-      End Default
-      Message Panel DEFAULT_MESSAGE_PANEL
+    Use Help Panel HELP_PANEL
+
+    Field Default BOLD_ICON
+      Active Highlight Bold
+    End Default
+
+    Apply Field Default Of
+      Active Highlight Underlined
+    End Default
+
+    Message Panel DEFAULT_MESSAGE_PANEL
       Viewport DEFAULT_MESSAGE_VIEWPORT
     End Panel
 
     Help Panel HELP_PANEL
       Viewport HELP_VIEWPORT
       Function Response NEXT HELP
-        Activate
-        Panel SECOND_HELP_PANEL
+        Activate Panel SECOND_HELP_PANEL
         Position To Panel SECOND_HELP_PANEL
       End Response
 
@@ -476,8 +475,7 @@ Form MRF_FORM
 
     Panel HEADER_INFO_PANEL
       Viewport MAIN_VIEWPORT
-      Display
-        %Keypad_Application
+      Display  %Keypad_Application
 
       Entry Response
         Message

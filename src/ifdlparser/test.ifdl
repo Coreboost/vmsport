@@ -220,8 +220,12 @@ Form MRF_FORM
       Message
         "Print file completed."
     End Response
-    
+
     Use Help Panel HELP_PANEL
+
+    Field Default BOLD_ICON
+      Active Highlight Bold
+    End Default
 
   End Layout
 END FORM

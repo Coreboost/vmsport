@@ -68,12 +68,17 @@ parser IFDL:
     token END_FUNCTION:         "(?i)END[ \t]+FUNCTION"
     token IS:                   "(?i)IS"
     token KEY_NAME:             "(?i)%PF1|%PF4|%F8|%KP_PERIOD|%KP_8|%CARRIAGE_RETURN|%ENTER|%DOWN|%HORIZONTAL_TAB|%UP|%DO|%SELECT|%CONTROL_P"
+    token TEXT_ATTRIBUTE:       "(?i)BOLD|UNDERLINED"
     token BUILT_IN_FUNCTION:    "(?i)EXIT[ \t]+GROUP[ \t]+NEXT|INSERT[ \t]+LINE"
     token INTERNAL_RESPONSE:    "(?i)INTERNAL[ \t]+RESPONSE"
     token DISABLE_RESPONSE:     "(?i)DISABLE[ \t]+RESPONSE"
     token RECEIVE_RESPONSE:     "(?i)RECEIVE[ \t]+RESPONSE"
     token FUNCTION_RESPONSE:    "(?i)FUNCTION[ \t]+RESPONSE"
     token END_RESPONSE:         "(?i)END[ \t]+RESPONSE"
+    token FIELD_DEFAULT:        "(?i)FIELD[ \t]+DEFAULT"
+    token END_DEFAULT:          "(?i)END[ \t]+DEFAULT"
+    token ACTIVE_HIGHLIGHT:     "(?i)ACTIVE[ \t]+HIGHLIGHT"
+    token NO_ACTIVE_HIGHLIGHT:  "(?i)NO[ \t]+ACTIVE[ \t]+HIGHLIGHT"
     token ACTIVATE:             "(?i)ACTIVATE"
     token SIGNAL:               "(?i)SIGNAL"
     token BELL_SIGNAL:          "(?i)%BELL"
@@ -173,7 +178,19 @@ parser IFDL:
                                         function_decl*
                                         (internal_response_decl | external_response_decl | function_response_decl)*
                                         [USE_HELP_PANEL NAME {{add_child(df_classes.Help_panel_reference(NAME))}} | NO_HELP_PANEL {{add_child(df_classes.Help_panel_reference(None))}}]
+                                        (field_default_decl)*
                                       END_LAYOUT {{ pop() }}
+
+    rule field_default_decl:          FIELD_DEFAULT NAME {{push(df_classes.Field_default_decl(NAME))}}
+                                        (item_description_entry {{add_child(item_description_entry)}})*
+                                      END_DEFAULT {{ pop() }}
+
+    rule item_description_entry:      (active_highlight_clause {{entry=active_highlight_clause}})
+                                      {{return entry}}
+
+    rule active_highlight_clause:     (ACTIVE_HIGHLIGHT TEXT_ATTRIBUTE {{clause = df_classes.Active_highlight_clause().set_elementary_attribute(TEXT_ATTRIBUTE)}}|
+                                      NO_ACTIVE_HIGHLIGHT {{clause = df_classes.Active_highlight_clause()}})
+                                      {{return clause}}
 
     rule device_decl:                 DEVICE TERMINAL {{ device_decl = df_classes.Device_decl(None) }}
                                         [NAME {{device_decl.set_name(NAME)}}]

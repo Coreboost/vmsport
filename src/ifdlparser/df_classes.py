@@ -34,6 +34,8 @@ class Form_decl(Named_clause, Container_clause):
         self.print_indented("END FORM", indent)
 
 class Form_data_decl(Container_clause):
+    def __init__(self):
+        Container_clause.__init__(self)
     def generate(self, indent):
         self.print_indented("FORM DATA", indent)
         self.generate_children(indent)
@@ -512,6 +514,28 @@ class Help_panel_reference(Clause):
             self.print_indented("NO HELP PANEL", indent)
         return self
 
+class Field_default_decl(Named_clause, Container_clause):
+    def __init__(self, name):
+        Named_clause.__init__(self, name)
+        Container_clause.__init__(self)
+    def generate(self, indent):
+        self.print_indented("FIELD DEFAULT " + self.name, indent)
+        self.generate_children(indent)
+        self.print_indented("END DEFAULT", indent)
+        return self
+
+class Active_highlight_clause(Clause):
+    def __init__(self):
+        self.elementary_attribute = None
+    def set_elementary_attribute(self, elementary_attribute):
+        self.elementary_attribute = elementary_attribute
+        return self
+    def generate(self, indent):
+        if self.elementary_attribute:
+            self.print_indented("ACTIVE HIGHLIGHT " + self.elementary_attribute, indent)
+        else:
+            self.print_indented("NO ACTIVE HIGHLIGHT", indent)
+        return self
 
 def test():
     form = Form("My form")
