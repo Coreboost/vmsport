@@ -68,7 +68,8 @@ parser IFDL:
     token END_FUNCTION:         "(?i)END[ \t]+FUNCTION"
     token IS:                   "(?i)IS"
     token KEY_NAME:             "(?i)%PF1|%PF4|%F8|%KP_PERIOD|%KP_8|%CARRIAGE_RETURN|%ENTER|%DOWN|%HORIZONTAL_TAB|%UP|%DO|%SELECT|%CONTROL_P"
-    token TEXT_ATTRIBUTE:       "(?i)BOLD|UNDERLINED"
+    token TEXT_ATTR:            "(?i)BOLD|UNDERLINED"
+    token IMPLEMENTOR_ATTR:     "(?i)%KEYPAD_APPLICATION"
     token BUILT_IN_FUNCTION:    "(?i)EXIT[ \t]+GROUP[ \t]+NEXT|INSERT[ \t]+LINE|NEXT[ \t]+HELP|CURSOR[ \t]+UP|CURSOR[ \t]+DOWN|TRANSMIT"
     token INTERNAL_RESPONSE:    "(?i)INTERNAL[ \t]+RESPONSE"
     token DISABLE_RESPONSE:     "(?i)DISABLE[ \t]+RESPONSE"
@@ -201,15 +202,18 @@ parser IFDL:
                                         (panel_decl|help_panel_decl)*
                                       END_LAYOUT {{ pop() }}
 
-    rule message_panel_decl:          MESSAGE_PANEL NAME {{panel_decl = df_classes.Message_panel_decl(NAME)}}
-                                        VIEWPORT NAME {{panel_decl.set_named_viewport(NAME)}}
+    rule message_panel_decl:          MESSAGE_PANEL NAME {{panel_decl=df_classes.Message_panel_decl(NAME)}}
+                                        (panel_property {{panel_decl.add_panel_property(panel_property)}})*
                                       END_PANEL {{add_child(panel_decl)}}
 
-    rule panel_decl:                  PANEL NAME {{push(df_classes.Panel_decl(NAME))}}
+    rule panel_decl:                  PANEL NAME {{panel_decl=push(df_classes.Panel_decl(NAME))}}
+                                        (panel_property {{panel_decl.add_panel_property(panel_property)}})*
+                                        (field_default_appl)*
+                                        (literal_decl|icon_decl)*
                                       END_PANEL {{ pop() }}
 
-    rule help_panel_decl:             HELP_PANEL NAME {{panel_decl = push(df_classes.Help_panel_decl(NAME))}}
-                                        (panel_property<<panel_decl>>)*
+    rule help_panel_decl:             HELP_PANEL NAME {{panel_decl=push(df_classes.Help_panel_decl(NAME))}}
+                                        (panel_property {{panel_decl.add_panel_property(panel_property)}})*
                                         (literal_decl|icon_decl)*
                                       END_PANEL {{ pop() }}
 
@@ -225,22 +229,23 @@ parser IFDL:
     rule text_literal_decl:           LITERAL_TEXT {{literal=add_child(df_classes.Literal_text())}}
                                         [loc_clause {{literal.set_location(loc_clause)}}]
                                         VALUE STRING_LITERAL {{literal.set_text(STRING_LITERAL[1:-1])}}
-                                        [display_clause<<literal>>]
+                                        [display_clause {{literal.set_display_clause(display_clause)}}]
                                       END_LITERAL
 
     rule polyline_literal_decl:       LITERAL_POLYLINE {{literal=add_child(df_classes.Literal_polyline())}}
                                         full_loc_clause {{literal.add_location(full_loc_clause)}}
                                         (full_loc_clause {{literal.add_location(full_loc_clause)}})+
-                                        [display_clause<<literal>>]
+                                        [display_clause {{literal.set_display_clause(display_clause)}}]
                                       END_LITERAL
 
     rule rectangle_literal_decl:      LITERAL_RECTANGLE {{literal=add_child(df_classes.Literal_rectangle())}}
                                         full_loc_clause {{literal.set_first_corner(full_loc_clause)}}
                                         full_loc_clause {{literal.set_second_corner(full_loc_clause)}}
-                                        [display_clause<<literal>>]
+                                        [display_clause {{literal.set_display_clause(display_clause)}}]
                                       END_LITERAL
 
-    rule display_clause<<item>>:      DISPLAY TEXT_ATTRIBUTE {{item.set_elementary_attribute(TEXT_ATTRIBUTE)}}
+    rule display_clause:              DISPLAY ((TEXT_ATTR {{clause=df_classes.Display_elementary_attribute(TEXT_ATTR)}})|
+                                               (IMPLEMENTOR_ATTR {{clause=df_classes.Display_implementor_attribute(IMPLEMENTOR_ATTR)}})) {{return clause}}
 
     rule loc_clause:                  full_loc_clause {{return full_loc_clause}}
 
@@ -251,8 +256,11 @@ parser IFDL:
 
     rule vertical_loc_clause:         LINE INTEGER_LITERAL {{return df_classes.Vertical_loc_clause(INTEGER_LITERAL)}}
 
-    rule panel_property<<p_decl>>:    (VIEWPORT NAME) {{p_decl.set_named_viewport(NAME)}} |
-                                      function_response_decl {{p_decl.add_function_response_decl(function_response_decl)}}
+    rule panel_property:              viewport_reference {{return viewport_reference}}|
+                                      display_clause {{return display_clause}} |
+                                      function_response_decl {{ return function_response_decl}}
+
+    rule viewport_reference:          VIEWPORT NAME {{return df_classes.Viewport_reference(NAME)}}
 
     rule field_default_appl:          APPLY (
                                       NO_FIELD_DEFAULT {{add_child(df_classes.Field_default_appl())}}|
@@ -266,7 +274,7 @@ parser IFDL:
     rule item_description_entry:      (active_highlight_clause {{entry=active_highlight_clause}})
                                       {{return entry}}
 
-    rule active_highlight_clause:     (ACTIVE_HIGHLIGHT TEXT_ATTRIBUTE {{clause = df_classes.Active_highlight_clause().set_elementary_attribute(TEXT_ATTRIBUTE)}}|
+    rule active_highlight_clause:     (ACTIVE_HIGHLIGHT TEXT_ATTR {{clause = df_classes.Active_highlight_clause().set_elementary_attribute(TEXT_ATTR)}}|
                                       NO_ACTIVE_HIGHLIGHT {{clause = df_classes.Active_highlight_clause()}})
                                       {{return clause}}
 

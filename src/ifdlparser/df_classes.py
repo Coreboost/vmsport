@@ -570,51 +570,56 @@ class Active_highlight_clause(Clause):
             self.print_indented("NO ACTIVE HIGHLIGHT", indent)
         return self
 
-class Message_panel_decl(Named_clause):
-    def __init__(self, name):
-        Named_clause.__init__(self, name)
-        self.named_viewport = None
-    def set_named_viewport(self, named_viewport):
-        self.named_viewport = named_viewport
-        return self
-    def generate(self, indent):
-        self.print_indented("MESSAGE PANEL " + self.name, indent)
-        if self.named_viewport:
-            self.print_indented("VIEWPORT " + self.named_viewport, indent+1)
-        self.print_indented("END PANEL", indent)
-        return self
-
-class Help_panel_decl(Named_clause, Container_clause):
+class Abstract_panel_decl(Named_clause, Container_clause):
     def __init__(self, name):
         Named_clause.__init__(self, name)
         Container_clause.__init__(self)
-        self.named_viewport = None
-        self.function_response_decls = []
-    def set_named_viewport(self, named_viewport):
-        self.named_viewport = named_viewport
-        return self
-    def add_function_response_decl(self, function_response_decl):
-        self.function_response_decls.append(function_response_decl)
-        return self
+        self.panel_properties = []
+    def add_panel_property(self, property):
+        self.panel_properties.append(property)
     def generate(self, indent):
-        self.print_indented("HEL PANEL " + self.name, indent)
-        if self.named_viewport:
-            self.print_indented("VIEWPORT " + self.named_viewport, indent+1)
-        for function_response_decl in self.function_response_decls:
-            function_response_decl.generate(indent+1)
+        for property in self.panel_properties:
+            property.generate(indent)
+
+class Message_panel_decl(Abstract_panel_decl):
+    def __init__(self, name):
+        Abstract_panel_decl.__init__(self, name)
+    def generate(self, indent):
+        self.print_indented("MESSAGE PANEL " + self.name, indent)
+        Abstract_panel_decl.generate(self, indent+1)
+        self.generate_children(indent)
+        self.print_indented("END PANEL", indent)
+        return self
+
+class Help_panel_decl(Abstract_panel_decl):
+    def __init__(self, name):
+        Abstract_panel_decl.__init__(self, name)
+    def generate(self, indent):
+        self.print_indented("HELP PANEL " + self.name, indent)
+        Abstract_panel_decl.generate(self, indent+1)
+        self.generate_children(indent)
+        self.print_indented("END PANEL", indent)
+        return self
+
+class Panel_decl(Abstract_panel_decl):
+    def __init__(self, name):
+        Abstract_panel_decl.__init__(self, name)
+    def generate(self, indent):
+        self.print_indented("HELP PANEL " + self.name, indent)
+        Abstract_panel_decl.generate(self, indent+1)
         self.generate_children(indent)
         self.print_indented("END PANEL", indent)
         return self
 
 class Literal(Clause):
     def __init__(self):
-        self.elementary_attribute = None
-    def set_elementary_attribute(self, elementary_attribute):
-        self.elementary_attribute=elementary_attribute
+        self.display_clause = None
+    def set_display_clause(self, display_clause):
+        self.elementary_attribute=display_clause
         return self
     def generate(self, indent):
-        if self.elementary_attribute:
-            self.print_indented("DISPLAY " + self.elementary_attribute, indent)
+        if self.display_clause:
+            self.display_clause.generate(indent)
         return self
 
 class Literal_text(Literal):
@@ -700,6 +705,24 @@ class Icon_decl(Named_clause, Container_clause):
         self.generate_children(indent)
         self.print_indented("END ICON", indent)
         return self
+
+class Display_elementary_attribute(Clause):
+    def __init__(self, attribute_name):
+        self.attribute_name = attribute_name
+    def generate(self, indent):
+        self.print_indented("DISPLAY " + self.attribute_name, indent)
+
+class Display_implementor_attribute(Clause):
+    def __init__(self, attribute_name):
+        self.attribute_name = attribute_name
+    def generate(self, indent):
+        self.print_indented("DISPLAY " + self.attribute_name, indent)
+
+class Viewport_reference(Clause):
+    def __init__(self, viewport_name):
+        self.viewport_name = viewport_name
+    def generate(self, indent):
+        self.print_indented("VIEWPORT " + self.viewport_name, indent)
 
 def test():
     form = Form("My form")

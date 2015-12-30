@@ -66,8 +66,62 @@ Form MRF_FORM
           Value "Help on Printing"
         End Literal
       End Icon
+  End Panel
 
+  Panel HEADER_INFO_PANEL
+    Viewport MAIN_VIEWPORT
+    Display  %Keypad_Application
 
+    Entry Response
+      Message
+        "Press Help for information on how to use this application."
+    End Response
+
+    Exit Response
+      Message
+        "Displaying next screen..."
+    End Response
+
+    Literal Text
+      Line 1
+      Column 15
+      Value "Mileage Reimbursement Form"
+      Display
+        Font Size Double Wide
+    End Literal
+
+    Literal Polyline
+      Line 3 Column 1
+      Line 3 Column 80
+    End Literal
+
+    Field EMPLOYEE_NAME
+      Line 5
+      Column 17
+    End Field
+
+    Field BADGE_NUMBER
+      Line 7
+      Column 17
+      Output Picture 999999R
+      Justification Right
+    End Field
+
+    Field COST_CENTER
+      Line 7
+      Column 43
+      Autoskip
+      Uppercase
+    End Field
+
+    Textfield ADDRESS
+      Line 9
+      Column 17
+      Builtin Function Response CURSOR UP
+      Builtin Function Response CURSOR DOWN
+      Rows 3
+      Columns 40
+    End Field
   End Panel
 
   End Layout
