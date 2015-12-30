@@ -68,13 +68,24 @@ parser IFDL:
     token END_FUNCTION:         "(?i)END[ \t]+FUNCTION"
     token IS:                   "(?i)IS"
     token KEY_NAME:             "(?i)%PF1|%PF4|%F8|%KP_PERIOD|%KP_8|%CARRIAGE_RETURN|%ENTER|%DOWN|%HORIZONTAL_TAB|%UP|%DO|%SELECT|%CONTROL_P"
-    token TEXT_ATTR:            "(?i)BOLD|UNDERLINED"
+    token SIMPLE_TEXT_ATTR:     "(?i)BOLD|UNDERLINED"
+    token FONT:                 "(?i)FONT"
+    token FAMILY:               "(?i)FAMILY"
+    token FONT_FAMILY:          "(?i)COURIER|HELVETICA"
+    token STYLE:                "(?i)STYLE"
+    token FONT_STYLE:           "(?i)ROMAN|ITALIC|OBLIQUE"
+    token WEIGHT:               "(?i)WEIGHT"
+    token FONT_WEIGHT:          "(?i)MEDIUM|BOLD"
+    token SIZE:                 "(?i)SIZE"
+    token FONT_SIZE:            "(?i)SINGLE|NORMAL|DOUBLE[ \t]+HIGH|DOUBLE[ \t]+WIDE"
     token IMPLEMENTOR_ATTR:     "(?i)%KEYPAD_APPLICATION"
     token BUILT_IN_FUNCTION:    "(?i)EXIT[ \t]+GROUP[ \t]+NEXT|INSERT[ \t]+LINE|NEXT[ \t]+HELP|CURSOR[ \t]+UP|CURSOR[ \t]+DOWN|TRANSMIT"
     token INTERNAL_RESPONSE:    "(?i)INTERNAL[ \t]+RESPONSE"
     token DISABLE_RESPONSE:     "(?i)DISABLE[ \t]+RESPONSE"
     token RECEIVE_RESPONSE:     "(?i)RECEIVE[ \t]+RESPONSE"
     token FUNCTION_RESPONSE:    "(?i)FUNCTION[ \t]+RESPONSE"
+    token ENTRY_RESPONSE:       "(?i)ENTRY[ \t]+RESPONSE"
+    token EXIT_RESPONSE:        "(?i)EXIT[ \t]+RESPONSE"
     token END_RESPONSE:         "(?i)END[ \t]+RESPONSE"
     token FIELD_DEFAULT:        "(?i)FIELD[ \t]+DEFAULT"
     token END_DEFAULT:          "(?i)END[ \t]+DEFAULT"
@@ -244,8 +255,18 @@ parser IFDL:
                                         [display_clause {{literal.set_display_clause(display_clause)}}]
                                       END_LITERAL
 
-    rule display_clause:              DISPLAY ((TEXT_ATTR {{clause=df_classes.Display_elementary_attribute(TEXT_ATTR)}})|
-                                               (IMPLEMENTOR_ATTR {{clause=df_classes.Display_implementor_attribute(IMPLEMENTOR_ATTR)}})) {{return clause}}
+    rule display_clause:              DISPLAY (disp_implementor_attr{{return disp_implementor_attr}}|disp_text_attr{{return disp_text_attr}})
+
+    rule disp_implementor_attr:       IMPLEMENTOR_ATTR {{return df_classes.Display_implementor_attribute(IMPLEMENTOR_ATTR)}}
+
+    rule disp_text_attr:              ((SIMPLE_TEXT_ATTR {{return df_classes.Display_elementary_attribute(SIMPLE_TEXT_ATTR)}})|
+                                      (font_decl {{return font_decl}}))
+
+    rule font_decl:                   FONT
+                                      ((FAMILY FONT_FAMILY {{return df_classes.Font_decl().set_font_family(FONT_FAMILY)}})|
+                                      (STYLE FONT_STYLE {{return df_classes.Font_decl().set_font_style(FONT_STYLE)}})|
+                                      (WEIGHT FONT_WEIGHT {{return df_classes.Font_decl().set_font_weight(FONT_WEIGHT)}})|
+                                      (SIZE ((FONT_SIZE {{return df_classes.Font_decl().set_font_size_named(FONT_SIZE)}})|(INTEGER_LITERAL {{return df_classes.Font_decl().set_font_size_points(INTEGER_LITERAL)}}))))
 
     rule loc_clause:                  full_loc_clause {{return full_loc_clause}}
 
@@ -258,6 +279,8 @@ parser IFDL:
 
     rule panel_property:              viewport_reference {{return viewport_reference}}|
                                       display_clause {{return display_clause}} |
+                                      entry_response_decl {{return entry_response_decl}} |
+                                      exit_response_decl {{return exit_response_decl}} |
                                       function_response_decl {{ return function_response_decl}}
 
     rule viewport_reference:          VIEWPORT NAME {{return df_classes.Viewport_reference(NAME)}}
@@ -274,7 +297,7 @@ parser IFDL:
     rule item_description_entry:      (active_highlight_clause {{entry=active_highlight_clause}})
                                       {{return entry}}
 
-    rule active_highlight_clause:     (ACTIVE_HIGHLIGHT TEXT_ATTR {{clause = df_classes.Active_highlight_clause().set_elementary_attribute(TEXT_ATTR)}}|
+    rule active_highlight_clause:     (ACTIVE_HIGHLIGHT SIMPLE_TEXT_ATTR {{clause = df_classes.Active_highlight_clause().set_elementary_attribute(SIMPLE_TEXT_ATTR)}}|
                                       NO_ACTIVE_HIGHLIGHT {{clause = df_classes.Active_highlight_clause()}})
                                       {{return clause}}
 
@@ -317,6 +340,14 @@ parser IFDL:
                                         ((BUILT_IN_FUNCTION {{function_response_decl.set_builtin(BUILT_IN_FUNCTION)}})|(NAME {{function_response_decl.set_name(NAME)}}))
                                         (response_step {{function_response_decl.add_child(response_step)}})*
                                       END_RESPONSE {{ return function_response_decl }}
+
+    rule entry_response_decl:         ENTRY_RESPONSE {{entry_response_decl = df_classes.Entry_response_decl()}}
+                                        (response_step {{entry_response_decl.add_child(response_step)}})*
+                                      END_RESPONSE {{ return entry_response_decl }}
+
+    rule exit_response_decl:          EXIT_RESPONSE {{exit_response_decl = df_classes.Exit_response_decl()}}
+                                        (response_step {{exit_response_decl.add_child(response_step)}})*
+                                      END_RESPONSE {{ return exit_response_decl }}
 
     rule response_step:               (signal_response_step {{step = signal_response_step}} |
                                       message_response_step {{step = message_response_step}} |

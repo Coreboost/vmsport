@@ -235,9 +235,13 @@ class Internal_response_decl(Named_clause, Container_clause):
         self.print_indented("END RESPONSE", indent)
         return self
 
-class Function_response_decl(Named_clause, Container_clause):
+class Response_decl(Container_clause):
     def __init__(self):
         Container_clause.__init__(self)
+
+class Function_response_decl(Named_clause, Response_decl):
+    def __init__(self):
+        Response_decl.__init__(self)
         self.builtin = False
     def set_builtin(self, name):
         self.builtin = True
@@ -249,19 +253,36 @@ class Function_response_decl(Named_clause, Container_clause):
         self.print_indented("END RESPONSE", indent)
         return self
 
-
-class Disable_response_decl(Container_clause):
+class Entry_response_decl(Response_decl):
     def __init__(self):
-        Container_clause.__init__(self)
+        Response_decl.__init__(self)
+    def generate(self, indent):
+        self.print_indented("ENTRY RESPONSE", indent)
+        self.generate_children(indent)
+        self.print_indented("END RESPONSE", indent)
+        return self
+
+class Exit_response_decl(Response_decl):
+    def __init__(self):
+        Response_decl.__init__(self)
     def generate(self, indent):
         self.print_indented("DISABLE RESPONSE", indent)
         self.generate_children(indent)
         self.print_indented("END RESPONSE", indent)
         return self
 
-class Receive_response_decl(Container_clause):
-    def __init__(self, record_name):
-        Container_clause.__init__(self)
+class Disable_response_decl(Response_decl):
+    def __init__(self):
+        Response_decl.__init__(self)
+    def generate(self, indent):
+        self.print_indented("DISABLE RESPONSE", indent)
+        self.generate_children(indent)
+        self.print_indented("END RESPONSE", indent)
+        return self
+
+class Receive_response_decl(Response_decl):
+    def __init__(self):
+        Response_decl.__init__(self)
         self.record_name = record_name
     def generate(self, indent):
         self.print_indented("RECEIVE RESPONSE " + self.record_name, indent)
@@ -711,18 +732,56 @@ class Display_elementary_attribute(Clause):
         self.attribute_name = attribute_name
     def generate(self, indent):
         self.print_indented("DISPLAY " + self.attribute_name, indent)
+        return self
 
 class Display_implementor_attribute(Clause):
     def __init__(self, attribute_name):
         self.attribute_name = attribute_name
     def generate(self, indent):
         self.print_indented("DISPLAY " + self.attribute_name, indent)
+        return self
 
 class Viewport_reference(Clause):
     def __init__(self, viewport_name):
         self.viewport_name = viewport_name
     def generate(self, indent):
         self.print_indented("VIEWPORT " + self.viewport_name, indent)
+        return self
+
+class Font_decl(Clause):
+    def __init__(self):
+        self.font_family = None
+        self.font_style = None
+        self.font_weight = None
+        self.font_size_named = None
+        self.font_size_points = None
+    def set_font_family(self, font_family):
+        self.font_family = font_family
+        return self
+    def set_font_style(self, font_style):
+        self.font_style = font_style
+        return self
+    def set_font_weight(self, font_weight):
+        self.font_weight = font_weight
+        return self
+    def set_font_size_named(self, font_size_named):
+        self.font_size_named = font_size_named
+        return self
+    def set_font_size_points(self, font_size_points):
+        self.font_size_named = font_size_points
+        return self
+    def generate(self, indent):
+        if self.font_family:
+            self.print_indented("FONT FAMILY " + self.font_family, indent)
+        if self.font_style:
+            self.print_indented("FONT STYLE " + self.font_style, indent)
+        if self.font_weight:
+            self.print_indented("FONT WEIGHT " + self.font_weight, indent)
+        if self.font_size_named:
+            self.print_indented("FONT SIZE " + self.font_size_named, indent)
+        if self.font_size_points:
+            self.print_indented("FONT SIZE " + self.font_size_points, indent)
+        return self
 
 def test():
     form = Form("My form")
