@@ -8,25 +8,8 @@ Form MRF_FORM
     Size 24 Lines by 80 Columns
 
     Use Help Panel HELP_PANEL
-
-    Field Default BOLD_ICON
-      Active Highlight Bold
-    End Default
-
-    Apply Field Default Of
-      Active Highlight Underlined
-    End Default
-
-    Message Panel DEFAULT_MESSAGE_PANEL
-      Viewport DEFAULT_MESSAGE_VIEWPORT
-    End Panel
-
     Help Panel HELP_PANEL
       Viewport HELP_VIEWPORT
-      Function Response NEXT HELP
-        Activate Panel SECOND_HELP_PANEL
-        Position To Panel SECOND_HELP_PANEL
-      End Response
 
       Literal Text
         Line 1
@@ -35,93 +18,8 @@ Form MRF_FORM
         Display Bold
       End Literal
 
-      Literal Polyline
-        Line 2 Column 1
-        Line 2 Column 80
-        Display Bold
-      End Literal
-
-      Literal Rectangle
-        Line 4 Column 1
-        Line 18 Column 80
-      End Literal
-
-      Icon MORE_HELP
-        Apply Field Default BOLD_ICON
-
-        Function Response SELECT
-          Activate
-          Panel SECOND_HELP_PANEL
-          Position To Panel SECOND_HELP_PANEL
-        End Response
-
-        Literal Rectangle
-          Line 19 Column 16
-          Line 21 Column 33
-        End Literal
-
-        Literal Text
-          Line 20
-          Column 17
-          Value "Help on Printing"
-        End Literal
-      End Icon
   End Panel
 
-  Panel HEADER_INFO_PANEL
-    Viewport MAIN_VIEWPORT
-    Display  %Keypad_Application
-
-    Entry Response
-      Message
-        "Press Help for information on how to use this application."
-    End Response
-
-    Exit Response
-      Message
-        "Displaying next screen..."
-    End Response
-
-    Literal Text
-      Line 1
-      Column 15
-      Value "Mileage Reimbursement Form"
-      Display Font Size Double Wide
-    End Literal
-
-    Literal Polyline
-      Line 3 Column 1
-      Line 3 Column 80
-    End Literal
-
-    Field EMPLOYEE_NAME
-      Line 5
-      Column 17
-    End Field
-
-    Field BADGE_NUMBER
-      Line 7
-      Column 17
-      Output Picture 999999R
-      Justification Right
-    End Field
-
-    Field COST_CENTER
-      Line 7
-      Column 43
-      Autoskip
-      Uppercase
-    End Field
-
-    Textfield ADDRESS
-      Line 9
-      Column 17
-      Builtin Function Response CURSOR UP
-      Builtin Function Response CURSOR DOWN
-      Rows 3
-      Columns 40
-    End Field
-  End Panel
 
   End Layout
 END FORM

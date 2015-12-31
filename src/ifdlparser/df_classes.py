@@ -243,14 +243,19 @@ class Function_response_decl(Named_clause, Response_decl):
     def __init__(self):
         Response_decl.__init__(self)
         self.builtin = False
-    def set_builtin(self, name):
+        self.fmt = 1
+    def set_builtin(self, name, fmt):
         self.builtin = True
+        self.fmt = fmt
         self.set_name(name)
         return self
     def generate(self, indent):
-        self.print_indented("FUNCTION RESPONSE " + self.name, indent)
-        self.generate_children(indent)
-        self.print_indented("END RESPONSE", indent)
+        if self.fmt == 1:
+            self.print_indented("FUNCTION RESPONSE " + self.name, indent)
+            self.generate_children(indent)
+            self.print_indented("END RESPONSE", indent)
+        elif self.fmt == 2:
+            self.print_indented("BUITIN FUNCTION RESPONSE " + self.name, indent)
         return self
 
 class Entry_response_decl(Response_decl):
@@ -636,7 +641,7 @@ class Literal(Clause):
     def __init__(self):
         self.display_clause = None
     def set_display_clause(self, display_clause):
-        self.elementary_attribute=display_clause
+        self.display_clause=display_clause
         return self
     def generate(self, indent):
         if self.display_clause:
@@ -781,6 +786,139 @@ class Font_decl(Clause):
             self.print_indented("FONT SIZE " + self.font_size_named, indent)
         if self.font_size_points:
             self.print_indented("FONT SIZE " + self.font_size_points, indent)
+        return self
+
+class Field_decl(Named_clause):
+    def __init__(self, name):
+        Named_clause.__init__(self, name)
+        self.item_description_entries = []
+        self.field_validation_entries = []
+        self.autoskip = False
+        self.uppercase = False
+        self.location = None
+    def add_item_description_entry(self, item_description_entry):
+        self.item_description_entries.append(item_description_entry)
+        return self
+    def add_field_validation_entry(self, field_validation_entry):
+        self.field_validation_entries.append(field_validation_entry)
+        return self
+    def set_autoskip(self, autoskip):
+        self.autoskip = autoskip
+        return self
+    def set_uppercase(self, uppercase):
+        self.uppercase = uppercase
+        return self
+    def set_location(self, location):
+        self.location = location
+        return self
+    def generate(self, indent):
+        for entry in self.item_description_entries:
+            entry.generate(indent)
+        for entry in self.field_validation_entries:
+            entry.generate(indent)
+        if self.autoskip:
+            self.print_indented("AUTOSKIP", indent)
+        if self.uppercase:
+            self.print_indented("UPPERCASE", indent)
+        if self.location:
+            self.location.generate(indent)
+        return self
+
+class Picture_field_decl(Field_decl):
+    def __init__(self, name):
+        Field_decl.__init__(self, name)
+        self.editing_entries = []
+        self.input_picture = None
+        self.output_picture = None
+        self.protected = None
+        self.protected_when = None
+        self.justification = None
+    def add_editing_entry(self, editing_entry):
+        self.editing_entries.append(editing_entry)
+        return self
+    def set_input_picture(self, input_picture):
+        self.input_picture = input_picture
+        return self
+    def set_output_picture(self, output_picture):
+        self.output_picture = output_picture
+        return self
+    def set_protected(self, protected):
+        self.protected = protected
+        return self
+    def set_protected_when(self, protected_when):
+        self.protected_when = protected_when
+        return self
+    def set_justification(self, justification):
+        self.justification = justification
+        return self
+    def generate(self, indent):
+        self.print_indented("FIELD " + self.name, indent)
+        Field_decl.generate(self, indent+1)
+        for entry in self.editing_entries:
+            entry.generate(indent+1)
+        if self.input_picture:
+            self.print_indented("INPUT PICTURE " + self.input_picture, indent+1)
+        if self.output_picture:
+            self.print_indented("OUTPUT PICTURE " + self.output_picture, indent+1)
+        if (self.protected):
+            trail = (" WHEN " + self.protected_when.to_string()) if (self.protected_when) else ""
+            self.print_indented("PROTECTED" + trail, indent+1)
+        if self.justification:
+            self.print_indented("JUSTIFICATION " + self.justification, indent+1)
+        self.print_indented("END FIELD", indent)
+        return self
+
+class Text_field_decl(Field_decl):
+    def __init__(self, name):
+        Field_decl.__init__(self, name)
+        self.rows = None
+        self.columns = None
+    def set_rows(self, rows):
+        self.rows = rows
+        return self
+    def set_columns(self, columns):
+        self.columns = columns
+        return self
+    def generate(self, indent):
+        self.print_indented("TEXTFIELD " + self.name, indent)
+        Field_decl.generate(self, indent+1)
+        if self.rows:
+            self.print_indented("ROWS " + self.rows, indent+1)
+        if self.columns:
+            self.print_indented("COLUMNS " + self.columns, indent+1)
+        self.print_indented("END FIELD", indent)
+        return self
+
+class Field_validation_entry(Clause):
+    def __init__(self):
+        self.search = None
+        self.range_lower = None
+        self.range_upper = None
+    def set_search(self, search):
+        self.search = search
+        return self
+    def set_range_lower(self, range_lower):
+        self.range_lower = range_lower
+        return self
+    def set_range_upper(self, range_upper):
+        self.range_upper = range_upper
+        return self
+    def generate(self, indent):
+        if self.search:
+            self.print_indented("SEARCH " + self.search, indent)
+        if self.range_lower:
+            self.print_indented("RANGE " + self.range_lower["value"] + " THROUGH " + self.range_upper["value"], indent)
+        return self
+
+class Editing_entry(Clause):
+    def __init__(self):
+        self.scale = None
+    def set_scale(self, scale):
+        self.scale = scale
+        return self
+    def generate(self, indent):
+        if self.scale:
+            self.print_indented("SCALE " + self.scale, indent)
         return self
 
 def test():

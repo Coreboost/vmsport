@@ -84,9 +84,29 @@ parser IFDL:
     token DISABLE_RESPONSE:     "(?i)DISABLE[ \t]+RESPONSE"
     token RECEIVE_RESPONSE:     "(?i)RECEIVE[ \t]+RESPONSE"
     token FUNCTION_RESPONSE:    "(?i)FUNCTION[ \t]+RESPONSE"
+    token BUILTIN_FUNCTION_RESPONSE:    "(?i)BUILTIN[ \t]+FUNCTION[ \t]+RESPONSE"
     token ENTRY_RESPONSE:       "(?i)ENTRY[ \t]+RESPONSE"
     token EXIT_RESPONSE:        "(?i)EXIT[ \t]+RESPONSE"
     token END_RESPONSE:         "(?i)END[ \t]+RESPONSE"
+    token FIELD:                "(?i)FIELD"
+    token TEXTFIELD:            "(?i)TEXTFIELD"
+    token END_FIELD:            "(?i)END[ \t]+FIELD"
+    token AUTOSKIP:             "(?i)AUTOSKIP"
+    token NO_AUTOSKIP:          "(?i)NO[ \t]AUTOSKIP"
+    token UPPERCASE:            "(?i)UPPERCASE"
+    token MIXED_CASE:           "(?i)MIXED[ \t]CASE"
+    token ROWS:                 "(?i)ROWS"
+    token COLUMNS:              "(?i)COLUMNS"
+    token INPUT_PICTURE:        "(?i)INPUT[ \t]PICTURE"
+    token OUTPUT_PICTURE:       "(?i)OUTPUT[ \t]PICTURE"
+    token PICTURE_SPEC:         "(\w|\.|(\"([^\"\r\n]|\"\")+\")|(\'([^\'\r\n]|\'\')+\'))+"
+    token PROTECTED:            "(?i)PROTECTED"
+    token WHEN:                 "(?i)WHEN"
+    token SEARCH:               "(?i)SEARCH"
+    token RANGE:                "(?i)RANGE"
+    token SCALE:                "(?i)SCALE"
+    token JUSTIFICATION:        "(?i)JUSTIFICATION"
+    token JUSTIFICATION_VALUE:  "(?i)LEFT|RIGHT|DECIMAL"
     token FIELD_DEFAULT:        "(?i)FIELD[ \t]+DEFAULT"
     token END_DEFAULT:          "(?i)END[ \t]+DEFAULT"
     token APPLY:                "(?i)APPLY"
@@ -221,12 +241,57 @@ parser IFDL:
                                         (panel_property {{panel_decl.add_panel_property(panel_property)}})*
                                         (field_default_appl)*
                                         (literal_decl|icon_decl)*
+                                        (picture_field_decl|text_field_decl)*
                                       END_PANEL {{ pop() }}
 
     rule help_panel_decl:             HELP_PANEL NAME {{panel_decl=push(df_classes.Help_panel_decl(NAME))}}
                                         (panel_property {{panel_decl.add_panel_property(panel_property)}})*
                                         (literal_decl|icon_decl)*
                                       END_PANEL {{ pop() }}
+
+    rule picture_field_decl:          FIELD NAME {{field_decl=push(df_classes.Picture_field_decl(NAME))}}
+                                        loc_clause {{field_decl.set_location(loc_clause)}}
+                                        (pic_field_desc_entry<<field_decl>>)*
+                                      END_FIELD {{pop()}}
+
+    rule text_field_decl:             TEXTFIELD NAME {{field_decl=push(df_classes.Text_field_decl(NAME))}}
+                                        loc_clause {{field_decl.set_location(loc_clause)}}
+                                        (txt_field_desc_entry<<field_decl>>)*
+                                      END_FIELD {{pop()}}
+
+    rule txt_field_desc_entry<<FDE>>: ((item_description_entry{{FDE.add_item_description_entry(item_description_entry)}})|
+                                      (field_validation_entry {{FDE.add_field_validation_entry(field_validation_entry)}})|
+                                      (AUTOSKIP {{FDE.set_autoskip(True)}})|
+                                      (NO_AUTOSKIP {{FDE.set_autoskip(False)}})|
+                                      (UPPERCASE {{FDE.set_uppercase(True)}})|
+                                      (MIXED_CASE {{FDE.set_uppercase(False)}})|
+                                      (ROWS INTEGER_LITERAL {{FDE.set_rows(INTEGER_LITERAL)}})|
+                                      (COLUMNS INTEGER_LITERAL {{FDE.set_columns(INTEGER_LITERAL)}}))
+
+    rule pic_field_desc_entry<<FDE>>: ((item_description_entry{{FDE.add_item_description_entry(item_description_entry)}})|
+                                      (field_validation_entry {{FDE.add_field_validation_entry(field_validation_entry)}})|
+                                      (editing_entry {{FDE.add_editing_entry(editing_entry)}})|
+                                      (AUTOSKIP {{FDE.set_autoskip(True)}})|
+                                      (NO_AUTOSKIP {{FDE.set_autoskip(False)}})|
+                                      (UPPERCASE {{FDE.set_uppercase(True)}})|
+                                      (MIXED_CASE {{FDE.set_uppercase(False)}})|
+                                      (INPUT_PICTURE PICTURE_SPEC {{FDE.set_input_picture(PICTURE_SPEC)}})|
+                                      (OUTPUT_PICTURE PICTURE_SPEC {{FDE.set_output_picture(PICTURE_SPEC)}})|
+                                      (PROTECTED {{FDE.set_protected(True)}} [WHEN conditional_expression {{FDE.set_protected_when(conditional_expression)}}])|
+                                      (JUSTIFICATION JUSTIFICATION_VALUE {{FDE.set_justification(JUSTIFICATION_VALUE)}}))
+
+    rule field_validation_entry:      ((SEARCH NAME {{return df_classes.Field_validation_entry().set_search(NAME)}})|
+                                      (RANGE {{r=df_classes.Field_validation_entry()}}
+                                        (STRING_LITERAL {{r.set_range_lower({"type": "string", "value": STRING_LITERAL})}}|
+                                        INTEGER_LITERAL {{r.set_range_lower({"type": "integer", "value": INTEGER_LITERAL})}}|
+                                        DATA_REFERENCE {{r.set_range_lower({"type": "reference", "value": DATA_REFERENCE})}})
+                                        (THROUGH|THRU)
+                                        (STRING_LITERAL {{r.set_range_upper({"type": "string", "value": STRING_LITERAL})}}|
+                                        INTEGER_LITERAL {{r.set_range_upper({"type": "integer", "value": INTEGER_LITERAL})}}|
+                                        DATA_REFERENCE {{r.set_range_upper({"type": "reference", "value": DATA_REFERENCE})}})
+                                      {{return r}}))
+
+    rule editing_entry:               SCALE INTEGER_LITERAL {{return df_classes.Editing_entry().set_scale(INTEGER_LITERAL)}}
 
     rule icon_decl:                   ICON NAME {{icon_decl = push(df_classes.Icon_decl(NAME))}}
                                         (field_default_appl)*
@@ -294,8 +359,11 @@ parser IFDL:
                                         (item_description_entry {{add_child(item_description_entry)}})*
                                       END_DEFAULT {{ pop() }}
 
-    rule item_description_entry:      (active_highlight_clause {{entry=active_highlight_clause}})
+    rule item_description_entry:      ((active_highlight_clause {{entry=active_highlight_clause}})|
+                                      (accept_response_decl {{entry=accept_response_decl}}))
                                       {{return entry}}
+
+    rule accept_response_decl:        (entry_response_decl{{return entry_response_decl}})|(exit_response_decl{{return exit_response_decl}})|(function_response_decl{{return function_response_decl}})
 
     rule active_highlight_clause:     (ACTIVE_HIGHLIGHT SIMPLE_TEXT_ATTR {{clause = df_classes.Active_highlight_clause().set_elementary_attribute(SIMPLE_TEXT_ATTR)}}|
                                       NO_ACTIVE_HIGHLIGHT {{clause = df_classes.Active_highlight_clause()}})
@@ -336,10 +404,14 @@ parser IFDL:
                                         (response_step {{add_child(response_step)}})*
                                       END_RESPONSE {{ pop() }}
 
-    rule function_response_decl:      FUNCTION_RESPONSE {{function_response_decl = df_classes.Function_response_decl()}}
-                                        ((BUILT_IN_FUNCTION {{function_response_decl.set_builtin(BUILT_IN_FUNCTION)}})|(NAME {{function_response_decl.set_name(NAME)}}))
+    rule function_response_decl:      (function_response_decl_1{{return function_response_decl_1}})|(function_response_decl_2{{return function_response_decl_2}})
+
+    rule function_response_decl_1:    FUNCTION_RESPONSE {{function_response_decl = df_classes.Function_response_decl()}}
+                                        ((BUILT_IN_FUNCTION {{function_response_decl.set_builtin(BUILT_IN_FUNCTION, 1)}})|(NAME {{function_response_decl.set_name(NAME)}}))
                                         (response_step {{function_response_decl.add_child(response_step)}})*
                                       END_RESPONSE {{ return function_response_decl }}
+
+    rule function_response_decl_2:    BUILTIN_FUNCTION_RESPONSE BUILT_IN_FUNCTION {{return df_classes.Function_response_decl().set_builtin(BUILT_IN_FUNCTION, 2)}}
 
     rule entry_response_decl:         ENTRY_RESPONSE {{entry_response_decl = df_classes.Entry_response_decl()}}
                                         (response_step {{entry_response_decl.add_child(response_step)}})*
