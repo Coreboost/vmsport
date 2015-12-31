@@ -240,8 +240,7 @@ parser IFDL:
     rule panel_decl:                  PANEL NAME {{panel_decl=push(df_classes.Panel_decl(NAME))}}
                                         (panel_property {{panel_decl.add_panel_property(panel_property)}})*
                                         (field_default_appl)*
-                                        (literal_decl|icon_decl)*
-                                        (picture_field_decl|text_field_decl)*
+                                        (literal_decl|icon_decl|picture_field_decl|text_field_decl)*
                                       END_PANEL {{ pop() }}
 
     rule help_panel_decl:             HELP_PANEL NAME {{panel_decl=push(df_classes.Help_panel_decl(NAME))}}

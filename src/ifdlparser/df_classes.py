@@ -286,7 +286,7 @@ class Disable_response_decl(Response_decl):
         return self
 
 class Receive_response_decl(Response_decl):
-    def __init__(self):
+    def __init__(self, record_name):
         Response_decl.__init__(self)
         self.record_name = record_name
     def generate(self, indent):
