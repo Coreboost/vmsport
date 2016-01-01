@@ -29,17 +29,17 @@ class Form_decl(Named_clause, Container_clause):
         Named_clause.__init__(self, name)
 
     def generate(self, indent):
-        self.print_indented("FORM " + self.name, indent)
+        self.print_indented("Form " + self.name, indent)
         self.generate_children(indent)
-        self.print_indented("END FORM", indent)
+        self.print_indented("End Form", indent)
 
 class Form_data_decl(Container_clause):
     def __init__(self):
         Container_clause.__init__(self)
     def generate(self, indent):
-        self.print_indented("FORM DATA", indent)
+        self.print_indented("Form Data", indent)
         self.generate_children(indent)
-        self.print_indented("END DATA", indent)
+        self.print_indented("End Data", indent)
         return self
 
 class Group_decl(Named_clause, Container_clause):
@@ -49,10 +49,10 @@ class Group_decl(Named_clause, Container_clause):
     def additional_generate(self, indent):
         return self
     def generate(self, indent):
-        self.print_indented("GROUP " + self.name, indent)
+        self.print_indented("Group " + self.name, indent)
         self.additional_generate(indent+1)
         self.generate_children(indent)
-        self.print_indented("END GROUP", indent)
+        self.print_indented("End Group", indent)
         return self
 
 class Form_data_group_decl(Group_decl):
@@ -76,7 +76,7 @@ class Panel_group_decl(Group_decl):
         return self
     def additional_generate(self, indent):
         if self.orientation:
-            trail = (" DISPLAYS " + self.displays) if self.displays else ""
+            trail = (" Displays " + self.displays) if self.displays else ""
             self.print_indented(self.orientation + trail, indent)
         if self.location:
             location.generate(indent)
@@ -90,9 +90,9 @@ class Occurs_clause(Clause):
         self.name = name
         return self
     def generate(self, indent):
-        self.print_indented("OCCURS " + self.length , indent)
+        self.print_indented("Occurs " + self.length , indent)
         if self.name:
-            self.print_indented("CURRENT " + self.name , indent+1)
+            self.print_indented("Current " + self.name , indent+1)
         return self
 
 class Atomic_type(Named_clause, Container_clause):
@@ -107,11 +107,11 @@ class Atomic_type(Named_clause, Container_clause):
 
 class Longword_integer(Atomic_type):
     def __init__(self, name):
-        Atomic_type.__init__(self, name, "LONGWORD INTEGER")
+        Atomic_type.__init__(self, name, "Longword Integer")
 
 class Unsigned_longword(Atomic_type):
     def __init__(self, name):
-        Atomic_type.__init__(self, name, "UNSIGNED LONGWORD")
+        Atomic_type.__init__(self, name, "Unsigned Longword")
 
 class Character_data(Named_clause, Container_clause):
     def __init__(self, name, length):
@@ -119,7 +119,7 @@ class Character_data(Named_clause, Container_clause):
         Container_clause.__init__(self)
         self.length = length
     def generate(self, indent):
-        self.print_indented(self.name + " CHARACTER(" + self.length + ")", indent)
+        self.print_indented(self.name + " Character(" + self.length + ")", indent)
         self.generate_children(indent)
         return self
 
@@ -129,7 +129,7 @@ class Integer_data(Named_clause, Container_clause):
         Container_clause.__init__(self)
         self.length = length
     def generate(self, indent):
-        self.print_indented(self.name + " INTEGER(" + self.length + ")", indent)
+        self.print_indented(self.name + " Integer(" + self.length + ")", indent)
         self.generate_children(indent)
         return self
 
@@ -139,7 +139,7 @@ class Datetime_data(Named_clause, Container_clause):
         Container_clause.__init__(self)
         self.int_value = int_value
     def generate(self, indent):
-        self.print_indented(self.name + " DATETIME(" + self.int_value + ")", indent)
+        self.print_indented(self.name + " Datetime(" + self.int_value + ")", indent)
         self.generate_children(indent)
         return self
 
@@ -155,16 +155,16 @@ class Form_record_decl(Named_clause, Container_clause):
         Container_clause.__init__(self)
         Named_clause.__init__(self, name)
     def generate(self, indent):
-        self.print_indented("FORM RECORD " + self.name, indent)
+        self.print_indented("Form Record " + self.name, indent)
         self.generate_children(indent)
-        self.print_indented("END RECORD", indent)
+        self.print_indented("End Record", indent)
         return self
 
 class Transfer_clause(Clause):
     def __init__(self, reference):
         self.reference = reference
     def generate(self, indent):
-        self.print_indented("USING " + self.reference, indent)
+        self.print_indented("Using " + self.reference, indent)
         return self
 
 class Layout_decl(Named_clause, Container_clause):
@@ -172,9 +172,9 @@ class Layout_decl(Named_clause, Container_clause):
         Container_clause.__init__(self)
         Named_clause.__init__(self, name)
     def generate(self, indent):
-        self.print_indented("LAYOUT " + self.name, indent)
+        self.print_indented("Layout " + self.name, indent)
         self.generate_children(indent)
-        self.print_indented("END LAYOUT", indent)
+        self.print_indented("End Layout", indent)
         return self
 
 class Device_decl(Named_clause):
@@ -188,10 +188,10 @@ class Device_decl(Named_clause):
         name_part = ""
         if self.name:
             name_part = " " + self.name
-        self.print_indented("DEVICE", indent)
-        self.print_indented("TERMINAL" + name_part, indent+1)
-        self.print_indented("TYPE " + self.type, indent+1)
-        self.print_indented("END DEVICE", indent)
+        self.print_indented("Device", indent)
+        self.print_indented("Terminal" + name_part, indent+1)
+        self.print_indented("Type " + self.type, indent+1)
+        self.print_indented("End Device", indent)
         return self
 
 class Size_decl(Clause):
@@ -199,7 +199,7 @@ class Size_decl(Clause):
         self.lines = lines
         self.columns = columns
     def generate(self, indent):
-        self.print_indented("SIZE " + self.lines + " LINES BY " + self.columns + " COLUMNS", indent)
+        self.print_indented("Size " + self.lines + " Lines By " + self.columns + " Columns", indent)
         return self
 
 class List_decl(Named_clause):
@@ -210,10 +210,10 @@ class List_decl(Named_clause):
         self.list_items.append(list_item)
         return self
     def generate(self, indent):
-        self.print_indented("LIST " + self.name, indent)
+        self.print_indented("List " + self.name, indent)
         for item in self.list_items:
             self.print_indented('"' + item + '"', indent+1)
-        self.print_indented("END LIST", indent)
+        self.print_indented("End List", indent)
         return self
 
 class Viewport_decl(Named_clause):
@@ -224,10 +224,10 @@ class Viewport_decl(Named_clause):
         self.columns_start = columns_start
         self. columns_end = columns_end
     def generate(self, indent):
-        self.print_indented("VIEWPORT " + self.name, indent)
-        self.print_indented("LINES " + self.lines_start + " THROUGH " + self.lines_end, indent+1)
-        self.print_indented("COLUMNS " + self.columns_start + " THROUGH " + self.columns_end, indent+1)
-        self.print_indented("END VIEWPORT", indent)
+        self.print_indented("Viewport " + self.name, indent)
+        self.print_indented("Lines " + self.lines_start + " Through " + self.lines_end, indent+1)
+        self.print_indented("Columns " + self.columns_start + " Through " + self.columns_end, indent+1)
+        self.print_indented("End Viewport", indent)
         return self
 
 class Function_decl(Named_clause):
@@ -246,13 +246,13 @@ class Function_decl(Named_clause):
         self.key_sequences[-1].append(key2)
         return self
     def generate(self, indent):
-        self.print_indented("FUNCTION " + self.name + " IS", indent)
+        self.print_indented("Function " + self.name + " Is", indent)
         for sequence in self.key_sequences:
             if len(sequence) == 1:
                 self.print_indented(sequence[0], indent+1)
             else:
                 self.print_indented ("(" + sequence[0] + " " + sequence[1] + ")", indent+1)
-        self.print_indented("END FUNCTION", indent)
+        self.print_indented("End Function", indent)
         return self
 
 class Internal_response_decl(Named_clause, Container_clause):
@@ -260,9 +260,9 @@ class Internal_response_decl(Named_clause, Container_clause):
         Container_clause.__init__(self)
         Named_clause.__init__(self, name)
     def generate(self, indent):
-        self.print_indented("INTERNAL RESPONSE " + self.name, indent)
+        self.print_indented("Internal Response " + self.name, indent)
         self.generate_children(indent)
-        self.print_indented("END RESPONSE", indent)
+        self.print_indented("End Response", indent)
         return self
 
 class Response_decl(Container_clause):
@@ -281,11 +281,11 @@ class Function_response_decl(Named_clause, Response_decl):
         return self
     def generate(self, indent):
         if self.fmt == 1:
-            self.print_indented("FUNCTION RESPONSE " + self.name, indent)
+            self.print_indented("Function Response " + self.name, indent)
             self.generate_children(indent)
-            self.print_indented("END RESPONSE", indent)
+            self.print_indented("End Response", indent)
         elif self.fmt == 2:
-            self.print_indented("BUITIN FUNCTION RESPONSE " + self.name, indent)
+            self.print_indented("Builtin Function Response " + self.name, indent)
         return self
 
 class Entry_response_decl(Response_decl):
@@ -301,18 +301,18 @@ class Exit_response_decl(Response_decl):
     def __init__(self):
         Response_decl.__init__(self)
     def generate(self, indent):
-        self.print_indented("Exit RESPONSE", indent)
+        self.print_indented("Exit Response", indent)
         self.generate_children(indent)
-        self.print_indented("END RESPONSE", indent)
+        self.print_indented("End Response", indent)
         return self
 
 class Disable_response_decl(Response_decl):
     def __init__(self):
         Response_decl.__init__(self)
     def generate(self, indent):
-        self.print_indented("DISABLE RESPONSE", indent)
+        self.print_indented("Disable Response", indent)
         self.generate_children(indent)
-        self.print_indented("END RESPONSE", indent)
+        self.print_indented("End Response", indent)
         return self
 
 class Receive_response_decl(Response_decl):
@@ -320,9 +320,9 @@ class Receive_response_decl(Response_decl):
         Response_decl.__init__(self)
         self.record_name = record_name
     def generate(self, indent):
-        self.print_indented("RECEIVE RESPONSE " + self.record_name, indent)
+        self.print_indented("Receive Response " + self.record_name, indent)
         self.generate_children(indent)
-        self.print_indented("END RESPONSE", indent)
+        self.print_indented("End Response", indent)
         return self
 
 class Activate_step(Clause):
@@ -330,18 +330,18 @@ class Activate_step(Clause):
         self.panel_name = None
         self.target_type = None
     def set_all(self):
-        self.target_type = "ALL"
+        self.target_type = "All"
         return self
     def set_panel(self, panel_name):
-        self.target_type = "PANEL"
+        self.target_type = "Panel"
         self.panel_name = panel_name
         return self
     def generate(self, indent):
         def undefined_target_type():
             raise NotImplementedError("The specified target type for activate step not supported")
         target_types = {
-            "ALL": lambda: self.print_indented("ACTIVATE ALL", indent),
-            "PANEL": lambda: self.print_indented("ACTIVATE PANEL " + self.panel_name, indent)
+            "All": lambda: self.print_indented("Activate All", indent),
+            "Panel": lambda: self.print_indented("Activate Panel " + self.panel_name, indent)
         }
         target_types.get(self.target_type, undefined_target_type)()
         return self
@@ -353,7 +353,7 @@ class Message_step(Clause):
         self.lines.append(line)
         return self
     def generate(self, indent):
-        self.print_indented("MESSAGE", indent)
+        self.print_indented("Message", indent)
         for line in self.lines:
             self.print_indented('"' + line + '"', indent+1)
         return self
@@ -369,9 +369,9 @@ class Signal_step(Clause):
         return self
     def generate(self, indent):
         if self.bell:
-            self.print_indented("SIGNAL ", indent)
+            self.print_indented("Signal ", indent)
         else:
-            self.print_indented("SIGNAL %REVERSE", indent)
+            self.print_indented("Signal %Reverse", indent)
         return self
 
 class Position_step(Clause):
@@ -381,18 +381,18 @@ class Position_step(Clause):
         self.named_position = None
     def set_panel(self, panel):
         self.panel = panel
-        self.target_type = "PANEL"
+        self.target_type = "Panel"
         return self
     def set_named_position(self, named_position):
         self.named_position = named_position
-        self.target_type = "NAMED POSITION"
+        self.target_type = "Named Position"
         return self
     def generate(self, indent):
         def undefined_target_type():
             raise NotImplementedError("The specified target type for position step not supported")
         target_types = {
-            "PANEL":          lambda: self.print_indented("POSITION TO PANEL " + self.panel, indent),
-            "NAMED POSITION": lambda: self.print_indented("POSITION TO " + self.named_position, indent)
+            "Panel":          lambda: self.print_indented("Position To Panel " + self.panel, indent),
+            "Named Position": lambda: self.print_indented("Position To " + self.named_position, indent)
         }
         target_types.get(self.target_type, undefined_target_type)()
         return self
@@ -405,7 +405,7 @@ class Reset_step(Clause):
         return self
     def generate(self, indent):
         if self.all:
-            self.print_indented("RESET ALL", indent)
+            self.print_indented("Reset All", indent)
         return self
 
 class Remove_step(Clause):
@@ -420,19 +420,19 @@ class Remove_step(Clause):
         return self
     def generate(self, indent):
         if self.all:
-            self.print_indented("REMOVE ALL", indent)
+            self.print_indented("Remove All", indent)
         elif self.help:
-            self.print_indented("REMOVE HELP", indent)
+            self.print_indented("Remove Help", indent)
         return self
 
 class Enter_help_step(Clause):
     def generate(self, indent):
-        self.print_indented("ENTER HELP", indent)
+        self.print_indented("Enter Help", indent)
         return self
 
 class Exit_help_step(Clause):
     def generate(self, indent):
-        self.print_indented("EXIT HELP", indent)
+        self.print_indented("Exit Help", indent)
         return self
 
 class Return_step(Clause):
@@ -442,7 +442,7 @@ class Return_step(Clause):
         self.immediate = True
         return self
     def generate(self, indent):
-        self.print_indented("RETURN" + " IMMEDIATE" if self.immediate else "", indent)
+        self.print_indented("Return" + " Immediate" if self.immediate else "", indent)
         return self
 
 class Let_step(Clause):
@@ -461,7 +461,7 @@ class Call_step(Clause):
         self.parameters.append({'convention': convention, 'name': name})
         return self
     def generate(self, indent):
-        self.print_indented('CALL "' + self.subroutine_name + '"' + ("" if len(self.parameters) == 0 else " USING"), indent)
+        self.print_indented('Call "' + self.subroutine_name + '"' + ("" if len(self.parameters) == 0 else " Using"), indent)
         for parameter in self.parameters:
             self.print_indented((parameter['convention'].upper() + " " if parameter['convention'] else "") + parameter['name'], indent+1)
         return self
@@ -470,7 +470,7 @@ class Include_step(Clause):
     def __init__(self, response_name):
         self.response_name = response_name
     def generate(self, indent):
-        self.print_indented("INCLUDE " + self.response_name, indent)
+        self.print_indented("Include " + self.response_name, indent)
         return self
 
 class Print_step(Clause):
@@ -484,7 +484,7 @@ class Print_step(Clause):
         self.panel_name = panel_name
         return self
     def generate(self, indent):
-        self.print_indented("PRINT " + ("IMMEDIATE " if self.immediate else "") + self.panel_name, indent)
+        self.print_indented("Print " + ("Immediate " if self.immediate else "") + self.panel_name, indent)
         return self
 
 class If_step(Clause):
@@ -499,14 +499,14 @@ class If_step(Clause):
         self.else_steps.append(step)
         return self
     def generate(self, indent):
-        self.print_indented("IF " + self.conditional.to_string() + " THEN", indent)
+        self.print_indented("If " + self.conditional.to_string() + " Then", indent)
         for step in self.then_steps:
             step.generate(indent+1)
         if len(self.else_steps) > 0:
-            self.print_indented("ELSE", indent)
+            self.print_indented("Else", indent)
             for step in self.else_steps:
                 step.generate(indent+1)
-        self.print_indented("END IF", indent)
+        self.print_indented("End If", indent)
         return self
 
 class Conditional_expression:
@@ -527,7 +527,7 @@ class Conditional_expression:
         self.negated = value
         return self
     def to_string(self):
-        lead = ("NOT " if self.negated else "") + "(" if self.subexpression else ""
+        lead = ("Not " if self.negated else "") + "(" if self.subexpression else ""
         trail = ")" if self.subexpression else ""
         term_1 = self.term_1.to_string()
         term_2 = (" " + self.logical_op + " " + self.term_2.to_string()) if self.logical_op else ""
@@ -543,7 +543,7 @@ class Relational_expression:
         self.negated = value
         return self
     def to_string(self):
-        return ("NOT " if self.negated else "") + self.expression_1.to_string() + self.relational_op + self.expression_2.to_string()
+        return ("Not " if self.negated else "") + self.expression_1.to_string() + self.relational_op + self.expression_2.to_string()
 
 class Elementary_condition:
     def __init__(self, elementary_condition):
@@ -553,7 +553,7 @@ class Elementary_condition:
         self.negated = value
         return self
     def to_string(self):
-        return ("NOT " if self.negated else "") + self.elementary_condition
+        return ("Not " if self.negated else "") + self.elementary_condition
 
 class Numeric_expression:
     def __init__(self, sign, term_1):
@@ -597,9 +597,9 @@ class Help_panel_reference(Clause):
         self.help_panel_name = help_panel_name
     def generate(self, indent):
         if self.help_panel_name:
-            self.print_indented("USE HELP PANEL " + self.help_panel_name, indent)
+            self.print_indented("Use Help Panel " + self.help_panel_name, indent)
         else:
-            self.print_indented("NO HELP PANEL", indent)
+            self.print_indented("No Help Panel", indent)
         return self
 
 class Field_default_decl(Named_clause, Container_clause):
@@ -607,9 +607,9 @@ class Field_default_decl(Named_clause, Container_clause):
         Named_clause.__init__(self, name)
         Container_clause.__init__(self)
     def generate(self, indent):
-        self.print_indented("FIELD DEFAULT " + self.name, indent)
+        self.print_indented("Field Default " + self.name, indent)
         self.generate_children(indent)
-        self.print_indented("END DEFAULT", indent)
+        self.print_indented("End Default", indent)
         return self
 
 class Field_default_appl(Container_clause):
@@ -621,13 +621,13 @@ class Field_default_appl(Container_clause):
         return self
     def generate(self, indent):
         if self.named_default:
-            self.print_indented("APPLY FIELD DEFAULT " + self.named_default, indent)
+            self.print_indented("Apply Field Default " + self.named_default, indent)
         elif len(self.contents) == 0:
-            self.print_indented("APPLY NO FIELD DEFAULT", indent)
+            self.print_indented("Apply No Field Default", indent)
         else:
-            self.print_indented("APPLY FIELD DEFAULT OF", indent)
+            self.print_indented("Apply Field Default Of", indent)
             self.generate_children(indent)
-            self.print_indented("END DEFAULT", indent)
+            self.print_indented("End Default", indent)
         return self
 
 class Active_highlight_clause(Clause):
@@ -638,9 +638,9 @@ class Active_highlight_clause(Clause):
         return self
     def generate(self, indent):
         if self.elementary_attribute:
-            self.print_indented("ACTIVE HIGHLIGHT " + self.elementary_attribute, indent)
+            self.print_indented("Active Highlight " + self.elementary_attribute, indent)
         else:
-            self.print_indented("NO ACTIVE HIGHLIGHT", indent)
+            self.print_indented("No Active Highlight", indent)
         return self
 
 class Abstract_panel_decl(Named_clause, Container_clause):
@@ -658,30 +658,30 @@ class Message_panel_decl(Abstract_panel_decl):
     def __init__(self, name):
         Abstract_panel_decl.__init__(self, name)
     def generate(self, indent):
-        self.print_indented("MESSAGE PANEL " + self.name, indent)
+        self.print_indented("Message Panel " + self.name, indent)
         Abstract_panel_decl.generate(self, indent+1)
         self.generate_children(indent)
-        self.print_indented("END PANEL", indent)
+        self.print_indented("End Panel", indent)
         return self
 
 class Help_panel_decl(Abstract_panel_decl):
     def __init__(self, name):
         Abstract_panel_decl.__init__(self, name)
     def generate(self, indent):
-        self.print_indented("HELP PANEL " + self.name, indent)
+        self.print_indented("Help Panel " + self.name, indent)
         Abstract_panel_decl.generate(self, indent+1)
         self.generate_children(indent)
-        self.print_indented("END PANEL", indent)
+        self.print_indented("End Panel", indent)
         return self
 
 class Panel_decl(Abstract_panel_decl):
     def __init__(self, name):
         Abstract_panel_decl.__init__(self, name)
     def generate(self, indent):
-        self.print_indented("PANEL " + self.name, indent)
+        self.print_indented("Panel " + self.name, indent)
         Abstract_panel_decl.generate(self, indent+1)
         self.generate_children(indent)
-        self.print_indented("END PANEL", indent)
+        self.print_indented("End Panel", indent)
         return self
 
 class Literal(Clause):
@@ -707,12 +707,12 @@ class Literal_text(Literal):
         self.text = text
         return self
     def generate(self, indent):
-        self.print_indented("LITERAL TEXT", indent)
+        self.print_indented("Literal Text", indent)
         if self.location:
             self.location.generate(indent+1)
-        self.print_indented('VALUE "' + self.text + '"', indent+1)
+        self.print_indented('Value "' + self.text + '"', indent+1)
         Literal.generate(self, indent+1)
-        self.print_indented("END LITERAL", indent)
+        self.print_indented("End Literal", indent)
         return self
 
 class Literal_polyline(Literal):
@@ -723,11 +723,11 @@ class Literal_polyline(Literal):
         self.locations.append(location)
         return self
     def generate(self, indent):
-        self.print_indented("LITERAL POLYLINE", indent)
+        self.print_indented("Literal Polyline", indent)
         for location in self.locations:
             location.generate(indent+1)
         Literal.generate(self, indent+1)
-        self.print_indented("END LITERAL", indent)
+        self.print_indented("End Literal", indent)
         return self
 
 class Literal_rectangle(Literal):
@@ -742,11 +742,11 @@ class Literal_rectangle(Literal):
         self.second_corner = second_corner
         return self
     def generate(self, indent):
-        self.print_indented("LITERAL RECTANGLE", indent)
+        self.print_indented("Literal Rectangle", indent)
         self.first_corner.generate(indent+1)
         self.second_corner.generate(indent+1)
         Literal.generate(self, indent+1)
-        self.print_indented("END LITERAL", indent)
+        self.print_indented("End Literal", indent)
         return self
 
 class Full_loc_clause(Clause):
@@ -761,43 +761,43 @@ class Horizontal_loc_clause(Clause):
     def __init__(self, value):
         self.value = value
     def to_string(self):
-        return "COLUMN " + self.value
+        return "Column " + self.value
 
 class Vertical_loc_clause(Clause):
     def __init__(self, value):
         self.value = value
     def to_string(self):
-        return "LINE " + self.value
+        return "Line " + self.value
 
 class Icon_decl(Named_clause, Container_clause):
     def __init__(self, name):
         Container_clause.__init__(self)
         Named_clause.__init__(self, name)
     def generate(self, indent):
-        self.print_indented("ICON " + self.name, indent)
+        self.print_indented("Icon " + self.name, indent)
         self.generate_children(indent)
-        self.print_indented("END ICON", indent)
+        self.print_indented("End Icon", indent)
         return self
 
 class Display_elementary_attribute(Clause):
     def __init__(self, attribute_name):
         self.attribute_name = attribute_name
     def generate(self, indent):
-        self.print_indented("DISPLAY " + self.attribute_name, indent)
+        self.print_indented("Display " + self.attribute_name, indent)
         return self
 
 class Display_implementor_attribute(Clause):
     def __init__(self, attribute_name):
         self.attribute_name = attribute_name
     def generate(self, indent):
-        self.print_indented("DISPLAY " + self.attribute_name, indent)
+        self.print_indented("Display " + self.attribute_name, indent)
         return self
 
 class Viewport_reference(Clause):
     def __init__(self, viewport_name):
         self.viewport_name = viewport_name
     def generate(self, indent):
-        self.print_indented("VIEWPORT " + self.viewport_name, indent)
+        self.print_indented("Viewport " + self.viewport_name, indent)
         return self
 
 class Font_decl(Clause):
@@ -824,15 +824,15 @@ class Font_decl(Clause):
         return self
     def generate(self, indent):
         if self.font_family:
-            self.print_indented("DISPLAY FONT FAMILY " + self.font_family, indent)
+            self.print_indented("Display Font Family " + self.font_family, indent)
         if self.font_style:
-            self.print_indented("DISPLAY FONT STYLE " + self.font_style, indent)
+            self.print_indented("Display Font Style " + self.font_style, indent)
         if self.font_weight:
-            self.print_indented("DISPLAY FONT WEIGHT " + self.font_weight, indent)
+            self.print_indented("Display Font Weight " + self.font_weight, indent)
         if self.font_size_named:
-            self.print_indented("DISPLAY FONT SIZE " + self.font_size_named, indent)
+            self.print_indented("Display Font Size " + self.font_size_named, indent)
         if self.font_size_points:
-            self.print_indented("DISPLAY FONT SIZE " + self.font_size_points, indent)
+            self.print_indented("Display Font Size " + self.font_size_points, indent)
         return self
 
 class Field_decl(Named_clause):
@@ -864,9 +864,9 @@ class Field_decl(Named_clause):
         for entry in self.field_validation_entries:
             entry.generate(indent)
         if self.autoskip:
-            self.print_indented("AUTOSKIP", indent)
+            self.print_indented("Autoskip", indent)
         if self.uppercase:
-            self.print_indented("UPPERCASE", indent)
+            self.print_indented("Uppercase", indent)
         if self.location:
             self.location.generate(indent)
         return self
@@ -907,23 +907,23 @@ class Picture_field_decl(Field_decl):
         self.output_when = output_when
         return self
     def generate(self, indent):
-        self.print_indented("FIELD " + self.name, indent)
+        self.print_indented("Field " + self.name, indent)
         Field_decl.generate(self, indent+1)
         for entry in self.editing_entries:
             entry.generate(indent+1)
         if self.input_picture:
-            for_date = "FOR DATE " if (self.input_picture_for_date) else ""
-            self.print_indented("INPUT PICTURE " + for_date +self.input_picture, indent+1)
+            for_date = "For Date " if (self.input_picture_for_date) else ""
+            self.print_indented("Input Picture " + for_date +self.input_picture, indent+1)
         if self.output_picture:
-            self.print_indented("OUTPUT PICTURE " + self.output_picture, indent+1)
+            self.print_indented("Output Picture " + self.output_picture, indent+1)
         if (self.protected):
-            trail = (" WHEN " + self.protected_when.to_string()) if (self.protected_when) else ""
-            self.print_indented("PROTECTED" + trail, indent+1)
+            trail = (" When " + self.protected_when.to_string()) if (self.protected_when) else ""
+            self.print_indented("Protected" + trail, indent+1)
         if self.justification:
-            self.print_indented("JUSTIFICATION " + self.justification, indent+1)
+            self.print_indented("Justification " + self.justification, indent+1)
         if self.output_when:
-            self.print_indented("OUTPUT " + '"' + self.output_when["output"] + '"' + " WHEN " + self.output_when["when"].to_string(), indent+1)
-        self.print_indented("END FIELD", indent)
+            self.print_indented("Output " + '"' + self.output_when["output"] + '"' + " When " + self.output_when["when"].to_string(), indent+1)
+        self.print_indented("End Field", indent)
         return self
 
 class Text_field_decl(Field_decl):
@@ -938,13 +938,13 @@ class Text_field_decl(Field_decl):
         self.columns = columns
         return self
     def generate(self, indent):
-        self.print_indented("TEXTFIELD " + self.name, indent)
+        self.print_indented("Textfield " + self.name, indent)
         Field_decl.generate(self, indent+1)
         if self.rows:
-            self.print_indented("ROWS " + self.rows, indent+1)
+            self.print_indented("Rows " + self.rows, indent+1)
         if self.columns:
-            self.print_indented("COLUMNS " + self.columns, indent+1)
-        self.print_indented("END FIELD", indent)
+            self.print_indented("Columns " + self.columns, indent+1)
+        self.print_indented("End Field", indent)
         return self
 
 class Field_validation_entry(Clause):
@@ -967,9 +967,9 @@ class Field_validation_entry(Clause):
     def generate(self, indent):
         message_spec = ((" " + self.message.to_string())) if self.message else ""
         if self.search:
-            self.print_indented("SEARCH " + self.search + message_spec, indent)
+            self.print_indented("Search " + self.search + message_spec, indent)
         if self.range_lower:
-            self.print_indented("RANGE " + self.range_lower["value"] + " THROUGH " + self.range_upper["value"] + message_spec, indent)
+            self.print_indented("Range " + self.range_lower["value"] + " Through " + self.range_upper["value"] + message_spec, indent)
         return self
 
 class Editing_entry(Clause):
@@ -980,7 +980,7 @@ class Editing_entry(Clause):
         return self
     def generate(self, indent):
         if self.scale:
-            self.print_indented("SCALE " + self.scale, indent)
+            self.print_indented("Scale " + self.scale, indent)
         return self
 
 class Message_clause(Clause):
@@ -991,7 +991,7 @@ class Message_clause(Clause):
         return self
     def to_string(self):
         if self.string:
-            return "MESSAGE " + self.string
+            return "Message " + self.string
         else:
             return ""
 
