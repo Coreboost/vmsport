@@ -905,7 +905,7 @@ class Picture_field_decl(Field_decl):
         if self.justification:
             self.print_indented("JUSTIFICATION " + self.justification, indent+1)
         if self.output_when:
-            self.print_indented("OUTPUT " + self.output_when["output"] + " WHEN " + self.output_when["when"].to_string())
+            self.print_indented("OUTPUT " + self.output_when["output"] + " WHEN " + self.output_when["when"].to_string(), indent+1)
         self.print_indented("END FIELD", indent)
         return self
 
