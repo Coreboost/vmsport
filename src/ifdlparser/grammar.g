@@ -173,9 +173,9 @@ parser IFDL:
     token INTEGER_LITERAL:      "(-|\+)?\d+"
     token DECIMAL_LITERAL:      "\d*\.\d+(E\d+)?"
     token DATETIME_LITERAL:     "\d+"
-    token STRING_LITERAL:         "(\"([^\"\r\n]|\"\")+\")|(\'([^\'\r\n]|\'\')+\')"
+    token STRING_LITERAL:         "(\"([^\"\r\n]|\"\")*\")|(\'([^\'\r\n]|\'\')*\')"
     token NAME:                 "\w+"
-    token DATA_REFERENCE:       "\w+(\(\w+\))?(\.\w+(\(\w+\))?)*"
+    token DATA_REFERENCE:       "\w+(\((\w+|\*\*)\))?(\.\w+(\(\w+\))?)*"
 
     rule form_decl:                   FORM NAME {{ push(df_classes.Form_decl(NAME)) }}
                                         form_data_decl*

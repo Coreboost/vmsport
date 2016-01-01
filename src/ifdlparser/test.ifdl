@@ -774,6 +774,7 @@ Form MRF_FORM
           Column 8
           Autoskip
           Input Picture For Date DD-AAA-YYYY
+          Output " " When (TRIP(**).TRIP_DATE = BLANK_DATE)
         End Field
 
         Field TRIP_FROM
@@ -781,6 +782,7 @@ Form MRF_FORM
           Column 22
           Autoskip
           Uppercase
+          Protected When (TRIP(**).TRIP_DATE = BLANK_DATE)
           Search LOCATION_CODES
           Message
             "Must be a valid code: ACT, BXB, LTN, MKO, or ZKO"
@@ -791,6 +793,7 @@ Form MRF_FORM
           Column 29
           Autoskip
           Uppercase
+          Protected When (TRIP(**).TRIP_DATE = BLANK_DATE)
           Search LOCATION_CODES
           Message
             "Must be a valid code: ACT, BXB, LTN, MKO, or ZKO"
@@ -805,6 +808,8 @@ Form MRF_FORM
           End Response
           Output Picture 999R
           Justification Right
+          Output "" When (TRIP(**).TRIP_DATE = BLANK_DATE)
+          Protected When (TRIP(**).TRIP_DATE = BLANK_DATE)
           Range 1 Through 100
           Message
           "You cannot get reimbursed for more than 100 miles per trip!"
@@ -815,15 +820,24 @@ Form MRF_FORM
           Column 46
           Output Picture 99R9.99
           Scale -2
+          Output ""
+          When (TRIP(**).TRIP_DATE = BLANK_DATE)
           Protected
         End Field
 
         Field TOLL
           Line 6
           Column 54
+          Exit Response
+            Let TRIP(N).SUBTOTAL = (TRIP(N).AMOUNT + TRIP(N).TOLL)
+          End Response
           Output Picture 99R9.99
           Scale -2
           Justification Decimal
+          Output ""
+          When (TRIP(**).TRIP_DATE = BLANK_DATE)
+          Protected
+          When (TRIP(**).TRIP_DATE = BLANK_DATE)
         End Field
 
         Field SUBTOTAL
@@ -831,6 +845,8 @@ Form MRF_FORM
           Column 62
           Output Picture 99R9.99
           Scale -2
+          Output ""
+          When (TRIP(**).TRIP_DATE = BLANK_DATE)
           Protected
         End Field
       End Group
@@ -925,6 +941,9 @@ Form MRF_FORM
 
       Icon HELP_ICON
         Apply Field Default BOLD_ICON
+        Function Response SELECT
+          Enter Help
+        End Response
         Literal Rectangle
           Line 20 Column 61
           Line 22 Column 75
