@@ -301,7 +301,7 @@ class Exit_response_decl(Response_decl):
     def __init__(self):
         Response_decl.__init__(self)
     def generate(self, indent):
-        self.print_indented("DISABLE RESPONSE", indent)
+        self.print_indented("Exit RESPONSE", indent)
         self.generate_children(indent)
         self.print_indented("END RESPONSE", indent)
         return self
@@ -678,7 +678,7 @@ class Panel_decl(Abstract_panel_decl):
     def __init__(self, name):
         Abstract_panel_decl.__init__(self, name)
     def generate(self, indent):
-        self.print_indented("HELP PANEL " + self.name, indent)
+        self.print_indented("PANEL " + self.name, indent)
         Abstract_panel_decl.generate(self, indent+1)
         self.generate_children(indent)
         self.print_indented("END PANEL", indent)
@@ -824,15 +824,15 @@ class Font_decl(Clause):
         return self
     def generate(self, indent):
         if self.font_family:
-            self.print_indented("FONT FAMILY " + self.font_family, indent)
+            self.print_indented("DISPLAY FONT FAMILY " + self.font_family, indent)
         if self.font_style:
-            self.print_indented("FONT STYLE " + self.font_style, indent)
+            self.print_indented("DISPLAY FONT STYLE " + self.font_style, indent)
         if self.font_weight:
-            self.print_indented("FONT WEIGHT " + self.font_weight, indent)
+            self.print_indented("DISPLAY FONT WEIGHT " + self.font_weight, indent)
         if self.font_size_named:
-            self.print_indented("FONT SIZE " + self.font_size_named, indent)
+            self.print_indented("DISPLAY FONT SIZE " + self.font_size_named, indent)
         if self.font_size_points:
-            self.print_indented("FONT SIZE " + self.font_size_points, indent)
+            self.print_indented("DISPLAY FONT SIZE " + self.font_size_points, indent)
         return self
 
 class Field_decl(Named_clause):
@@ -922,7 +922,7 @@ class Picture_field_decl(Field_decl):
         if self.justification:
             self.print_indented("JUSTIFICATION " + self.justification, indent+1)
         if self.output_when:
-            self.print_indented("OUTPUT " + self.output_when["output"] + " WHEN " + self.output_when["when"].to_string(), indent+1)
+            self.print_indented("OUTPUT " + '"' + self.output_when["output"] + '"' + " WHEN " + self.output_when["when"].to_string(), indent+1)
         self.print_indented("END FIELD", indent)
         return self
 
