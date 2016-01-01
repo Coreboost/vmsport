@@ -98,9 +98,11 @@ parser IFDL:
     token ROWS:                 "(?i)ROWS"
     token COLUMNS:              "(?i)COLUMNS"
     token INPUT_PICTURE:        "(?i)INPUT[ \t]PICTURE"
+    token FOR_DATE:             "(?i)FOR[ \t]DATE"
     token OUTPUT_PICTURE:       "(?i)OUTPUT[ \t]PICTURE"
-    token PICTURE_SPEC:         "(\w|\.|(\"([^\"\r\n]|\"\")+\")|(\'([^\'\r\n]|\'\')+\'))+"
+    token PICTURE_SPEC:         "(\w|\.|-|(\"([^\"\r\n]|\"\")+\")|(\'([^\'\r\n]|\'\')+\'))+"
     token PROTECTED:            "(?i)PROTECTED"
+    token OUTPUT:               "(?i)OUTPUT"
     token WHEN:                 "(?i)WHEN"
     token SEARCH:               "(?i)SEARCH"
     token RANGE:                "(?i)RANGE"
@@ -118,6 +120,8 @@ parser IFDL:
     token HELP_PANEL:           "(?i)HELP[ \t]+PANEL"
     token MESSAGE_PANEL:        "(?i)MESSAGE[ \t]+PANEL"
     token END_PANEL:            "(?i)END[ \t]+PANEL"
+    token ORIENTATION:          "(?i)VERTICAL|HORIZONTAL"
+    token DISPLAYS:             "(?i)DISPLAYS"
     token LITERAL_TEXT:         "(?i)LITERAL[ \t]+TEXT"
     token LITERAL_POLYLINE:     "(?i)LITERAL[ \t]+POLYLINE"
     token LITERAL_RECTANGLE:    "(?i)LITERAL[ \t]+RECTANGLE"
@@ -134,7 +138,7 @@ parser IFDL:
     token MESSAGE:              "(?i)MESSAGE"
     token POSITION:             "(?i)POSITION"
     token TO:                   "(?i)TO"
-    token NAMED_POSITION:       "(?i)UP[ \t]+ITEM|DOWN[ \t]+ITEM"
+    token NAMED_POSITION:       "(?i)UP[ \t]+ITEM|DOWN[ \t]+ITEM|UP[ \t]+OCCURRENCE|DOWN[ \t]+OCCURRENCE"
     token RESET:                "(?i)RESET"
     token ALL:                  "(?i)ALL"
     token HELP:                 "(?i)HELP"
@@ -159,15 +163,14 @@ parser IFDL:
     token RELATIONAL_OP:        "<=|<>|<|>=|>|="
     token SIGN:                 "-|\+"
     token ARITHMETIC_OP:        "-|\+|\*|/"
-    token LOWERMOST_ITEM:       "(?i)LOWERMOST[ \t]+ITEM"
-    token UPPERMOST_ITEM:       "(?i)UPPERMOST[ \t]+ITEM"
+    token ELEMENTARY_CONDITION: "(?i)LOWERMOST[ \t]+ITEM|UPPERMOST[ \t]+ITEM|FIRST[ \t]+OCCURRENCE[ \t]+VERTICAL|LAST[ \t]+OCCURRENCE[ \t]+VERTICAL"
     token VALUE:                "(?i)VALUE"
     token LONGWORD_INTEGER:     "(?i)LONGWORD[ \t]+INTEGER"
     token UNSIGNED_LONGWORD:    "(?i)UNSIGNED[ \t]+LONGWORD"
     token CHARACTER:            "(?i)CHARACTER"
     token INTEGER:              "(?i)INTEGER"
     token DATETIME:             "(?i)DATETIME"
-    token INTEGER_LITERAL:      "\d+"
+    token INTEGER_LITERAL:      "(-|\+)?\d+"
     token DECIMAL_LITERAL:      "\d*\.\d+(E\d+)?"
     token DATETIME_LITERAL:     "\d+"
     token STRING_LITERAL:         "(\"([^\"\r\n]|\"\")+\")|(\'([^\'\r\n]|\'\')+\')"
@@ -186,7 +189,7 @@ parser IFDL:
 
     rule form_data_item_decl:         NAME (text_data_clause<<NAME>> | atomic_clause<<NAME>> | datetime_data_clause<<NAME>>)
 
-    rule form_data_group_decl:        GROUP NAME {{ push(df_classes.Group_decl(NAME)) }}
+    rule form_data_group_decl:        GROUP NAME {{ push(df_classes.Form_data_group_decl(NAME)) }}
                                         [occurs_clause]
                                         (form_data_item_decl | form_data_group_decl)*
                                       END_GROUP {{ pop() }}
@@ -240,13 +243,25 @@ parser IFDL:
     rule panel_decl:                  PANEL NAME {{panel_decl=push(df_classes.Panel_decl(NAME))}}
                                         (panel_property {{panel_decl.add_panel_property(panel_property)}})*
                                         (field_default_appl)*
-                                        (literal_decl|icon_decl|picture_field_decl|text_field_decl)*
+                                        (literal_decl|icon_decl|picture_field_decl|text_field_decl|panel_group_decl)*
                                       END_PANEL {{ pop() }}
 
     rule help_panel_decl:             HELP_PANEL NAME {{panel_decl=push(df_classes.Help_panel_decl(NAME))}}
                                         (panel_property {{panel_decl.add_panel_property(panel_property)}})*
-                                        (literal_decl|icon_decl)*
+                                        (field_default_appl)*
+                                        (literal_decl|icon_decl|picture_field_decl|text_field_decl|panel_group_decl)*
                                       END_PANEL {{ pop() }}
+
+    rule panel_group_decl:            GROUP NAME {{group_decl=push(df_classes.Panel_group_decl(NAME))}}
+                                        [ORIENTATION {{group_decl.set_orientation(ORIENTATION)}} [DISPLAYS INTEGER_LITERAL {{group_decl.set_displays(INTEGER_LITERAL)}}]]
+                                        [full_loc_clause {{group_decl.set_location(full_loc_clause)}}]
+                                        [entry_response_decl {{group_decl.add_child(entry_response_decl)}}]
+                                        [exit_response_decl {{group_decl.add_child(exit_response_decl)}}]
+                                        (function_response_decl {{group_decl.add_child(function_response_decl)}})*
+                                        field_default_appl*
+                                        (panel_group_decl|picture_field_decl|text_field_decl|icon_decl|literal_decl)*
+                                      END_GROUP {{pop()}}
+
 
     rule picture_field_decl:          FIELD NAME {{field_decl=push(df_classes.Picture_field_decl(NAME))}}
                                         loc_clause {{field_decl.set_location(loc_clause)}}
@@ -274,21 +289,24 @@ parser IFDL:
                                       (NO_AUTOSKIP {{FDE.set_autoskip(False)}})|
                                       (UPPERCASE {{FDE.set_uppercase(True)}})|
                                       (MIXED_CASE {{FDE.set_uppercase(False)}})|
-                                      (INPUT_PICTURE PICTURE_SPEC {{FDE.set_input_picture(PICTURE_SPEC)}})|
+                                      (INPUT_PICTURE [FOR_DATE {{FDE.set_input_picture_for_date()}}] PICTURE_SPEC {{FDE.set_input_picture(PICTURE_SPEC)}})|
                                       (OUTPUT_PICTURE PICTURE_SPEC {{FDE.set_output_picture(PICTURE_SPEC)}})|
                                       (PROTECTED {{FDE.set_protected(True)}} [WHEN conditional_expression {{FDE.set_protected_when(conditional_expression)}}])|
-                                      (JUSTIFICATION JUSTIFICATION_VALUE {{FDE.set_justification(JUSTIFICATION_VALUE)}}))
+                                      (JUSTIFICATION JUSTIFICATION_VALUE {{FDE.set_justification(JUSTIFICATION_VALUE)}})|
+                                      (OUTPUT STRING_LITERAL WHEN conditional_expression {{FDE.set_output_when({"output": STRING_LITERAL[1:-1], "when": conditional_expression})}}))
 
-    rule field_validation_entry:      ((SEARCH NAME {{return df_classes.Field_validation_entry().set_search(NAME)}})|
-                                      (RANGE {{r=df_classes.Field_validation_entry()}}
-                                        (STRING_LITERAL {{r.set_range_lower({"type": "string", "value": STRING_LITERAL})}}|
-                                        INTEGER_LITERAL {{r.set_range_lower({"type": "integer", "value": INTEGER_LITERAL})}}|
-                                        DATA_REFERENCE {{r.set_range_lower({"type": "reference", "value": DATA_REFERENCE})}})
+    rule field_validation_entry:      ((SEARCH NAME {{fve=df_classes.Field_validation_entry().set_search(NAME)}})|
+                                      (RANGE {{fve=df_classes.Field_validation_entry()}}
+                                        (STRING_LITERAL {{fve.set_range_lower({"type": "string", "value": STRING_LITERAL})}}|
+                                        INTEGER_LITERAL {{fve.set_range_lower({"type": "integer", "value": INTEGER_LITERAL})}}|
+                                        DATA_REFERENCE {{fve.set_range_lower({"type": "reference", "value": DATA_REFERENCE})}})
                                         (THROUGH|THRU)
-                                        (STRING_LITERAL {{r.set_range_upper({"type": "string", "value": STRING_LITERAL})}}|
-                                        INTEGER_LITERAL {{r.set_range_upper({"type": "integer", "value": INTEGER_LITERAL})}}|
-                                        DATA_REFERENCE {{r.set_range_upper({"type": "reference", "value": DATA_REFERENCE})}})
-                                      {{return r}}))
+                                        (STRING_LITERAL {{fve.set_range_upper({"type": "string", "value": STRING_LITERAL})}}|
+                                        INTEGER_LITERAL {{fve.set_range_upper({"type": "integer", "value": INTEGER_LITERAL})}}|
+                                        DATA_REFERENCE {{fve.set_range_upper({"type": "reference", "value": DATA_REFERENCE})}})
+                                      ))[message_clause {{fve.set_message(message_clause)}}]{{return fve}}
+
+    rule message_clause:              MESSAGE STRING_LITERAL {{return df_classes.Message_clause().set_string(STRING_LITERAL)}}
 
     rule editing_entry:               SCALE INTEGER_LITERAL {{return df_classes.Editing_entry().set_scale(INTEGER_LITERAL)}}
 
@@ -487,9 +505,7 @@ parser IFDL:
                                       DATA_REFERENCE {{expression = df_classes.Data_reference(DATA_REFERENCE)}})
                                       {{return expression}}
 
-    rule elementary_condition:        (LOWERMOST_ITEM {{ condition=df_classes.Elementary_condition(LOWERMOST_ITEM) }} |
-                                      UPPERMOST_ITEM {{ condition=df_classes.Elementary_condition(UPPERMOST_ITEM) }} )
-                                      {{ return condition }}
+    rule elementary_condition:        ELEMENTARY_CONDITION {{return df_classes.Elementary_condition(ELEMENTARY_CONDITION)}}
 
     rule numeric_expression:          [SIGN] simple_numeric_term {{sign = SIGN if SIGN in locals() else None; expression = df_classes.Numeric_expression(sign, simple_numeric_term)}}
                                       [ARITHMETIC_OP simple_numeric_term {{term=simple_numeric_term}} {{expression.set_arithmetic_op(ARITHMETIC_OP, term)}}]

@@ -46,10 +46,40 @@ class Group_decl(Named_clause, Container_clause):
     def __init__(self, name):
         Container_clause.__init__(self)
         Named_clause.__init__(self, name)
+    def additional_generate(self, indent):
+        return self
     def generate(self, indent):
         self.print_indented("GROUP " + self.name, indent)
+        self.additional_generate(indent+1)
         self.generate_children(indent)
         self.print_indented("END GROUP", indent)
+        return self
+
+class Form_data_group_decl(Group_decl):
+    def __init__(self, name):
+        Group_decl.__init__(self, name)
+
+class Panel_group_decl(Group_decl):
+    def __init__(self, name):
+        Group_decl.__init__(self, name)
+        self.orientation = None
+        self.displays = None
+        self.location = None
+    def set_orientation(self, orientation):
+        self.orientation = orientation
+        return self
+    def set_displays(self, displays):
+        self.displays = displays
+        return self
+    def set_location(self, location):
+        self.location = location
+        return self
+    def additional_generate(self, indent):
+        if self.orientation:
+            trail = (" DISPLAYS " + self.displays) if self.displays else ""
+            self.print_indented(self.orientation + trail, indent)
+        if self.location:
+            location.generate(indent)
         return self
 
 class Occurs_clause(Clause):
@@ -829,15 +859,20 @@ class Picture_field_decl(Field_decl):
         Field_decl.__init__(self, name)
         self.editing_entries = []
         self.input_picture = None
+        self.input_picture_for_date = False
         self.output_picture = None
         self.protected = None
         self.protected_when = None
         self.justification = None
+        self.output_when = None
     def add_editing_entry(self, editing_entry):
         self.editing_entries.append(editing_entry)
         return self
     def set_input_picture(self, input_picture):
         self.input_picture = input_picture
+        return self
+    def set_input_picture_for_date(self):
+        self.input_picture_for_date = True
         return self
     def set_output_picture(self, output_picture):
         self.output_picture = output_picture
@@ -851,13 +886,17 @@ class Picture_field_decl(Field_decl):
     def set_justification(self, justification):
         self.justification = justification
         return self
+    def set_output_when(self, output_when):
+        self.output_when = output_when
+        return self
     def generate(self, indent):
         self.print_indented("FIELD " + self.name, indent)
         Field_decl.generate(self, indent+1)
         for entry in self.editing_entries:
             entry.generate(indent+1)
         if self.input_picture:
-            self.print_indented("INPUT PICTURE " + self.input_picture, indent+1)
+            for_date = "FOR DATE " if (self.input_picture_for_date) else ""
+            self.print_indented("INPUT PICTURE " + for_date +self.input_picture, indent+1)
         if self.output_picture:
             self.print_indented("OUTPUT PICTURE " + self.output_picture, indent+1)
         if (self.protected):
@@ -865,6 +904,8 @@ class Picture_field_decl(Field_decl):
             self.print_indented("PROTECTED" + trail, indent+1)
         if self.justification:
             self.print_indented("JUSTIFICATION " + self.justification, indent+1)
+        if self.output_when:
+            self.print_indented("OUTPUT " + self.output_when["output"] + " WHEN " + self.output_when["when"].to_string())
         self.print_indented("END FIELD", indent)
         return self
 
@@ -894,6 +935,7 @@ class Field_validation_entry(Clause):
         self.search = None
         self.range_lower = None
         self.range_upper = None
+        self.message = None
     def set_search(self, search):
         self.search = search
         return self
@@ -903,11 +945,14 @@ class Field_validation_entry(Clause):
     def set_range_upper(self, range_upper):
         self.range_upper = range_upper
         return self
+    def set_message(self, message):
+        self.message = message
     def generate(self, indent):
+        message_spec = ((" " + self.message.to_string())) if self.message else ""
         if self.search:
-            self.print_indented("SEARCH " + self.search, indent)
+            self.print_indented("SEARCH " + self.search + message_spec, indent)
         if self.range_lower:
-            self.print_indented("RANGE " + self.range_lower["value"] + " THROUGH " + self.range_upper["value"], indent)
+            self.print_indented("RANGE " + self.range_lower["value"] + " THROUGH " + self.range_upper["value"] + message_spec, indent)
         return self
 
 class Editing_entry(Clause):
@@ -920,6 +965,18 @@ class Editing_entry(Clause):
         if self.scale:
             self.print_indented("SCALE " + self.scale, indent)
         return self
+
+class Message_clause(Clause):
+    def __init__(self):
+        self.string = None
+    def set_string(self, string):
+        self.string = string
+        return self
+    def to_string(self):
+        if self.string:
+            return "MESSAGE " + self.string
+        else:
+            return ""
 
 def test():
     form = Form("My form")
