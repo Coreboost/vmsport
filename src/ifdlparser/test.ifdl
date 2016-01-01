@@ -941,6 +941,7 @@ Form MRF_FORM
       Icon HELP_ICON
         Apply Field Default BOLD_ICON
         Function Response SELECT
+          Enter Help
         End Response
         Literal Rectangle
           Line 20 Column 61

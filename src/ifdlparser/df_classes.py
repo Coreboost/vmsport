@@ -425,6 +425,11 @@ class Remove_step(Clause):
             self.print_indented("REMOVE HELP", indent)
         return self
 
+class Enter_help_step(Clause):
+    def generate(self, indent):
+        self.print_indented("ENTER HELP", indent)
+        return self
+
 class Exit_help_step(Clause):
     def generate(self, indent):
         self.print_indented("EXIT HELP", indent)

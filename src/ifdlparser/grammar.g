@@ -143,6 +143,7 @@ parser IFDL:
     token ALL:                  "(?i)ALL"
     token HELP:                 "(?i)HELP"
     token REMOVE:               "(?i)REMOVE"
+    token ENTER_HELP:           "(?i)ENTER[ \t]+HELP"
     token EXIT_HELP:            "(?i)EXIT[ \t]+HELP"
     token RETURN:               "(?i)RETURN"
     token IMMEDIATE:            "(?i)IMMEDIATE"
@@ -439,6 +440,7 @@ parser IFDL:
                                       END_RESPONSE {{ return exit_response_decl }}
 
     rule response_step:               (signal_response_step {{step = signal_response_step}} |
+                                      enter_help_response_step {{step = enter_help_response_step}} |
                                       message_response_step {{step = message_response_step}} |
                                       activate_response_step {{step = activate_response_step}} |
                                       position_response_step {{step = position_response_step}} |
@@ -468,6 +470,8 @@ parser IFDL:
     rule reset_response_step:         RESET {{reset_step = df_classes.Reset_step()}} ALL {{return reset_step.set_all()}}
 
     rule remove_response_step:        REMOVE {{remove_step = df_classes.Remove_step()}} ((ALL {{return remove_step.set_all()}})|(HELP {{return remove_step.set_help()}}))
+
+    rule enter_help_response_step:    ENTER_HELP {{return df_classes.Enter_help_step()}}
 
     rule exit_help_response_step:     EXIT_HELP {{return df_classes.Exit_help_step()}}
 
