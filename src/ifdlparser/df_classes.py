@@ -445,6 +445,14 @@ class Return_step(Clause):
         self.print_indented("RETURN" + " IMMEDIATE" if self.immediate else "", indent)
         return self
 
+class Let_step(Clause):
+    def __init__(self, data_ref, value_expression):
+        self.data_ref = data_ref
+        self.value_expression = value_expression
+    def generate(self, indent):
+        self.print_indented(self.data_ref + " = " +  self.value_expression.to_string(), indent)
+        return self
+
 class Call_step(Clause):
     def __init__(self, subroutine_name):
         self.subroutine_name = subroutine_name
@@ -553,13 +561,17 @@ class Numeric_expression:
         self.term_1 = term_1
         self.arithmetic_op = None
         self.term_2 = None
+        self.subexpression = False
     def set_arithmetic_op(self, arithmetic_op, term_2):
         self.arithmetic_op = arithmetic_op
         self.term_2 = term_2
         return self
+    def set_subexpression(self):
+        self.subexpression = True
+        return self
     def to_string(self):
-        lead = self.sign if self.sign else ""
-        trail = (self.arithmetic_op + self.term_2.to_string()) if self.arithmetic_op else ""
+        lead = ("(" if self.subexpression else "") + (self.sign if self.sign else "")
+        trail = ((self.arithmetic_op + self.term_2.to_string()) if self.arithmetic_op else "") + (")" if self.subexpression else "")
         return lead + self.term_1.to_string() + trail
 
 class Integer_literal:

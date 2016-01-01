@@ -133,6 +133,7 @@ parser IFDL:
     token DISPLAY:              "(?i)DISPLAY"
     token ACTIVATE:             "(?i)ACTIVATE"
     token SIGNAL:               "(?i)SIGNAL"
+    token LET:                  "(?i)LET"
     token BELL_SIGNAL:          "(?i)%BELL"
     token REVERSE_SIGNAL:       "(?i)%REVERSE"
     token MESSAGE:              "(?i)MESSAGE"
@@ -440,6 +441,7 @@ parser IFDL:
                                       END_RESPONSE {{ return exit_response_decl }}
 
     rule response_step:               (signal_response_step {{step = signal_response_step}} |
+                                      let_response_step {{step = let_response_step}} |
                                       enter_help_response_step {{step = enter_help_response_step}} |
                                       message_response_step {{step = message_response_step}} |
                                       activate_response_step {{step = activate_response_step}} |
@@ -453,6 +455,8 @@ parser IFDL:
                                       if_response_step {{step = if_response_step}} |
                                       call_response_step {{step = call_response_step}})
                                       {{return step}}
+
+    rule let_response_step:           LET DATA_REFERENCE "=" value_expression {{return df_classes.Let_step(DATA_REFERENCE, value_expression)}}
 
     rule signal_response_step:        SIGNAL {{signal_step = df_classes.Signal_step()}} [BELL_SIGNAL {{signal_step.set_bell()}} | REVERSE_SIGNAL {{signal_step.set_reverse()}}] {{return signal_step}}
 
@@ -499,27 +503,37 @@ parser IFDL:
                                       "\(" conditional_expression {{term = conditional_expression.set_subexpression()}} "\)")
                                       {{return term.set_negated(negated)}}
 
-    rule relational_expression:       (value_expression {{expression_1 = value_expression}})
+    rule relational_expression:       (string_rel_expression{{return string_rel_expression}})|(num_rel_expression{{return num_rel_expression}})
+
+    rule string_rel_expression:       (string_expression {{expression_1 = string_expression}})
                                       RELATIONAL_OP
-                                      (value_expression {{expression_2 = value_expression}})
+                                      (string_expression {{expression_2 = string_expression}})
+                                      {{return df_classes.Relational_expression(expression_1, RELATIONAL_OP, expression_2)}}
+
+    rule num_rel_expression:          (simple_numeric_expression {{expression_1 = simple_numeric_expression}})
+                                      RELATIONAL_OP
+                                      (simple_numeric_expression {{expression_2 = simple_numeric_expression}})
                                       {{return df_classes.Relational_expression(expression_1, RELATIONAL_OP, expression_2)}}
 
     rule value_expression:            (numeric_expression {{expression = numeric_expression}} |
-                                      string_expression {{expression = string_expression}} |
-                                      DATA_REFERENCE {{expression = df_classes.Data_reference(DATA_REFERENCE)}})
+                                      string_expression {{expression = string_expression}})
                                       {{return expression}}
 
     rule elementary_condition:        ELEMENTARY_CONDITION {{return df_classes.Elementary_condition(ELEMENTARY_CONDITION)}}
 
-    rule numeric_expression:          [SIGN] simple_numeric_term {{sign = SIGN if SIGN in locals() else None; expression = df_classes.Numeric_expression(sign, simple_numeric_term)}}
-                                      [ARITHMETIC_OP simple_numeric_term {{term=simple_numeric_term}} {{expression.set_arithmetic_op(ARITHMETIC_OP, term)}}]
-                                      {{return numeric_expression}}
+    rule numeric_expression:          {{SIGN=None}}[SIGN] numeric_term {{expression = df_classes.Numeric_expression(SIGN, numeric_term)}}
+                                      [ARITHMETIC_OP numeric_term {{expression.set_arithmetic_op(ARITHMETIC_OP, numeric_term)}}]
+                                      {{return expression}}
 
-    rule numeric_term:                INTEGER_LITERAL {{term = df_classes.Integer_Literal(INTEGER_LITERAL)}} |
-                                      "\(" value_expression "\)" {{ term = value_expression.set_subexpression()}}
-                                      {{return term}}
+    rule simple_numeric_expression:   {{SIGN=None}}[SIGN] simple_numeric_term {{expression = df_classes.Numeric_expression(SIGN, simple_numeric_term)}}
+                                      [ARITHMETIC_OP simple_numeric_term {{expression.set_arithmetic_op(ARITHMETIC_OP, simple_numeric_term)}}]
+                                      {{return expression}}
 
-    rule simple_numeric_term:         INTEGER_LITERAL {{return df_classes.Integer_Literal(INTEGER_LITERAL)}}
+    rule numeric_term:                simple_numeric_term {{return simple_numeric_term}} |
+                                      "\(" numeric_expression "\)" {{ return numeric_expression.set_subexpression()}}
+
+    rule simple_numeric_term:         INTEGER_LITERAL {{return df_classes.Integer_literal(INTEGER_LITERAL)}} |
+                                      DATA_REFERENCE  {{return df_classes.Integer_literal(DATA_REFERENCE)}}
 
     rule string_expression:           STRING_LITERAL {{return df_classes.String_literal(STRING_LITERAL)}}
 

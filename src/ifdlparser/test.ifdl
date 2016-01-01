@@ -829,6 +829,7 @@ Form MRF_FORM
           Line 6
           Column 54
           Exit Response
+            Let TRIP(N).SUBTOTAL = (TRIP(N).AMOUNT + TRIP(N).TOLL)
           End Response
           Output Picture 99R9.99
           Scale -2
