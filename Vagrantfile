@@ -13,7 +13,7 @@ Vagrant.configure(2) do |config|
   config.vm.network "forwarded_port", guest: 80, host: 8080
   config.vm.network "private_network", ip: "192.168.33.10"
 
-  config.vm.synced_folder "./src", "/home/vagrant/vmsport/src"
+  config.vm.synced_folder "./", "/home/vagrant/vmsport"
 
   config.vm.provider "virtualbox" do |vb|
     vb.name ="openvms"
@@ -31,6 +31,7 @@ Vagrant.configure(2) do |config|
     apt-get upgrade
     apt-get install -y curl
     apt-get install -y git
+    apt-get install -y putty
     apt-get install -y gfortran
     apt-get install -y python-pip
     pip install 'git+https://github.com/mk-fg/yapps.git#egg=yapps'
