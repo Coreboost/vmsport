@@ -16,8 +16,14 @@ Vagrant.configure(2) do |config|
   config.vm.synced_folder "./src", "/home/vagrant/vmsport/src"
 
   config.vm.provider "virtualbox" do |vb|
+    vb.name ="openvms"
     vb.gui = true
-    vb.memory = "2048"
+    vb.memory = "3072"
+    vb.cpus = 2
+    vb.customize ["modifyvm", :id, "--vram", "64"]
+    vb.customize ["modifyvm", :id, "--accelerate3d", "on"]
+#   This is needed for AlphaVM to work in VirtualBox
+    vb.customize ["setextradata", :id, "VBoxInternal/CPUM/CMPXCHG16B", "1"]
   end
 
   config.vm.provision "shell", inline: <<-SHELL
