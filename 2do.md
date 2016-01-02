@@ -1,8 +1,5 @@
 Short term
 ----------
-* Update the vagrant box so that:
- - Install Atom
- - Write makefiles for generating the python parser and running the translation
  - Test interoperability Fortran/C/Go, interestingly it is so that this should be a
    non-issue under VMS since calling conventions, stack usage etc are standardized on the OS
    level. Try this on an emulator.
@@ -12,9 +9,9 @@ Short term
  - Write another wrapper for ZeroMQ
  - Write test harnesses and apply load to evaluate performance/throughput
  - Test in on OpenVMS
- - Whenever I am tired, work on the parsers
  - Write React components that map to IFDL concepts
  - Add the generation of javascript based on these react components.
+
 OpenVMS Mailboxes
 -----------------
 * POC Mailbox Replacement Create two Fortran Programs that communicate through message passing using:

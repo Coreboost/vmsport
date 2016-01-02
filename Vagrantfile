@@ -23,24 +23,31 @@ Vagrant.configure(2) do |config|
   config.vm.provision "shell", inline: <<-SHELL
     apt-get update
     apt-get upgrade
-    apt-get install curl
+    apt-get install -y curl
+    apt-get install -y git
     apt-get install -y gfortran
     apt-get install -y python-pip
     pip install 'git+https://github.com/mk-fg/yapps.git#egg=yapps'
-    curl https://storage.googleapis.com/golang/go1.5.2.linux-amd64.tar.gz | tar -C /usr/local -xzf -
+    curl --fail --silent --show-error https://storage.googleapis.com/golang/go1.5.2.linux-amd64.tar.gz | tar -C /usr/local -xzf -
     sudo sed -i '$a export PATH=$PATH:/usr/local/go/bin' /etc/profile
     apt-get install -y gccgo-go
     apt-get install -y libtool
     apt-get install -y build-essential
     apt-get install -y autoconf
     apt-get install -y automake
-    curl https://download.libsodium.org/libsodium/releases/libsodium-1.0.7.tar.gz | tar -C -xzf -
+    curl --fail --silent --show-error https://download.libsodium.org/libsodium/releases/libsodium-1.0.7.tar.gz | tar -C . -xzf -
+    cd libsodium-1.0.7
     ./configure
     make
     make install
-    curl http://download.zeromq.org/zeromq-4.1.4.tar.gz | tar -C . -xzf -
+    cd ..
+    curl --fail --silent --show-error http://download.zeromq.org/zeromq-4.1.4.tar.gz | tar -C . -xzf -
+    cd zeromq-4.1.4
     ./configure
     make
     make install
+    cd ..
+    curl --fail --silent --show-error -o atom.deb https://atom-installer.github.com/v1.3.2/atom-amd64.deb
+    dpkg -i atom.deb
   SHELL
 end
