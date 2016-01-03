@@ -156,7 +156,7 @@ system {
         #  - socket - use TCPIP raw mode. It is similar to COM connected to a
         #           terminal server.
         #  - serial - connect to a real serial device like /dev/ttyS0.
-                    This option is only available in the professiona version
+        #            This option is only available in the professiona version
         #----------------------------------------------------------------------
         server  = socket;
         # server = serial;
