@@ -32,7 +32,7 @@ Vagrant.configure(2) do |config|
     apt-get install -y curl
     apt-get install -y git
 #    apt-get install -y putty
-#    apt-get install -y gfortran
+    apt-get install -y gfortran
     apt-get install -y python-pip
     pip install 'git+https://github.com/mk-fg/yapps.git#egg=yapps'
     curl --fail --silent --show-error https://storage.googleapis.com/golang/go1.5.2.linux-amd64.tar.gz | tar -C /usr/local -xzf -
