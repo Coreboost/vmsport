@@ -31,13 +31,13 @@ Vagrant.configure(2) do |config|
     apt-get upgrade
     apt-get install -y curl
     apt-get install -y git
-    apt-get install -y putty
-    apt-get install -y gfortran
+#    apt-get install -y putty
+#    apt-get install -y gfortran
     apt-get install -y python-pip
     pip install 'git+https://github.com/mk-fg/yapps.git#egg=yapps'
     curl --fail --silent --show-error https://storage.googleapis.com/golang/go1.5.2.linux-amd64.tar.gz | tar -C /usr/local -xzf -
     sudo sed -i '$a export PATH=$PATH:/usr/local/go/bin' /etc/profile
-    apt-get install -y gccgo-go
+#    apt-get install -y gccgo-go
     apt-get install -y libtool
     apt-get install -y build-essential
     apt-get install -y autoconf
