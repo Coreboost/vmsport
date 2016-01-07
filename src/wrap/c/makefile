@@ -1,5 +1,5 @@
 ftest: ftest.o ../lib/libf.a
-	cc -static ftest.o -L../lib -lf -lgfortran -o ftest
+	cc -static ftest.o -L../lib -lc -lf -lgfortran -o ftest
 
 lib:
 	@make -C ../flib
