@@ -18,13 +18,19 @@ Vagrant.configure(2) do |config|
   config.vm.provider "virtualbox" do |vb|
     vb.name ="openvms"
     vb.gui = true
-    vb.memory = "3072"
+    vb.memory = "2048"
     vb.cpus = 2
     vb.customize ["modifyvm", :id, "--vram", "64"]
     vb.customize ["modifyvm", :id, "--accelerate3d", "on"]
 #   This is needed for AlphaVM to work in VirtualBox
     vb.customize ["setextradata", :id, "VBoxInternal/CPUM/CMPXCHG16B", "1"]
   end
+
+
+config.proxy.http     = ENV['http_proxy']
+config.proxy.https    = ENV['https_proxy']
+config.proxy.no_proxy = "localhost,127.0.0.1,*.atg.se"
+
 
   config.vm.provision "shell", inline: <<-SHELL
     apt-get update
