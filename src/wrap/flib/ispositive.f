@@ -1,0 +1,10 @@
+      FUNCTION ISPOSITIVE(A)
+      IMPLICIT NONE
+      INTEGER A
+      LOGICAL ISPOSITIVE
+      IF (A > 0) THEN
+        ISPOSITIVE = .TRUE.
+      ELSE
+        ISPOSITIVE = .FALSE.
+      ENDIF
+      END
