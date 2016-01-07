@@ -1,3 +1,6 @@
+*.o
+*.so
+*.a
 .vagrant/
 src/ifdlparser/*.pyc
 src/ifdlparser/grammar.py
