@@ -4,3 +4,4 @@
 .vagrant/
 src/ifdlparser/*.pyc
 src/ifdlparser/grammar.py
+src/wrap/c/ftest
