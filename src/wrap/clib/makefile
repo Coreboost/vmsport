@@ -1,5 +1,5 @@
-../lib/libmyc.a: add_ref.o
-	ar rcs ../lib/libmyc.a add_ref.o
+../lib/libmyc.a: add.o add_ref.o
+	ar rcs ../lib/libmyc.a add.o add_ref.o
 
 add.o: add.c
 	cc -c add.c -o add.o

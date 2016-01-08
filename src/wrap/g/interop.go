@@ -5,6 +5,7 @@ import "fmt"
 
 // #cgo LDFLAGS: -L../lib -lmyc
 // #include "../clib/libmyc.h"
+// int c_one, c_two;
 import "C"
 
 func test_suite()(func(string, func()(string)), func()) {
@@ -47,14 +48,15 @@ func main() {
 
 	add_test("Test add references in C",
 		func()(string) {
-			one := 1
-			two := 2
-			r := int(C.add_ref(&one, &two))
+			C.c_one = C.int(1)
+			C.c_two = C.int(2)
+			r := int(C.add_ref(&C.c_one, &C.c_two))
 			if r != 3 {
 				return fmt.Sprintf("Expected 3, got %d.", r)
 			}
 			return ""
 		})
+
 	run_test()
 /*
 	test_suite.add_test("Test name", testfunction);
