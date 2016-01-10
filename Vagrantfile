@@ -22,30 +22,24 @@ Vagrant.configure(2) do |config|
     vb.cpus = 2
     vb.customize ["modifyvm", :id, "--vram", "64"]
     vb.customize ["modifyvm", :id, "--accelerate3d", "on"]
-#   This is needed for AlphaVM to work in VirtualBox
-    vb.customize ["setextradata", :id, "VBoxInternal/CPUM/CMPXCHG16B", "1"]
   end
-
-
-config.proxy.http     = ENV['http_proxy']
-config.proxy.https    = ENV['https_proxy']
-config.proxy.no_proxy = "localhost,127.0.0.1,*.atg.se"
-
 
   config.vm.provision "shell", inline: <<-SHELL
     apt-get update
     apt-get upgrade
     apt-get install -y curl
     apt-get install -y git
-#    apt-get install -y putty
     apt-get install -y gfortran
+    curl -sL https://deb.nodesource.com/setup_4.x | bash -
+    apt-get install -y nodejs
+    apt-get install -y build-essential
+    npm install -g gulp
     apt-get install -y python-dev
     apt-get install -y python-pip
     pip install Flask
     pip install 'git+https://github.com/mk-fg/yapps.git#egg=yapps'
     curl --fail --silent --show-error https://storage.googleapis.com/golang/go1.5.2.linux-amd64.tar.gz | tar -C /usr/local -xzf -
     sudo sed -i '$a export PATH=$PATH:/usr/local/go/bin' /etc/profile
-#    apt-get install -y gccgo-go
     apt-get install -y libtool
     apt-get install -y build-essential
     apt-get install -y autoconf

@@ -1,13 +1,10 @@
-      SUBROUTINE CONCAT(STR1, LEN1, STR2, LEN2, STR3, LEN3)
+      SUBROUTINE CONCAT(STR1, STR2, STR3)
       IMPLICIT NONE
-      INTEGER LEN1, LEN2, LEN3, I
-      CHARACTER STR1(LEN1), STR2(LEN2), STR3(LEN3)
-      DO 10 I=1, LEN1
-        STR3(I) = STR1(I)
-10    CONTINUE
-      DO 20 I=1, LEN2
-        STR3(LEN1+I) = STR2(I)
-20    CONTINUE
-      LEN3 = LEN1+LEN2
+      CHARACTER STR1*(*), STR2*(*)
+      CHARACTER STR3*100
+Cf2py intent(in) str1
+Cf2py intent(in) str2
+Cf2py intent(out) str3
+      STR3 = STR1//STR2
       RETURN
       END
