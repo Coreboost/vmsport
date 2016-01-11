@@ -150,6 +150,84 @@ class Form_data_group_decl(Group_decl):
         self.print_indented("}, // End Group", indent)
         return self
 
+class Layout_decl(Named_clause, Container_clause):
+    def __init__(self, name):
+        Container_clause.__init__(self)
+        Named_clause.__init__(self, name)
+    def generate(self, indent):
+        self.print_indented("Layout " + self.name, indent)
+        self.generate_children(indent)
+        self.print_indented("End Layout", indent)
+        return self
+    def generate_js(self, indent):
+        self.print_indented("var " + self.name + "_layout =  { // Layout " + self.name, indent)
+        self.print_indented("name: '" + self.name + "',", indent+1)
+        self.generate_children_js(indent)
+        self.print_indented("}; // End Layout", indent)
+        return self
+
+class Device_decl(Named_clause):
+    def __init__(self, name):
+        Named_clause.__init__(self, name)
+        self.type = None
+    def set_type(self, type):
+        self.type = type
+        return self
+    def generate(self, indent):
+        name_part = ""
+        if self.name:
+            name_part = " " + self.name
+        self.print_indented("Device", indent)
+        self.print_indented("Terminal" + name_part, indent+1)
+        self.print_indented("Type " + self.type, indent+1)
+        self.print_indented("End Device", indent)
+        return self
+    def generate_js(self, indent):
+        self.print_indented("devices: ", indent)
+        return self
+
+class Size_decl(Clause):
+    def __init__(self, lines, columns):
+        self.lines = lines
+        self.columns = columns
+    def generate(self, indent):
+        self.print_indented("Size " + self.lines + " Lines By " + self.columns + " Columns", indent)
+        return self
+    def generate_js(self, indent):
+        return self
+
+class List_decl(Named_clause):
+    def __init__(self, name):
+        Named_clause.__init__(self, name)
+        self.list_items = []
+    def add_list_item(self, list_item):
+        self.list_items.append(list_item)
+        return self
+    def generate(self, indent):
+        self.print_indented("List " + self.name, indent)
+        for item in self.list_items:
+            self.print_indented('"' + item + '"', indent+1)
+        self.print_indented("End List", indent)
+        return self
+    def generate_js(self, indent):
+        return self
+
+class Viewport_decl(Named_clause):
+    def __init__(self, name, lines_start, lines_end, columns_start, columns_end):
+        Named_clause.__init__(self, name)
+        self.lines_start = lines_start
+        self.lines_end = lines_end
+        self.columns_start = columns_start
+        self. columns_end = columns_end
+    def generate(self, indent):
+        self.print_indented("Viewport " + self.name, indent)
+        self.print_indented("Lines " + self.lines_start + " Through " + self.lines_end, indent+1)
+        self.print_indented("Columns " + self.columns_start + " Through " + self.columns_end, indent+1)
+        self.print_indented("End Viewport", indent)
+        return self
+    def generate_js(self, indent):
+        return self
+
 class Panel_group_decl(Group_decl):
     def __init__(self, name):
         Group_decl.__init__(self, name)
@@ -221,79 +299,6 @@ class Transfer_clause(Clause):
         self.reference = reference
     def generate(self, indent):
         self.print_indented("Using " + self.reference, indent)
-        return self
-    def generate_js(self, indent):
-        return self
-
-class Layout_decl(Named_clause, Container_clause):
-    def __init__(self, name):
-        Container_clause.__init__(self)
-        Named_clause.__init__(self, name)
-    def generate(self, indent):
-        self.print_indented("Layout " + self.name, indent)
-        self.generate_children(indent)
-        self.print_indented("End Layout", indent)
-        return self
-    def generate_js(self, indent):
-        return self
-
-class Device_decl(Named_clause):
-    def __init__(self, name):
-        Named_clause.__init__(self, name)
-        self.type = None
-    def set_type(self, type):
-        self.type = type
-        return self
-    def generate(self, indent):
-        name_part = ""
-        if self.name:
-            name_part = " " + self.name
-        self.print_indented("Device", indent)
-        self.print_indented("Terminal" + name_part, indent+1)
-        self.print_indented("Type " + self.type, indent+1)
-        self.print_indented("End Device", indent)
-        return self
-    def generate_js(self, indent):
-        return self
-
-class Size_decl(Clause):
-    def __init__(self, lines, columns):
-        self.lines = lines
-        self.columns = columns
-    def generate(self, indent):
-        self.print_indented("Size " + self.lines + " Lines By " + self.columns + " Columns", indent)
-        return self
-    def generate_js(self, indent):
-        return self
-
-class List_decl(Named_clause):
-    def __init__(self, name):
-        Named_clause.__init__(self, name)
-        self.list_items = []
-    def add_list_item(self, list_item):
-        self.list_items.append(list_item)
-        return self
-    def generate(self, indent):
-        self.print_indented("List " + self.name, indent)
-        for item in self.list_items:
-            self.print_indented('"' + item + '"', indent+1)
-        self.print_indented("End List", indent)
-        return self
-    def generate_js(self, indent):
-        return self
-
-class Viewport_decl(Named_clause):
-    def __init__(self, name, lines_start, lines_end, columns_start, columns_end):
-        Named_clause.__init__(self, name)
-        self.lines_start = lines_start
-        self.lines_end = lines_end
-        self.columns_start = columns_start
-        self. columns_end = columns_end
-    def generate(self, indent):
-        self.print_indented("Viewport " + self.name, indent)
-        self.print_indented("Lines " + self.lines_start + " Through " + self.lines_end, indent+1)
-        self.print_indented("Columns " + self.columns_start + " Through " + self.columns_end, indent+1)
-        self.print_indented("End Viewport", indent)
         return self
     def generate_js(self, indent):
         return self
