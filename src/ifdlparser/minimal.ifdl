@@ -1,0 +1,165 @@
+Form MRF_FORM
+
+  Form Data
+    EMPLOYEE_NAME Character(32)
+    LOCATION Character(3)
+  End Data
+
+  Form Record HEADER_INFO_RECORD
+    EMPLOYEE_NAME Character(32)
+    LOCATION Character(3)
+  End Record
+
+  Layout VT_LAYOUT
+    Device
+      Terminal Type %VT100
+    End Device
+
+    Size 24 Lines by 80 Columns
+
+    List LOCATION_CODES
+      "ACT"
+      "BXB"
+      "LTN"
+      "MKO"
+      "ZKO"
+    End List
+
+    Viewport MAIN_VIEWPORT
+      Lines 1 Through 22
+      Columns 1 Through 80
+    End Viewport
+
+    Viewport DEFAULT_MESSAGE_VIEWPORT
+      Lines 23 Through 24
+      Columns 1 Through 80
+    End Viewport
+
+    Function DISCARD
+      Is %F8
+      (%PF1 %KP_8)
+    End Function
+
+    Function SELECT
+      Is %SELECT
+      %KP_PERIOD
+    End Function
+
+    Internal Response RESET_DATA
+      Reset All
+      Message
+        "Data discarded."
+      Signal
+      Position To Panel TRIPS_INFO_PANEL
+    End Response
+
+    Internal Response RECORD_DATA
+      Message
+        "Data received. Program exiting."
+      Signal
+      Return Immediate
+    End Response
+
+    Disable Response
+      Remove All
+    End Response
+
+    Receive Response HEADER_INFO_RECORD
+      Activate
+      Panel HEADER_INFO_PANEL
+      Position To Panel HEADER_INFO_PANEL
+    End Response
+
+    Function Response DISCARD
+      Include RESET_DATA
+    End Response
+
+    Field Default BOLD_ICON
+      Active Highlight Bold
+    End Default
+
+    Apply Field Default Of
+      Active Highlight Underlined
+    End Default
+
+    Message Panel DEFAULT_MESSAGE_PANEL
+      Viewport DEFAULT_MESSAGE_VIEWPORT
+    End Panel
+
+    Panel HEADER_INFO_PANEL
+      Viewport MAIN_VIEWPORT
+      Display  %Keypad_Application
+
+      Entry Response
+        Message
+          "Press Help for information on how to use this application."
+      End Response
+
+      Exit Response
+        Message
+          "Displaying next screen..."
+      End Response
+
+      Function Response TRANSMIT
+        Include RECORD_DATA
+      End Response
+
+      Literal Text
+        Line 1
+        Column 15
+        Value "Mileage Reimbursement Form"
+        Display
+          Font Size Double Wide
+      End Literal
+
+      Literal Polyline
+        Line 3 Column 1
+        Line 3 Column 80
+      End Literal
+
+      Literal Text
+        Line 5
+        Column 2
+        Value "Employee Name: "
+      End Literal
+
+      Field EMPLOYEE_NAME
+        Line 5
+        Column 17
+      End Field
+
+            Icon DISCARD_DATA
+              Apply Field Default BOLD_ICON
+              Function Response SELECT
+                Include RESET_DATA
+              End Response
+              Literal Rectangle
+                Line 20 Column 22
+                Line 22 Column 37
+              End Literal
+              Literal Text
+                Line 21
+                Column 24
+                Value "Discard Data"
+              End Literal
+            End Icon
+
+            Icon RECORD_AND_EXIT
+              Apply Field Default BOLD_ICON
+              Function Response SELECT
+                Include UPDATE_TOTALS
+                Include RECORD_DATA
+              End Response
+              Literal Rectangle
+                Line 20 Column 40
+                Line 22 Column 58
+              End Literal
+              Literal Text
+                Line 21
+                Column 42
+                Value "Record and Exit"
+              End Literal
+            End Icon
+    End Panel
+  End Layout
+End Form
