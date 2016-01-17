@@ -6,3 +6,5 @@ src/ifdlparser/*.pyc
 src/ifdlparser/grammar.py
 src/wrap/c/ftest
 src/react_comp/node_modules
+src/form_server/node_modules
+src/form_server/static/js/app.js
