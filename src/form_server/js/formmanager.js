@@ -10,4 +10,4 @@ const FormManager = React.createClass({
   },
 });
 
-module.exports = Demo;
+module.exports = FormManager;
