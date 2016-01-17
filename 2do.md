@@ -3,10 +3,13 @@ Short term
  - Test interoperability Fortran/C/Go, interestingly it is so that this should be a
    non-issue under VMS since calling conventions, stack usage etc are standardized on the OS
    level. Try this on an emulator.
- - Write makefiles for building the example Programs
+   -- > Conclusion so far is that it might be complicated to get something running
+   with Go. Initially we can simply wrap Fortran with Python to do a PoC/get going.
  - Make sure that kernel messaging is available, try to run that in Fortran
  - Write a wrapper for kernel messaging  that is similar to Mailboxes and try it
  - Write another wrapper for ZeroMQ
+   -- > Not totally clear why we should try ZeroMQ. For the external messaging I think we can assume that Oracle AQ will be around, at lease for the short term.
+  that
  - Write test harnesses and apply load to evaluate performance/throughput
  - Test in on OpenVMS
  - Write React components that map to IFDL concepts
@@ -29,7 +32,7 @@ IFDL / DecForms
   * Create IFDL Translator in Python
   * Generate a HTML/Javascript client, possibly by implementing a number of React components that map to the IFDL components.
   * Use (possibly) protocolbuffers and something, socket.io, nullMQ, whatever to communicate with the backend
-  which will be a go-webserver.
+  which will be a go-webserver, or more likely as thing stands, a Python or C web server.
 
 Test on OpenVMS
 ---------------

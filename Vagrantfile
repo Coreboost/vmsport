@@ -36,7 +36,10 @@ Vagrant.configure(2) do |config|
     npm install -g gulp
     apt-get install -y python-dev
     apt-get install -y python-pip
-    pip install Flask
+    pip install flask
+    pip install flask-login
+    pip install flask-openid
+    pip install eventlet
     pip install 'git+https://github.com/mk-fg/yapps.git#egg=yapps'
     curl --fail --silent --show-error https://storage.googleapis.com/golang/go1.5.2.linux-amd64.tar.gz | tar -C /usr/local -xzf -
     sudo sed -i '$a export PATH=$PATH:/usr/local/go/bin' /etc/profile

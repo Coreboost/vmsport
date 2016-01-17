@@ -19,7 +19,7 @@ formData: {
   render: function () {
     return (
       <div className="demo">
-        <Tree treeData={this.treeData}/>
+        <Form formData={this.formData}/>
       </div>
     );
   },
