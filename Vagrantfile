@@ -13,7 +13,7 @@ Vagrant.configure(2) do |config|
   config.vm.network "forwarded_port", guest: 80, host: 8080
   config.vm.network "private_network", ip: "192.168.33.10"
 
-  config.vm.synced_folder "./", "/home/vagrant/vmsport"
+#  config.vm.synced_folder "./", "/home/vagrant/vmsport"
 
   config.vm.provider "virtualbox" do |vb|
     vb.name ="openvms"
@@ -24,26 +24,30 @@ Vagrant.configure(2) do |config|
     vb.customize ["modifyvm", :id, "--accelerate3d", "on"]
   end
 
+  config.proxy.http     = ENV['http_proxy']
+  config.proxy.https    = ENV['https_proxy']
+  config.proxy.no_proxy = "localhost,127.0.0.1,*.atg.se"
+
   config.vm.provision "shell", inline: <<-SHELL
     apt-get update
     apt-get upgrade
     apt-get install -y curl
     apt-get install -y git
     apt-get install -y gfortran
-    curl -sL https://deb.nodesource.com/setup_4.x | bash -
-    apt-get install -y nodejs
+#    curl -sL https://deb.nodesource.com/setup_4.x | bash -
+#    apt-get install -y nodejs
     apt-get install -y build-essential
-    npm install -g gulp
+#    npm install -g gulp
     apt-get install -y python-dev
     apt-get install -y python-pip
-    pip install flask
-    pip install flask-login
-    pip install flask-openid
-    pip install eventlet
-    pip install python-socketio
+    pip install virtualenv
+#    pip install flask
+#    pip install flask-login
+#    pip install flask-openid
+#    pip install python-socketio
     pip install 'git+https://github.com/mk-fg/yapps.git#egg=yapps'
-    curl --fail --silent --show-error https://storage.googleapis.com/golang/go1.5.2.linux-amd64.tar.gz | tar -C /usr/local -xzf -
-    sudo sed -i '$a export PATH=$PATH:/usr/local/go/bin' /etc/profile
+#    curl --fail --silent --show-error https://storage.googleapis.com/golang/go1.5.2.linux-amd64.tar.gz | tar -C /usr/local -xzf -
+#    sudo sed -i '$a export PATH=$PATH:/usr/local/go/bin' /etc/profile
     apt-get install -y libtool
     apt-get install -y build-essential
     apt-get install -y autoconf
