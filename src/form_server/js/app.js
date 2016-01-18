@@ -21,9 +21,7 @@
       });
 
       socket.on('forms', function(msg) {
-        console.log(msg);
-        this.forms = ['One form', 'Another form'];
-        ReactDOM.render(<FormManager forms={this.forms} />, document.getElementById('content'));
+        ReactDOM.render(<FormManager forms={msg.forms} />, document.getElementById('content'));
       });
   });
 

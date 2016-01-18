@@ -31,7 +31,7 @@ def disconnect_request(sid):
 
 @sio.on('connect', namespace='/ifdl')
 def test_connect(sid, environ):
-    sio.emit('forms', {'data': 'Connected', 'count': 0}, room=sid,
+    sio.emit('forms', {'forms': ['One form', 'Another form', 'Mileage form'],}, room=sid,
              namespace='/ifdl')
 
 
