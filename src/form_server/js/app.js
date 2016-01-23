@@ -4,6 +4,7 @@
   const React = require('react');
   const ReactDOM = require('react-dom');
   const FormManager = require('./formmanager.js');
+  const Form = require('./form.js');
   console.log('Intializing');
 
   //Needed for React Developer Tools
@@ -24,9 +25,7 @@
       });
 
       socket.on('initialize form', function(form_data) {
-        console.log('*** Initializing form ***');
-        ReactDOM.render(<p>Initializing form...</p>, document.getElementById('content'));
-        console.log(form_data);
+        ReactDOM.render(<Form definition={form_data} socket={socket} />, document.getElementById('content'));
       });
   });
 

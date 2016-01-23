@@ -10,8 +10,13 @@ Notes about the generation of JavaScript/HTML/Backend
 =====================================================
 - Get a Python server up and running with Socket.io and Flask (Flask is for Rest so is it really needed or??)
 - Define an end-point for loading up a form. Something like: /loadform/form-name
+- Field defaults (bold, underline and so on) are ignored for now. Need to decide if they should be handled at all and then how.
+  The thing is of course that it may be more interesting to generate classes for the tags we generate so that it is easy enough
+  to tweak visuals in CSS. If we generate anything from the field defaults it should probably be CSS anyway.
+- Display %Keypad_Appplication is currently ignored
 - This should send over the form definition and the initial data and then we go into send/recieve mode until we close things
  some kind of session/auth needs to be done but that can be left for later.
+- Keybindings should fir on the KeyUp event.
 - Need to generate code for the default keybindings:
   Tab/Enter -> Next field
   F12/Backspace/Shift-tab -> Previous field

@@ -1,0 +1,206 @@
+{
+  "name": "MRF_FORM",
+  "form_data": [
+    {
+      "name": "EMPLOYEE_NAME",
+      "multiplicity": 32,
+      "type": "Character"
+    },
+    {
+      "name": "LOCATION",
+      "multiplicity": 3,
+      "type": "Character"
+    }
+  ],
+  "form_records": [
+    {
+      "name": "HEADER_INFO_RECORD",
+      "fields": [
+        {
+          "name": "EMPLOYEE_NAME",
+          "multiplicity": 32,
+          "type": "Character"
+        },
+        {
+          "name": "LOCATION",
+          "multiplicity": 3,
+          "type": "Character"
+        }
+      ]
+    }
+  ],
+  "layouts": [
+    {
+      "name": "VT_LAYOUT",
+      "device": {
+        "terminal_type": "%VT100"
+      },
+      "lines": 24,
+      "columns": 80,
+      "lists": [
+        {
+          "name": "LOCATION_CODES",
+          "value": ["ACT", "BXB", "LTN", "MKO", "ZKO"]
+        }
+      ],
+      "viewports": [
+        {
+          "name": "MAIN_VIEWPORT",
+          "line_from": 1,
+          "line_to": 22,
+          "col_from": 1,
+          "col_to": 80
+        },
+        {
+          "name": "DEFAULT_MESSAGE_VIEWPORT",
+          "line_from": 23,
+          "line_to": 24,
+          "col_from": 1,
+          "col_to": 80
+        }
+      ],
+      "key_bindings" : [
+        {
+          "key": "F8",
+          "scan_code": 119,
+          "handler": "DISCARD"
+        },
+        {
+          "key": "%KP_PERIOD",
+          "scan_code": 110,
+          "handler": "SELECT"
+        }
+      ],
+      "functions": [
+        {
+          "name": "f_RESET_DATA",
+          "behavior": "function() {this.ResetAll(); this.DisplayMessage('Data discarded.'); this.Signal(); this.PositionToPanel('TRIPS_INFO_PANEL');}"
+        },
+        {
+          "name": "f_RECORD_DATA",
+          "behavior": "function() {this.DisplayMessage('Data recieved. Program exiting.'); this.Signal(); this.ReturnImmediate();}"
+        }
+      ],
+      "on_disable_handler": "function() {this.RemoveAll();}",
+      "on_recieve_handlers":[
+        {
+          "record_type": "HEADER_INFO_RECORD",
+          "behavior": "this.ActivatePanel('HEADER_INFO_PANEL'); this.PositionToPanel('HEADER_INFO_PANEL');"
+        }
+      ],
+      "on_key_handlers": [
+        {
+          "name": "DISCARD",
+          "behavior": "function() {f_RESET_DATA();}"
+        }
+      ],
+      "message_panel": {
+        "viewport": "DEFAULT_MESSAGE_VIEWPORT"
+      },
+      "panels": [
+        {
+          "name": "HEADER_INFO_PANEL",
+          "viewport": "MAIN_VIEWPORT",
+          "on_entry": "function() {this.DisplayMessage('Press Help for information on how to use this application.')}",
+          "on_exit": "function() {this.DisplayMessage('Displaying next screen...')}",
+          "on_key_handlers": [
+            {
+              "name": "TRANSMIT",
+              "behavior": "function() {f_RECORD_DATA();}"
+            }
+          ],
+          "text_literals": [
+            {
+              "line": 1,
+              "column": 15,
+              "value": "Mileage Reimbursement Form",
+              "style": "Font_Size_Double_Wide"
+            },
+            {
+              "line": 5,
+              "column": 2,
+              "value": "Employee Name:"
+            }
+          ],
+          "polyline_literals": [
+            [
+              {
+                "line": 3,
+                "column": 1
+              },
+              {
+                "line": 3,
+                "column": 80
+              }
+            ]
+          ],
+          "fields": [
+            {
+              "name": "EMPLOYEE_NAME",
+              "line": 5,
+              "column": 17
+            }
+          ],
+          "icons": [
+            {
+              "name": "DISCARD_DATA",
+              "on_key_handlers": [
+                {
+                  "name": "SELECT",
+                  "behavior": "function() {f_RESET_DATA();}"
+                }
+              ],
+              "rectangle_literals": [
+                [
+                  {
+                    "line": 20,
+                    "column": 22
+                  },
+                  {
+                    "line": 22,
+                    "column": 37
+                  }
+                ]
+              ],
+              "text_literals": [
+                {
+                  "line": 21,
+                  "column": 24,
+                  "value": "Discard Data"
+                }
+              ]
+            },
+            {
+              "name": "RECORD_AND_EXIT",
+              "on_key_handlers": [
+                {
+                  "name": "SELECT",
+                  "behavior": "function() {f_UPDATE_TOTALS(); f_RECORD_DATA();}"
+                }
+              ],
+              "rectangle_literals": [
+                [
+                  {
+                    "line": 20,
+                    "column": 40
+                  },
+                  {
+                    "line": 22,
+                    "column": 58
+                  }
+                ]
+              ],
+              "text_literals": [
+                {
+                  "line": 21,
+                  "column": 42,
+                  "value": "Record and Exit"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
