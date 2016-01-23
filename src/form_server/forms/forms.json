@@ -1,0 +1,14 @@
+[
+  {
+    "key": "minimal",
+    "name": "Minimal example",
+    "description": "Minimal example of a DecForms form",
+    "path": "forms/minimal.json"
+  },
+  {
+    "key": "mileage",
+    "name": "Mileage reimbursement",
+    "description": "The full Mileage reimbursement example from the DecForms documentation.",
+    "path": "forms/minimal.json"
+  }
+]

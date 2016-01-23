@@ -1,4 +1,5 @@
 import time
+import json
 from threading import Thread
 from flask import Flask, render_template
 import socketio
@@ -13,27 +14,26 @@ def index():
     return render_template('index.html')
 
 
-@sio.on('my event', namespace='/ifdl')
-def test_message(sid, message):
-    sio.emit('my response', {'data': message['data']}, room=sid,
+@sio.on('load form', namespace='/ifdl')
+def load_form(sid, message):
+    print "Load form" + message
+    sio.emit('initialize form', message, room=sid,
              namespace='/ifdl')
-
 
 @sio.on('my broadcast event', namespace='/ifdl')
 def test_broadcast_message(sid, message):
     sio.emit('my response', {'data': message['data']}, namespace='/ifdl')
 
-
 @sio.on('disconnect request', namespace='/ifdl')
 def disconnect_request(sid):
     sio.disconnect(sid, namespace='/ifdl')
 
-
 @sio.on('connect', namespace='/ifdl')
 def test_connect(sid, environ):
-    sio.emit('forms', {'forms': ['One form', 'Another form', 'Mileage form'],}, room=sid,
-             namespace='/ifdl')
-
+    with open('forms/forms.json', 'r') as content_file:
+        content = content_file.read()
+        forms = json.loads(content)
+    sio.emit('forms', forms, room=sid, namespace='/ifdl')
 
 @sio.on('disconnect', namespace='/ifdl')
 def test_disconnect(sid):

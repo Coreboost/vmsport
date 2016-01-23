@@ -10,7 +10,6 @@
   window.React = React;
   $(document).ready(function(){
       var namespace = '/ifdl';
-      console.log('http://' + document.domain + ':' + location.port + namespace);
       var socket = io.connect('http://' + document.domain + ':' + location.port + namespace);
 
       socket.on('connect', function() {
@@ -21,7 +20,13 @@
       });
 
       socket.on('forms', function(msg) {
-        ReactDOM.render(<FormManager forms={msg.forms} />, document.getElementById('content'));
+        ReactDOM.render(<FormManager forms={msg} socket={socket} />, document.getElementById('content'));
+      });
+
+      socket.on('initialize form', function(form_data) {
+        console.log('*** Initializing form ***');
+        ReactDOM.render(<p>Initializing form...</p>, document.getElementById('content'));
+        console.log(form_data);
       });
   });
 

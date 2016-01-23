@@ -1,12 +1,15 @@
 const React = require('react');
 
 const FormManager = React.createClass({
+  loadForm: function (e) {
+    this.props.socket.emit('load form', e.target.id);
+  },
   render: function () {
     var formLabels = []
-    var key = 0;
-    this.props.forms.forEach(function (formName) {
+    var formManager = this;
+    this.props.forms.forEach(function (form) {
       formLabels.push(
-        <p key={key++}><a>{formName}</a></p>
+        <p key={form.key}><a id={form.key} onClick={formManager.loadForm}>{form.name}</a></p>
       );
     });
     return (
