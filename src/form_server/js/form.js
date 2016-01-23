@@ -7,7 +7,6 @@ const Form = React.createClass({
     this.props.socket.emit('sendData', "some data");
   },
   render: function () {
-    console.log(this.props.definition);
     return (
       <div className="form">
         <p>Name of the loaded form: {this.props.definition.name}</p>

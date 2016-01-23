@@ -5,7 +5,6 @@
   const ReactDOM = require('react-dom');
   const FormManager = require('./formmanager.js');
   const Form = require('./form.js');
-  console.log('Intializing');
 
   //Needed for React Developer Tools
   window.React = React;
