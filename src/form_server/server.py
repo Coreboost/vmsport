@@ -4,6 +4,7 @@ from threading import Thread
 from flask import Flask, render_template
 import socketio
 
+forms = None
 sio = socketio.Server(logger=True, async_mode='threading')
 app = Flask(__name__)
 app.wsgi_app = socketio.Middleware(sio, app.wsgi_app)
@@ -15,10 +16,14 @@ def index():
 
 
 @sio.on('load form', namespace='/ifdl')
-def load_form(sid, message):
-    print "Load form" + message
-    sio.emit('initialize form', message, room=sid,
-             namespace='/ifdl')
+def load_form(sid, form_key):
+    for form in forms:
+        if form['key'] == form_key:
+            with open(form['path'], 'r') as form_file:
+                form_definition_text = form_file.read()
+                form_definition = json.loads(form_definition_text)
+                sio.emit('initialize form', form_definition, room=sid,
+                         namespace='/ifdl')
 
 @sio.on('my broadcast event', namespace='/ifdl')
 def test_broadcast_message(sid, message):
@@ -30,6 +35,7 @@ def disconnect_request(sid):
 
 @sio.on('connect', namespace='/ifdl')
 def test_connect(sid, environ):
+    global forms
     with open('forms/forms.json', 'r') as content_file:
         content = content_file.read()
         forms = json.loads(content)
