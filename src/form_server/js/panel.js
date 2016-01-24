@@ -1,9 +1,13 @@
 const React = require('react');
 const _ = require('lodash');
-//const Panel = require('./panel.js');
+const TextLiteral = require('./textliteral.js');
 
 const Panel = React.createClass({
   componentWillMount: function () {
+    // Need to parse and hook
+    // on_entry
+    // on_exit
+    // on_key_handlers
   },
   getInitialState: function () {
     return {
@@ -26,9 +30,26 @@ const Panel = React.createClass({
       height: (vp.line_to - vp.line_from + 1) * 20,
       backgroundColor:"LightSteelBlue"
     };
+
+    var text_literals = [];
+    var polyline_literals = [];
+    var rectangle_literals = [];
+    var fields = [];
+    var icons  = [];
+    var key = 1;
+    this.props.definition.text_literals.forEach(function (tl_def) {
+      text_literals.push(
+        <TextLiteral key={key++} definition={tl_def} />
+      );
+    });
+
     return (
       <div className="panel" style={panel_style}>
-        Panel: {this.props.definition.name}
+        {text_literals}
+        {polyline_literals}
+        {rectangle_literals}
+        {fields}
+        {icons}
       </div>
     );
   },
