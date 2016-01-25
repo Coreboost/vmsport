@@ -1,6 +1,7 @@
 const React = require('react');
 const _ = require('lodash');
 const TextLiteral = require('./textliteral.js');
+const PolylineLiteral = require('./polylineliteral.js');
 
 const Panel = React.createClass({
   componentWillMount: function () {
@@ -42,6 +43,11 @@ const Panel = React.createClass({
         <TextLiteral key={key++} definition={tl_def} />
       );
     });
+    this.props.definition.polyline_literals.forEach(function (pl_def) {
+      polyline_literals.push(
+        <PolylineLiteral key={key++} definition={pl_def} />
+      );
+    });
 
     return (
       <div className="panel" style={panel_style}>
@@ -52,7 +58,7 @@ const Panel = React.createClass({
         {icons}
       </div>
     );
-  },
+  }
 });
 
 module.exports = Panel;
