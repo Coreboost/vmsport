@@ -1,8 +1,7 @@
 const React = require('react');
 const _ = require('lodash');
-const TextLiteral = require('./textliteral.js');
-const PolylineLiteral = require('./polylineliteral.js');
-const RectangleLiteral = require('./rectangleliteral.js');
+const Icon = require('./icon.js');
+const renderWidgets = require('./renderWidgets.js');
 
 const Panel = React.createClass({
   componentWillMount: function () {
@@ -33,33 +32,19 @@ const Panel = React.createClass({
       backgroundColor:"LightSteelBlue"
     };
 
-    var text_literals = [];
-    var polyline_literals = [];
-    var rectangle_literals = [];
     var fields = [];
     var icons  = [];
-    var key = 1;
-    this.props.definition.text_literals.forEach(function (tl_def) {
-      text_literals.push(
-        <TextLiteral key={key++} definition={tl_def} />
-      );
-    });
-    this.props.definition.polyline_literals.forEach(function (pl_def) {
-      polyline_literals.push(
-        <PolylineLiteral key={key++} definition={pl_def} />
-      );
-    });
-    this.props.definition.rectangle_literals.forEach(function (rt_def) {
-      rectangle_literals.push(
-        <RectangleLiteral key={key++} definition={rt_def} />
+    var widgets = renderWidgets(this.props.definition.text_literals, this.props.definition.polyline_literals, this.props.definition.rectangle_literals)
+    var key = 1000;  // KSL: Not so nice but should be enough...
+    this.props.definition.icons.forEach(function (ic_def) {
+      icons.push(
+        <Icon key={key++} definition={ic_def} />
       );
     });
 
     return (
       <div className="panel" style={panel_style}>
-        {text_literals}
-        {polyline_literals}
-        {rectangle_literals}
+        {widgets}
         {fields}
         {icons}
       </div>
