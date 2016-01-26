@@ -74,24 +74,24 @@
       "functions": [
         {
           "name": "f_RESET_DATA",
-          "behavior": "function() {this.ResetAll(); this.DisplayMessage('Data discarded.'); this.Signal(); this.PositionToPanel('TRIPS_INFO_PANEL');}"
+          "behavior": "(function() {this.ResetAll(); this.DisplayMessage('Data discarded.'); this.Signal(); this.PositionToPanel('TRIPS_INFO_PANEL');})"
         },
         {
           "name": "f_RECORD_DATA",
-          "behavior": "function() {this.DisplayMessage('Data recieved. Program exiting.'); this.Signal(); this.ReturnImmediate();}"
+          "behavior": "(function() {this.DisplayMessage('Data recieved. Program exiting.'); this.Signal(); this.ReturnImmediate();})"
         }
       ],
       "on_disable_handler": "function() {this.RemoveAll();}",
       "on_recieve_handlers":[
         {
           "record_type": "HEADER_INFO_RECORD",
-          "behavior": "this.ActivatePanel('HEADER_INFO_PANEL'); this.PositionToPanel('HEADER_INFO_PANEL');"
+          "behavior": "(function() {this.ActivatePanel('HEADER_INFO_PANEL'); this.PositionToPanel('HEADER_INFO_PANEL');})"
         }
       ],
       "on_key_handlers": [
         {
           "name": "DISCARD",
-          "behavior": "function() {f_RESET_DATA();}"
+          "behavior": "(function() {f_RESET_DATA();})"
         }
       ],
       "message_panel": {
@@ -106,7 +106,7 @@
           "on_key_handlers": [
             {
               "name": "TRANSMIT",
-              "behavior": "function() {f_RECORD_DATA();}"
+              "behavior": "(function() {f_RECORD_DATA();})"
             }
           ],
           "text_literals": [
@@ -147,7 +147,7 @@
               "on_key_handlers": [
                 {
                   "name": "SELECT",
-                  "behavior": "function() {f_RESET_DATA();}"
+                  "behavior": "(function() {f_RESET_DATA();})"
                 }
               ],
               "rectangle_literals": [
@@ -175,7 +175,7 @@
               "on_key_handlers": [
                 {
                   "name": "SELECT",
-                  "behavior": "function() {f_UPDATE_TOTALS(); f_RECORD_DATA();}"
+                  "behavior": "(function() {f_UPDATE_TOTALS(); f_RECORD_DATA();})"
                 }
               ],
               "rectangle_literals": [

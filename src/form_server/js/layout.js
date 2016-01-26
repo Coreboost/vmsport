@@ -5,12 +5,33 @@ const MessagePanel = require('./messagepanel.js');
 const Layout = React.createClass({
   componentWillMount: function () {
     // setup handlers here, we need to parse/compile them here
-    // regular functions
     // on_recieve_handlers
     // on_disable:handler
-    // on_key_handlers
     // on_entry
-    // possibly somethin more
+    this.on_recieve_handlers = [];
+    this.on_disable_handlers = [];
+    this.on_key_handlers = [];
+    this.functions = [];
+    var this_ = this;
+    this.props.definition.functions.forEach(function (funcdef) {
+      var fn = eval(funcdef.behavior);
+      this_.functions.push(
+        {
+          name: funcdef.name,
+          behavior: fn
+        }
+      );
+    });
+    this.key_bindings = [];
+    this.props.definition.key_bindings.forEach(function (binding) {
+      this_.key_bindings.push(
+        {
+          key: binding.key,
+          scan_code: binding.scan_code,
+          handler: binding.handler
+        }
+      );
+    });
   },
   handle_key_press: function(scan_code) {
     // search the on_key_handlers if there is a match, return true if the key was handled, false otherwise.
