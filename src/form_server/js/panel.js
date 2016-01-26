@@ -2,6 +2,7 @@ const React = require('react');
 const _ = require('lodash');
 const TextLiteral = require('./textliteral.js');
 const PolylineLiteral = require('./polylineliteral.js');
+const RectangleLiteral = require('./rectangleliteral.js');
 
 const Panel = React.createClass({
   componentWillMount: function () {
@@ -46,6 +47,11 @@ const Panel = React.createClass({
     this.props.definition.polyline_literals.forEach(function (pl_def) {
       polyline_literals.push(
         <PolylineLiteral key={key++} definition={pl_def} />
+      );
+    });
+    this.props.definition.rectangle_literals.forEach(function (rt_def) {
+      rectangle_literals.push(
+        <RectangleLiteral key={key++} definition={rt_def} />
       );
     });
 
