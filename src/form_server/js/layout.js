@@ -4,10 +4,6 @@ const MessagePanel = require('./messagepanel.js');
 
 const Layout = React.createClass({
   componentWillMount: function () {
-    // setup handlers here, we need to parse/compile them here
-    // on_recieve_handlers
-    // on_disable:handler
-    // on_entry
     var this_ = this;
     this.functions = [];
     this.props.definition.functions.forEach(function (funcdef) {
@@ -33,11 +29,10 @@ const Layout = React.createClass({
     if (this.props.definition.on_disable_handler) {
       this.on_disable_handler = eval(this.props.definition.on_disable_handler);
     }
-
     this.on_key_handlers = [];
     this.props.definition.on_key_handlers.forEach(function (handler) {
       var fn = eval(handler.behavior);
-      this_.on_recieve_handlers.push(
+      this_.on_key_handlers.push(
         {
           name: handler.name,
           behavior: fn

@@ -5,10 +5,25 @@ const renderWidgets = require('./renderwidgets.js');
 
 const Panel = React.createClass({
   componentWillMount: function () {
-    // Need to parse and hook
-    // on_entry
-    // on_exit
-    // on_key_handlers
+    var this_ = this;
+    this.on_entry_handler = undefined;
+    if (this.props.definition.on_entry_handler) {
+      this.on_entry_handler = eval(this.props.definition.on_entry_handler);
+    }
+    this.on_exit_handler = undefined;
+    if (this.props.definition.on_exit_handler) {
+      this.on_exit_handler = eval(this.props.definition.on_exit_handler);
+    }
+    this.on_key_handlers = [];
+    this.props.definition.on_key_handlers.forEach(function (handler) {
+      var fn = eval(handler.behavior);
+      this_.on_key_handlers.push(
+        {
+          name: handler.name,
+          behavior: fn
+        }
+      );
+    });
   },
   getInitialState: function () {
     return {
