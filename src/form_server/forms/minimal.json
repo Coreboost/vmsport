@@ -81,7 +81,7 @@
           "behavior": "(function() {this.DisplayMessage('Data recieved. Program exiting.'); this.Signal(); this.ReturnImmediate();})"
         }
       ],
-      "on_disable_handler": "function() {this.RemoveAll();}",
+      "on_disable_handler": "(function() {this.RemoveAll();})",
       "on_recieve_handlers":[
         {
           "record_type": "HEADER_INFO_RECORD",
