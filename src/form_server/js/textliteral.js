@@ -12,7 +12,7 @@ const TextLiteral = React.createClass({
     var text_literal_style = {
       position: "absolute",
       left: (this.props.definition.column - 1) * 10,
-      top: (this.props.definition.line - 1) * 20,
+      top: (this.props.definition.line - 1) * 22,
       transformOrigin: "left center",
       transform: scale
     };

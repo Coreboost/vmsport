@@ -18,9 +18,9 @@ const RectangleLiteral = React.createClass({
     var style = {
       position: "absolute",
       left: (leftColumn - 1) * 10 + 5,
-      top: (topLine - 1) * 20 + 10,
+      top: (topLine - 1) * 22 + 11,
       width: (rightColumn - leftColumn) * 10,
-      height: (bottomLine - topLine) * 20,
+      height: (bottomLine - topLine) * 22,
       borderWidth: 2,
       borderStyle: "solid",
       borderColor: "Black",

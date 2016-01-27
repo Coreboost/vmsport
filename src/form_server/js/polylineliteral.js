@@ -26,9 +26,9 @@ const PolylineLiteral = React.createClass({
       var style = {
         position: "absolute",
         left: (leftColumn - 1) * 10 + 4,
-        top: (topLine - 1) * 20 + 9,
+        top: (topLine - 1) * 22 + 10,
         width: (rightColumn - leftColumn) * 10 + 2,
-        height: (bottomLine - topLine) * 20 + 2,
+        height: (bottomLine - topLine) * 22 + 2,
         borderWidth: "1px",
         borderColor: "Black",
         backgroundColor: "Black"

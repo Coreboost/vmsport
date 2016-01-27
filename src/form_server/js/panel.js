@@ -1,6 +1,7 @@
 const React = require('react');
 const _ = require('lodash');
 const Icon = require('./icon.js');
+const Field = require('./field.js');
 const renderWidgets = require('./renderwidgets.js');
 
 const Panel = React.createClass({
@@ -41,9 +42,9 @@ const Panel = React.createClass({
       position: "absolute",
       visibility: this.state.visible ? "visible" : "hidden",
       left: (vp.col_from - 1) * 10,
-      top: (vp.line_from - 1) * 20,
+      top: (vp.line_from - 1) * 22,
       width: (vp.col_to - vp.col_from + 1) * 10,
-      height: (vp.line_to - vp.line_from + 1) * 20,
+      height: (vp.line_to - vp.line_from + 1) * 22,
       backgroundColor:"LightSteelBlue"
     };
 
@@ -54,6 +55,11 @@ const Panel = React.createClass({
     this.props.definition.icons.forEach(function (ic_def) {
       icons.push(
         <Icon key={key++} definition={ic_def} />
+      );
+    });
+    this.props.definition.fields.forEach(function (fl_def) {
+      icons.push(
+        <Field key={key++} definition={fl_def} />
       );
     });
 

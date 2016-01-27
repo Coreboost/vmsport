@@ -73,7 +73,7 @@ const Layout = React.createClass({
       padding: 0,
       margin: 0,
       width: columns * 10,
-      height: lines * 20,
+      height: lines * 22,
       backgroundColor: "Beige",
       fontFamily: "Inconsolata",
       fontSize: 20
