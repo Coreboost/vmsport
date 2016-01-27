@@ -8,16 +8,38 @@ const Layout = React.createClass({
     // on_recieve_handlers
     // on_disable:handler
     // on_entry
-    this.on_recieve_handlers = [];
-    this.on_disable_handlers = [];
-    this.on_key_handlers = [];
-    this.functions = [];
     var this_ = this;
+    this.functions = [];
     this.props.definition.functions.forEach(function (funcdef) {
       var fn = eval(funcdef.behavior);
       this_.functions.push(
         {
           name: funcdef.name,
+          behavior: fn
+        }
+      );
+    });
+    this.on_recieve_handlers = [];
+    this.props.definition.on_recieve_handlers.forEach(function (handler) {
+      var fn = eval(handler.behavior);
+      this_.on_recieve_handlers.push(
+        {
+          record_type: handler.record_type,
+          behavior: fn
+        }
+      );
+    });
+    this.on_disable_handler = undefined;
+    if (this.props.definition.on_disable_handler) {
+      this.on_disable_handler = eval(this.props.definition.on_disable_handler);
+    }
+
+    this.on_key_handlers = [];
+    this.props.definition.on_key_handlers.forEach(function (handler) {
+      var fn = eval(handler.behavior);
+      this_.on_recieve_handlers.push(
+        {
+          name: handler.name,
           behavior: fn
         }
       );
