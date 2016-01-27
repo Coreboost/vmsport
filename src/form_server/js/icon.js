@@ -1,9 +1,9 @@
 const React = require('react');
-const renderWidgets = require('./renderWidgets.js');
+const renderWidgets = require('./renderwidgets.js');
 const Icon = React.createClass({
   componentWillMount: function () {
     // Need to parse and hook
-    // on_key_handlers
+    // on_key_handl
   },
   render: function () {
     var icons  = [];

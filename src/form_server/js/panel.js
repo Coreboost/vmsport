@@ -1,7 +1,7 @@
 const React = require('react');
 const _ = require('lodash');
 const Icon = require('./icon.js');
-const renderWidgets = require('./renderWidgets.js');
+const renderWidgets = require('./renderwidgets.js');
 
 const Panel = React.createClass({
   componentWillMount: function () {
