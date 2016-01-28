@@ -82,9 +82,10 @@ const Layout = React.createClass({
     var lists = this.props.definition.lists;
     var viewports = this.props.definition.viewports;
     var layout = this;
+    var form = this.props.form;
     this.props.definition.panels.forEach(function(panel) {
       panels.push(
-        <Panel key={panel.name} definition={panel} lists={lists} viewports={viewports} layout={layout} />
+        <Panel key={panel.name} definition={panel} lists={lists} viewports={viewports} layout={layout} form={form} />
       );
     });
     if (this.props.definition.message_panel) {

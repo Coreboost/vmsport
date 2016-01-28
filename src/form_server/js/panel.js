@@ -57,9 +57,10 @@ const Panel = React.createClass({
         <Icon key={key++} definition={ic_def} />
       );
     });
+    var form = this.props.form;
     this.props.definition.fields.forEach(function (fl_def) {
       icons.push(
-        <Field key={key++} definition={fl_def} />
+        <Field key={key++} definition={fl_def} form={form} />
       );
     });
 

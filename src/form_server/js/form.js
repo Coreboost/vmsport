@@ -1,19 +1,26 @@
 const React = require('react');
+const _ = require('lodash');
 const Layout = require('./layout.js');
 
 const Form = React.createClass({
   componentWillMount: function () {
     var form_data = {};
     this.props.definition.form_data.forEach(function (data_item) {
-      form_data[data_item.name] = null;
+      form_data[data_item.name] = {definition: data_item, value: null};
     });
-    this.setState({form_data: form_data});
+    this.form_data = form_data;
   },
   recieveData: function (records) {
 
   },
   sendData: function () {
-    this.props.socket.emit('sendData', "some data");
+    this.props.socket.emit('sendData', this.form_data);
+  },
+  get_data_item: function (item_name) {
+    return this.form_data[item_name];
+  },
+  set_data_item: function (item_name, value) {
+    this.form_data[item_name].value = value;
   },
   render: function () {
 /**
