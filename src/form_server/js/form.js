@@ -1,26 +1,18 @@
 const React = require('react');
 const _ = require('lodash');
 const Layout = require('./layout.js');
+const Context = require('./context.js')
 
 const Form = React.createClass({
   componentWillMount: function () {
-    var form_data = {};
-    this.props.definition.form_data.forEach(function (data_item) {
-      form_data[data_item.name] = {definition: data_item, value: null};
-    });
-    this.form_data = form_data;
+    this.context = Context().
+                    add_form_data(this.props.definition);
   },
   recieveData: function (records) {
-
+    this.context.recieve_data(records);
   },
   sendData: function () {
-    this.props.socket.emit('sendData', this.form_data);
-  },
-  get_data_item: function (item_name) {
-    return this.form_data[item_name];
-  },
-  set_data_item: function (item_name, value) {
-    this.form_data[item_name].value = value;
+    this.props.socket.emit('sendData', this.context.form_data);
   },
   render: function () {
 /**
@@ -39,7 +31,7 @@ const Form = React.createClass({
 
 **/
     return (
-      <Layout definition={this.props.definition.layouts[0]} form={this} />
+      <Layout definition={this.props.definition.layouts[0]} context={this.context} />
     );
   },
 });

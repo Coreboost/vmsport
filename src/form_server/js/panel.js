@@ -6,25 +6,9 @@ const renderWidgets = require('./renderwidgets.js');
 
 const Panel = React.createClass({
   componentWillMount: function () {
-    var this_ = this;
-    this.on_entry_handler = undefined;
-    if (this.props.definition.on_entry_handler) {
-      this.on_entry_handler = eval(this.props.definition.on_entry_handler);
-    }
-    this.on_exit_handler = undefined;
-    if (this.props.definition.on_exit_handler) {
-      this.on_exit_handler = eval(this.props.definition.on_exit_handler);
-    }
-    this.on_key_handlers = [];
-    this.props.definition.on_key_handlers.forEach(function (handler) {
-      var fn = eval(handler.behavior);
-      this_.on_key_handlers.push(
-        {
-          name: handler.name,
-          behavior: fn
-        }
-      );
-    });
+    this.my_frame = this.props.context.
+                        new_child_frame(this.props.parentframe).
+                        add_handlers(this.props.definition);
   },
   getInitialState: function () {
     return {
@@ -47,28 +31,24 @@ const Panel = React.createClass({
       height: (vp.line_to - vp.line_from + 1) * 22,
       backgroundColor:"LightSteelBlue"
     };
-
-    var fields = [];
-    var icons  = [];
-    var widgets = renderWidgets(this.props.definition.text_literals, this.props.definition.polyline_literals, this.props.definition.rectangle_literals)
+    var widgets = renderWidgets(this.props.definition.text_literals,
+                                this.props.definition.polyline_literals,
+                                this.props.definition.rectangle_literals);
     var key = 1000;  // KSL: Not so nice but should be enough...
     this.props.definition.icons.forEach(function (ic_def) {
-      icons.push(
-        <Icon key={key++} definition={ic_def} />
+      widgets.push(
+        <Icon key={key++} definition={ic_def} context={this.props.context} parentframe={this.my_frame} />
       );
-    });
-    var form = this.props.form;
+    }, this);
     this.props.definition.fields.forEach(function (fl_def) {
-      icons.push(
-        <Field key={key++} definition={fl_def} form={form} />
+      widgets.push(
+        <Field key={key++} definition={fl_def} context={this.props.context} parentframe={this.my_frame} />
       );
-    });
+    }, this);
 
     return (
       <div className="panel" style={panel_style}>
         {widgets}
-        {fields}
-        {icons}
       </div>
     );
   }

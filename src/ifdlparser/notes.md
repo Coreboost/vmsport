@@ -8,22 +8,18 @@ Notes about the parser implementation
 
 Notes about the generation of JavaScript/HTML/Backend
 =====================================================
-- Get a Python server up and running with Socket.io and Flask (Flask is for Rest so is it really needed or??)
-- Define an end-point for loading up a form. Something like: /loadform/form-name
 - Field defaults (bold, underline and so on) are ignored for now. Need to decide if they should be handled at all and then how.
   The thing is of course that it may be more interesting to generate classes for the tags we generate so that it is easy enough
   to tweak visuals in CSS. If we generate anything from the field defaults it should probably be CSS anyway.
 - Display %Keypad_Appplication is currently ignored
+- There is something with that the tab order does't work for the buttons/icons as I think it should...
 - This should send over the form definition and the initial data and then we go into send/recieve mode until we close things
  some kind of session/auth needs to be done but that can be left for later.
-- Keybindings should fir on the KeyUp event.
 - Need to generate code for the default keybindings:
-  Tab/Enter -> Next field
-  F12/Backspace/Shift-tab -> Previous field
+  Tab/Enter -> Next field ** Not done/needed
+  F12/Backspace/Shift-tab -> Previous field  ** Not done/needed
   F10/Ctrl-Z -> Save and exit
-- En Function i IFDL blir egentligen en key-binding i Javascript.
-- En Function response i IFDL är själva funktionen. Function responses kan gömma varandra
-  Layout/Panel/Group/Field-Icon
+
 - Need to generate code for the lifecycle, something like this:
   - Navigate to a URL which corresponds to a particular form and initiate a session
   - The HTML and Javascript for the form is downloaded to the client, a websocket is setup-

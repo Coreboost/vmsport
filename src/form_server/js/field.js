@@ -3,9 +3,12 @@ const _ = require('lodash');
 
 const Field = React.createClass({
   componentWillMount: function () {
+    this.my_frame = this.props.context.
+                        new_child_frame(this.props.parentframe).
+                        add_handlers(this.props.definition);
   },
   getInitialState: function () {
-    this.data_item = this.props.form.get_data_item(this.props.definition.name);
+    this.data_item = this.props.context.get_data_item(this.props.definition.name);
     return {
       field_value: this.data_item.value
     };

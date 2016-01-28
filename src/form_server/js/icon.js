@@ -3,17 +3,9 @@ const _ = require('lodash');
 const renderWidgets = require('./renderwidgets.js');
 const Icon = React.createClass({
   componentWillMount: function () {
-    var this_ = this;
-    this.on_key_handlers = [];
-    this.props.definition.on_key_handlers.forEach(function (handler) {
-      var fn = eval(handler.behavior);
-      this_.on_key_handlers.push(
-        {
-          name: handler.name,
-          behavior: fn
-        }
-      );
-    });
+    this.my_frame = this.props.context.
+                        new_child_frame(this.props.parentframe).
+                        add_handlers(this.props.definition);
   },
   select_handler: function () {
     var behavior = _.find(this.on_key_handlers, function (handler) {
