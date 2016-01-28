@@ -159,7 +159,7 @@
               "on_key_handlers": [
                 {
                   "name": "SELECT",
-                  "behavior": "(function() {f_RESET_DATA();})"
+                  "behavior": "(function() {console.log('Bozo')})"
                 }
               ],
               "rectangle_literals": [

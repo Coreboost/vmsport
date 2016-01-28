@@ -32,7 +32,7 @@ const Field = React.createClass({
       fontSize: 20
     };
     return (
-      <input className="field" type="text" maxLength={this.data_item.definition.multiplicity} style={field_style} value={this.state.field_value} onChange={this.handleChange} />
+      <input tabIndex="1" className="field" type="text" maxLength={this.data_item.definition.multiplicity} style={field_style} value={this.state.field_value} onChange={this.handleChange} />
     );
   },
 });
