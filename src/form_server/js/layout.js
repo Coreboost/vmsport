@@ -5,9 +5,10 @@ const MessagePanel = require('./messagepanel.js');
 
 const Layout = React.createClass({
   componentWillMount: function () {
-    this.my_frame = this.props.context.
+    this.frame = this.props.context.
                         new_child_frame(null).
                         add_handlers(this.props.definition);
+    this.props.context.register_layout(this);
   },
   render: function () {
     var lines = this.props.definition.lines;
@@ -33,12 +34,12 @@ const Layout = React.createClass({
     var form = this.props.form;
     this.props.definition.panels.forEach(function(panel) {
       panels.push(
-        <Panel key={panel.name} definition={panel} lists={lists} viewports={viewports} context={this.props.context} parentframe={this.my_frame} />
+        <Panel key={panel.name} definition={panel} lists={lists} viewports={viewports} context={this.props.context} parentframe={this.frame} />
       );
     }, this);
     if (this.props.definition.message_panel) {
       panels.push(
-        <MessagePanel key="__message_panel__" viewport_name={this.props.definition.message_panel.viewport} viewports={viewports} context={this.props.context} parentframe={this.my_frame} />
+        <MessagePanel key="__message_panel__" viewport_name={this.props.definition.message_panel.viewport} viewports={viewports} context={this.props.context} parentframe={this.frame} />
       );
     }
     return (

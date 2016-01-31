@@ -6,7 +6,7 @@ const renderWidgets = require('./renderwidgets.js');
 
 const Panel = React.createClass({
   componentWillMount: function () {
-    this.my_frame = this.props.context.
+    this.frame = this.props.context.
                         new_child_frame(this.props.parentframe).
                         add_handlers(this.props.definition);
   },
@@ -37,12 +37,12 @@ const Panel = React.createClass({
     var key = 1000;  // KSL: Not so nice but should be enough...
     this.props.definition.icons.forEach(function (ic_def) {
       widgets.push(
-        <Icon key={key++} definition={ic_def} context={this.props.context} parentframe={this.my_frame} />
+        <Icon key={key++} definition={ic_def} context={this.props.context} parentframe={this.frame} />
       );
     }, this);
     this.props.definition.fields.forEach(function (fl_def) {
       widgets.push(
-        <Field key={key++} definition={fl_def} context={this.props.context} parentframe={this.my_frame} />
+        <Field key={key++} definition={fl_def} context={this.props.context} parentframe={this.frame} />
       );
     }, this);
 

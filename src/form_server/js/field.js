@@ -3,7 +3,7 @@ const _ = require('lodash');
 
 const Field = React.createClass({
   componentWillMount: function () {
-    this.my_frame = this.props.context.
+    this.frame = this.props.context.
                         new_child_frame(this.props.parentframe).
                         add_handlers(this.props.definition);
   },

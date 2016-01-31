@@ -22,8 +22,12 @@ def load_form(sid, form_key):
             with open(form['path'], 'r') as form_file:
                 form_definition_text = form_file.read()
                 form_definition = json.loads(form_definition_text)
-                sio.emit('enable form', form_definition, room=sid,
-                         namespace='/ifdl')
+                sio.emit('enable form', form_definition, room=sid, namespace='/ifdl')
+                sio.emit('receive', 'HEADER_INFO_RECORD', room=sid, namespace='/ifdl')
+
+@sio.on('receive response', namespace='/ifdl')
+def receive_response(sid, data):
+    print(data)
 
 @sio.on('my broadcast event', namespace='/ifdl')
 def test_broadcast_message(sid, message):

@@ -3,6 +3,7 @@ const beep = require('./beep.js');
 
 const Context = function() {
   return {
+    layout: null,
     form_data: {},
     root_frame: null,
     add_form_data: function (definition) {
@@ -22,12 +23,30 @@ const Context = function() {
     set_data_item: function (item_name, value) {
       this.form_data[item_name].value = value;
     },
-    recieve_data: function (records) {
-      console.log("Data recieved:");
-      console.dir(records);
+    receive_data: function (record_name) {
+      console.log("Start of receive data: " + record_name);
+      /*
+      What needs to be done next??
+      ----------------------------
+      0. From the beginning no panel should be activated.
+         Need to understand which items are activated / not activated by default.
+         The default action is to activate the items corresponding to The
+         record specified in receive. ACTIVATE CORRESPONDING RECEIVE
+         ACTIVATE PANEL NAME activates all fields on the panel.
+      1. For the top level frame, run the on_recieve_handler
+      2. Then when TRANSMIT is send, i.e., Ctrl-Z, F10 I believe
+      3. Then we should emit the Data
+      4. Maybe we should have a very simple state variable here and on the server
+         to keep track of if we are in a recieve transaction, a send transaction, a call transaction
+         or similar and we will simply lock the UI in between, check how we can do that quickly with CSS. Maybe we can just
+         have a top level property on the layout that we propagate with react.
+      */
     },
     register_message_panel: function (message_panel) {
       this.message_panel = message_panel;
+    },
+    register_layout: function (layout) {
+      this.layout = layout;
     },
     new_child_frame: function (parent_frame) {
       var frame = {
