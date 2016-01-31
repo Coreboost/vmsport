@@ -12,8 +12,16 @@ const Panel = React.createClass({
   },
   getInitialState: function () {
     return {
-      visible: true
+      visible: false
     };
+  },
+  activate: function() {
+    React.Children.forEach(function (comp) {
+      if (comp.activate) {
+        comp.activate();
+      }
+    });
+    this.setState({visible: true});
   },
   render: function () {
     var vp_name = this.props.definition.viewport;

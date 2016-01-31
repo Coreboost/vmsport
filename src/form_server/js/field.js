@@ -10,16 +10,19 @@ const Field = React.createClass({
   getInitialState: function () {
     this.data_item = this.props.context.get_data_item(this.props.definition.name);
     return {
-      field_value: this.data_item.value
+      field_value: this.data_item.value,
+      active: false
     };
+  },
+  activate: function () {
+    this.setState({ active: true });
+  },
+  deactivate: function () {
+    this.setState({ active: false });
   },
   handleChange: function (e) {
     this.data_item.value = e.target.value;
-    this.setState(
-      {
-        field_value: e.target.value
-      }
-    )
+    this.setState({ field_value: e.target.value });
   },
   render: function () {
     var field_style = {
@@ -35,7 +38,7 @@ const Field = React.createClass({
       fontSize: 20
     };
     return (
-      <input tabIndex="1" className="field" type="text" maxLength={this.data_item.definition.multiplicity} style={field_style} value={this.state.field_value} onChange={this.handleChange} />
+      <input tabIndex="1" className="field" type="text" maxLength={this.data_item.definition.multiplicity} style={field_style} value={this.state.field_value} disabled={!this.state.active} onChange={this.handleChange} />
     );
   },
 });
