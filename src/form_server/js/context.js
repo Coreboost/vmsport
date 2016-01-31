@@ -1,4 +1,5 @@
 const _ = require('lodash');
+const beep = require('./beep.js');
 
 const Context = function() {
   return {
@@ -10,6 +11,11 @@ const Context = function() {
       }, this);
       return this;
     },
+    clear_form_data: function () {
+      _.forOwn(this.form_data, function (data_item) {
+        data_item.value = null;
+      });
+    },
     get_data_item: function (item_name) {
       return this.form_data[item_name];
     },
@@ -19,6 +25,9 @@ const Context = function() {
     recieve_data: function (records) {
       console.log("Data recieved:");
       console.dir(records);
+    },
+    register_message_panel: function (message_panel) {
+      this.message_panel = message_panel;
     },
     new_child_frame: function (parent_frame) {
       var frame = {
@@ -116,7 +125,7 @@ const Context = function() {
         i_frame = i_frame.parent_frame;
       }
       if (fdef) {
-        (_.bind(fdef.behavior, widget))();
+        fdef.behavior(this, widget);
       } else {
         console.log("Function not found: " + function_name)
       }
@@ -131,11 +140,34 @@ const Context = function() {
         i_frame = i_frame.parent_frame;
       }
       if (hdef) {
-        (_.bind(hdef.behavior, widget))();
+        hdef.behavior(this, widget);
       } else {
         console.log("On-Key handler not found: " + handler_name)
       }
-    }
+    },
+    reset_all: function () {
+      this.clear_form_data();
+    },
+    display_message: function(message) {
+      if (this.message_panel) {
+        this.message_panel.display_message(message);
+      } else {
+        console.log("Could not display the following message as no message panel is registered.");
+        console.log("Message: " + message);
+      }
+    },
+    signal: function () {
+      beep();
+    },
+    position_to_panel: function () {
+      console.log("position_to_panel not implemented in context.js");
+    },
+    return_immediate: function () {
+      console.log("return_immediate not implemented in context.js");
+    },
+    remove_all: function () {
+      console.log("remove_all not implemented in context.js");
+    },
   };
 };
 

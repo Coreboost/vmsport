@@ -20,12 +20,14 @@ Notes about the generation of JavaScript/HTML/Backend
   F12/Backspace/Shift-tab -> Previous field  ** Not done/needed
   F10/Ctrl-Z -> Save and exit
 
+-
 - In the Decforms runtime everything is pretty much synchronous which of course is different
   from our websocket implementation which is more asynchronous in nature. For example, when
   a call to recieve is made from the application program a receive response for the particular
   record type will typically activate a panel and then expect the operator to terminate the data entry
   by pressing Ctrl-Z, i.e., in essence this could be translated to displaying an OK box, i.e., we could
-  see the panels as modal forms....
+  see the panels as modal forms.... Question is if we need some synch layer on top of web sockets like WAMP.
+  Should maybe look at this later on.
 - The lifecycle for a forms application goes like this:
   ENABLE - In the traditional case this corresponds to a call from the application program.
   In our case this is initiated by the server getting an "enable form" request over a web-socket. The server

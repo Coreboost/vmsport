@@ -3,11 +3,19 @@ const _ = require('lodash');
 
 const MessagePanel = React.createClass({
   componentWillMount: function () {
+    this.props.context.register_message_panel(this);
   },
   getInitialState: function () {
     return {
+      message: "Some message to appear here.",
       visible: true
     };
+  },
+  display_message: function (message) {
+    this.setState({message: message});
+  },
+  clear: function (message) {
+    this.display_message("");
   },
   render: function () {
     var vp_name = this.props.viewport_name;
@@ -27,7 +35,7 @@ const MessagePanel = React.createClass({
     };
     return (
       <div className="messagepanel" style={message_panel_style}>
-        Message panel...
+        {this.state.message}
       </div>
     );
   },
