@@ -3,12 +3,12 @@ const _ = require('lodash');
 const renderWidgets = require('./renderwidgets.js');
 const Icon = React.createClass({
   componentWillMount: function () {
-    this.my_frame = this.props.context.
+    this.frame = this.props.context.
                         new_child_frame(this.props.parentframe).
                         add_handlers(this.props.definition);
   },
   click_handler: function () {
-    this.props.context.invoke_on_key_handler("SELECT", this.my_frame);
+    this.props.context.invoke_on_key_handler(this, "SELECT");
   },
   render: function () {
     if (this.props.definition.text_literals.length === 1 && !this.props.definition.polyline_literals && this.props.definition.rectangle_literals.length === 1) {

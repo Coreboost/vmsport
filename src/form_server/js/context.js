@@ -106,9 +106,9 @@ const Context = function() {
       // This should be firec when the disable message is recieved from the server
       // we should then search for the on_disable handler if any and execute it if it exists
     },
-    invoke_function: function (function_name, frame) {
+    invoke_function: function (widget, function_name) {
       var fdef;
-      var i_frame = frame;
+      var i_frame = widget.frame;
       while (i_frame && !fdef) {
         fdef = _.find(i_frame.functions, function (fdef) {
           return fdef.name === function_name;
@@ -116,14 +116,14 @@ const Context = function() {
         i_frame = i_frame.parent_frame;
       }
       if (fdef) {
-        fdef.behavior();
+        (_.bind(fdef.behavior, widget))();
       } else {
         console.log("Function not found: " + function_name)
       }
     },
-    invoke_on_key_handler: function (handler_name, frame) {
+    invoke_on_key_handler: function (widget, handler_name) {
       var hdef;
-      var i_frame = frame;
+      var i_frame = widget.frame;
       while (i_frame && !hdef) {
         hdef = _.find(i_frame.on_key_handlers, function (hdef) {
           return hdef.name === handler_name;
@@ -131,7 +131,7 @@ const Context = function() {
         i_frame = i_frame.parent_frame;
       }
       if (hdef) {
-        hdef.behavior();
+        (_.bind(hdef.behavior, widget))();
       } else {
         console.log("On-Key handler not found: " + handler_name)
       }
