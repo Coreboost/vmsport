@@ -20,7 +20,18 @@ Notes about the generation of JavaScript/HTML/Backend
   F12/Backspace/Shift-tab -> Previous field  ** Not done/needed
   F10/Ctrl-Z -> Save and exit
 
-- Need to generate code for the lifecycle, something like this:
+- In the Decforms runtime everything is pretty much synchronous which of course is different
+  from our websocket implementation which is more asynchronous in nature. For example, when
+  a call to recieve is made from the application program a receive response for the particular
+  record type will typically activate a panel and then expect the operator to terminate the data entry
+  by pressing Ctrl-Z, i.e., in essence this could be translated to displaying an OK box, i.e., we could
+  see the panels as modal forms....
+- The lifecycle for a forms application goes like this:
+  ENABLE - In the traditional case this corresponds to a call from the application program.
+  In our case this is initiated by the server getting an "enable form" request over a web-socket. The server
+  then responds with emitting an "enable form" event that also carries the json-definition of the form in question.
+  SEND - Nothing special here I thing
+  RECEIVE: Execute the appropriate receive response, wait for Ctrl-Z and send the data to the server.
   - Navigate to a URL which corresponds to a particular form and initiate a session
   - The HTML and Javascript for the form is downloaded to the client, a websocket is setup-
   - Now the following actions can be taken:

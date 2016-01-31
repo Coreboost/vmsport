@@ -23,7 +23,7 @@
         ReactDOM.render(<FormManager forms={msg} socket={socket} />, document.getElementById('content'));
       });
 
-      socket.on('initialize form', function(form_data) {
+      socket.on('enable form', function(form_data) {
         ReactDOM.render(<Form definition={form_data} socket={socket} />, document.getElementById('content'));
       });
   });
