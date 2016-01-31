@@ -1,3 +1,5 @@
+const _ = require('lodash');
+
 const Context = function() {
   return {
     form_data: {},
@@ -93,7 +95,7 @@ const Context = function() {
       }
       return frame;
     },
-    handle_key_press: function(scan_code) {
+    handle_key_press: function(scan_code, frame) {
       // search the on_key_handlers if there is a match, return true if the key was handled, false otherwise.
     },
     handle_recieve: function(record_type, data) {
@@ -104,18 +106,35 @@ const Context = function() {
       // This should be firec when the disable message is recieved from the server
       // we should then search for the on_disable handler if any and execute it if it exists
     },
-    current_frame: function () {
-      return this.frames[this.frames.length-1];
-    },
-    call_function: function (function_name) {
-      var iframe;
+    invoke_function: function (function_name, frame) {
       var fdef;
-      for (iframe = frames.length-1; iframe >= 0; iframe -= 1) {
-        fdef = _.find(frames[iframe].functions, function (fdef) {
-          fdef.name === function_name;
+      var i_frame = frame;
+      while (i_frame && !fdef) {
+        fdef = _.find(i_frame.functions, function (fdef) {
+          return fdef.name === function_name;
         });
+        i_frame = i_frame.parent_frame;
       }
-      fdef.behavior();
+      if (fdef) {
+        fdef.behavior();
+      } else {
+        console.log("Function not found: " + function_name)
+      }
+    },
+    invoke_on_key_handler: function (handler_name, frame) {
+      var hdef;
+      var i_frame = frame;
+      while (i_frame && !hdef) {
+        hdef = _.find(i_frame.on_key_handlers, function (hdef) {
+          return hdef.name === handler_name;
+        });
+        i_frame = i_frame.parent_frame;
+      }
+      if (hdef) {
+        hdef.behavior();
+      } else {
+        console.log("On-Key handler not found: " + handler_name)
+      }
     }
   };
 };

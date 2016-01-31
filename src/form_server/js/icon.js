@@ -7,15 +7,8 @@ const Icon = React.createClass({
                         new_child_frame(this.props.parentframe).
                         add_handlers(this.props.definition);
   },
-  select_handler: function () {
-    var behavior = _.find(this.on_key_handlers, function (handler) {
-      return handler.name === "SELECT";
-    });
-    if (behavior) {
-      behavior.behavior();
-    } else {
-      throw "No SELECT handler defined for Icon.";
-    }
+  click_handler: function () {
+    this.props.context.invoke_on_key_handler("SELECT", this.my_frame);
   },
   render: function () {
     if (this.props.definition.text_literals.length === 1 && !this.props.definition.polyline_literals && this.props.definition.rectangle_literals.length === 1) {
@@ -37,7 +30,7 @@ const Icon = React.createClass({
             fontSize: 20
           };
       return (
-        <input tabIndex="1" className="icon" type="button" onClick={this.select_handler} style={button_style} value={caption} />
+        <input tabIndex="1" className="icon" type="button" onClick={this.click_handler} style={button_style} value={caption} />
       );
     } else {
       throw "Unsupported Icon format."
