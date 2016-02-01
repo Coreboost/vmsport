@@ -23,7 +23,7 @@ def load_form(sid, form_key):
                 form_definition_text = form_file.read()
                 form_definition = json.loads(form_definition_text)
                 sio.emit('enable form', form_definition, room=sid, namespace='/ifdl')
-                sio.emit('receive', {'name': 'HEADER_INFO_RECORD', 'data': {'EMPLOYEE_NAME': "Kalle Anka", 'LOCATION': "XYZ"}}, room=sid, namespace='/ifdl')
+                sio.emit('receive', 'HEADER_INFO_RECORD', room=sid, namespace='/ifdl')
 
 @sio.on('receive response', namespace='/ifdl')
 def receive_response(sid, data):

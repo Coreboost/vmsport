@@ -33,25 +33,19 @@ const Context = function() {
     fire_form_data_updated(key) {
       // Check out how I did this in coolgraphy
     },
-    receive_data: function (record) {
-      if (this.form_records[record.name]) {
-        var ctx = this;
-        _.forOwn(record.data, function (val, key) {
-          if (ctx.form_data[key]) {
-            ctx.form_data[key].value = _.cloneDeep(val);
-            ctx.fire_form_data_updated(key);
-          } else {
-            console.log("Record type " + record.name + " had an unknown member: " + key);
-          }
-        });
+    // Note the confused terminology receive means receive in the application, i.e.,
+    // we should gather up the data and send it back to the server
+    receive_data: function (record_name) {
+      // Maybe we should have a state variable here of some kind, i.e., pending receive or similar.
+      if (this.form_records[record_name]) {
         var handler = _.find(this.root_frame.on_receive_handlers, function (handler) {
-          return handler.record_type === record.name;
+          return handler.record_type === record_name;
         });
         if (handler) {
           handler.behavior(this);
         }
       } else {
-        console.log("Received unknown record type: " + record_name)
+        console.log("Received request for unknown record type: " + record_name)
       }
       /*
       What needs to be done next??
@@ -68,6 +62,23 @@ const Context = function() {
          or similar and we will simply lock the UI in between, check how we can do that quickly with CSS. Maybe we can just
          have a top level property on the layout that we propagate with react.
       */
+    },
+    // Note the confused terminology, send mean that the data was sent from the server
+    // i.e., it is really received herr.
+    send_data: function (record) {
+      if (this.form_records[record.name]) {
+        var ctx = this;
+        _.forOwn(record.data, function (val, key) {
+          if (ctx.form_data[key]) {
+            ctx.form_data[key].value = _.cloneDeep(val);
+            ctx.fire_form_data_updated(key);
+          } else {
+            console.log("Record type " + record.name + " had an unknown member: " + key);
+          }
+        });
+      } else {
+        console.log("Received unknown record type: " + record_name)
+      }
     },
     add_form_records: function (definition) {
       definition.form_records.forEach(function (record) {
