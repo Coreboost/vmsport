@@ -6,10 +6,11 @@ const Context = require('./context.js')
 const Form = React.createClass({
   componentWillMount: function () {
     var context = Context().
-                    add_form_data(this.props.definition);
+                    add_form_data(this.props.definition).
+                    add_form_records(this.props.definition);
     this.context = context;
-    this.props.socket.on('receive', function(record_name) {
-      context.receive_data(record_name);
+    this.props.socket.on('receive', function(data) {
+      context.receive_data(data);
     });
   },
   render: function () {

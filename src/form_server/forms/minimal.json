@@ -82,7 +82,7 @@
         }
       ],
       "on_disable_handler": "(function(context) {context.remove_all();})",
-      "on_recieve_handlers":[
+      "on_receive_handlers":[
         {
           "record_type": "HEADER_INFO_RECORD",
           "behavior": "(function(context) {context.activate_panel('HEADER_INFO_PANEL'); context.position_to_panel('HEADER_INFO_PANEL');})"

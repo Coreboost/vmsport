@@ -5,6 +5,7 @@ const Context = function() {
   return {
     layout: null,
     form_data: {},
+    form_records: {},
     root_frame: null,
     add_form_data: function (definition) {
       definition.form_data.forEach(function (data_item) {
@@ -23,8 +24,35 @@ const Context = function() {
     set_data_item: function (item_name, value) {
       this.form_data[item_name].value = value;
     },
-    receive_data: function (record_name) {
-      console.log("Start of receive data: " + record_name);
+    add_form_data_updated_listener(listener) {
+      // Check out how I did this in coolgraphy
+    },
+    remove_form_data_updated_listener(listener) {
+      // Check out how I did this in coolgraphy
+    },
+    fire_form_data_updated(key) {
+      // Check out how I did this in coolgraphy
+    },
+    receive_data: function (record) {
+      if (this.form_records[record.name]) {
+        var ctx = this;
+        _.forOwn(record.data, function (val, key) {
+          if (ctx.form_data[key]) {
+            ctx.form_data[key].value = _.cloneDeep(val);
+            ctx.fire_form_data_updated(key);
+          } else {
+            console.log("Record type " + record.name + " had an unknown member: " + key);
+          }
+        });
+        var handler = _.find(this.root_frame.on_receive_handlers, function (handler) {
+          return handler.record_type === record.name;
+        });
+        if (handler) {
+          handler.behavior(this);
+        }
+      } else {
+        console.log("Received unknown record type: " + record_name)
+      }
       /*
       What needs to be done next??
       ----------------------------
@@ -33,7 +61,6 @@ const Context = function() {
          The default action is to activate the items corresponding to The
          record specified in receive. ACTIVATE CORRESPONDING RECEIVE
          ACTIVATE PANEL NAME activates all fields on the panel.
-      1. For the top level frame, run the on_recieve_handler
       2. Then when TRANSMIT is send, i.e., Ctrl-Z, F10 I believe
       3. Then we should emit the Data
       4. Maybe we should have a very simple state variable here and on the server
@@ -41,6 +68,12 @@ const Context = function() {
          or similar and we will simply lock the UI in between, check how we can do that quickly with CSS. Maybe we can just
          have a top level property on the layout that we propagate with react.
       */
+    },
+    add_form_records: function (definition) {
+      definition.form_records.forEach(function (record) {
+        this.form_records[record.name] = _.cloneDeep(record);
+      }, this);
+      return this;
     },
     register_message_panel: function (message_panel) {
       this.message_panel = message_panel;
@@ -52,7 +85,7 @@ const Context = function() {
       var frame = {
         functions: [],
         on_key_handlers: [],
-        on_recieve_handlers: [],
+        on_receive_handlers: [],
         on_disable_handler: null,
         on_entry_handler: null,
         on_exit_handler: null,
@@ -82,12 +115,12 @@ const Context = function() {
               );
             }, this);
           }
-          if (definition.on_recieve_handlers) {
-            definition.on_recieve_handlers.forEach(function (handler) {
+          if (definition.on_receive_handlers) {
+            definition.on_receive_handlers.forEach(function (handler) {
               var fn = eval(handler.behavior);
-              this.on_recieve_handlers.push(
+              this.on_receive_handlers.push(
                 {
-                  name: handler.name,
+                  record_type: handler.record_type,
                   behavior: fn
                 }
               );
@@ -125,10 +158,6 @@ const Context = function() {
     },
     handle_key_press: function(scan_code, frame) {
       // search the on_key_handlers if there is a match, return true if the key was handled, false otherwise.
-    },
-    handle_recieve: function(record_type, data) {
-      // This should be fired when records are recieved from the server
-      // we should then search for the appropriate on_recieve_handler and execute it if found
     },
     handle_disable: function() {
       // This should be firec when the disable message is recieved from the server
@@ -186,6 +215,12 @@ const Context = function() {
     },
     remove_all: function () {
       console.log("remove_all not implemented in context.js");
+    },
+    activate_panel: function () {
+      console.log("activate_panel not implemented in context.js");
+    },
+    position_to_panel: function () {
+      console.log("position_to_panel not implemented in context.js");
     },
   };
 };
