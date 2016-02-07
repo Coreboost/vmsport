@@ -4,6 +4,7 @@ const beep = require('./beep.js');
 const Context = function() {
   return {
     layout: null,
+    panels: [],
     form_data: {},
     form_records: {},
     root_frame: null,
@@ -91,6 +92,9 @@ const Context = function() {
     },
     register_layout: function (layout) {
       this.layout = layout;
+    },
+    register_panel: function (panel) {
+      this.panels.push(panel);
     },
     new_child_frame: function (parent_frame) {
       var frame = {
@@ -227,10 +231,15 @@ const Context = function() {
     remove_all: function () {
       console.log("remove_all not implemented in context.js");
     },
-    activate_panel: function () {
-      console.log("activate_panel not implemented in context.js");
+    activate_panel: function (panel_name) {
+      var panel = _.find(this.panels, function (panel) {
+        return panel.props.definition.name === panel_name;
+      });
+      if (panel) {
+        panel.activate();
+      }
     },
-    position_to_panel: function () {
+    position_to_panel: function (panel_name) {
       console.log("position_to_panel not implemented in context.js");
     },
   };

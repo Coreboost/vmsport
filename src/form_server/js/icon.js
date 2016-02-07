@@ -7,6 +7,17 @@ const Icon = React.createClass({
                         new_child_frame(this.props.parentframe).
                         add_handlers(this.props.definition);
   },
+  getInitialState: function () {
+    return {
+      active: false
+    };
+  },
+  activate: function () {
+    this.setState({ active: true });
+  },
+  deactivate: function () {
+    this.setState({ active: false });
+  },
   click_handler: function () {
     this.props.context.invoke_on_key_handler(this, "SELECT");
   },
@@ -30,7 +41,7 @@ const Icon = React.createClass({
             fontSize: 20
           };
       return (
-        <input tabIndex="1" className="icon" type="button" onClick={this.click_handler} style={button_style} value={caption} />
+        <input tabIndex="1" className="icon" type="button" onClick={this.click_handler} disabled={!this.state.active} style={button_style} value={caption} />
       );
     } else {
       throw "Unsupported Icon format."

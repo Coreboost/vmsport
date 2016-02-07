@@ -9,6 +9,11 @@ const Panel = React.createClass({
     this.frame = this.props.context.
                         new_child_frame(this.props.parentframe).
                         add_handlers(this.props.definition);
+    this.props.context.register_panel(this);
+    this.activatable_children = [];
+  },
+  register_activatable_child: function (child) {
+    this.activatable_children.push(child);
   },
   getInitialState: function () {
     return {
@@ -16,12 +21,16 @@ const Panel = React.createClass({
     };
   },
   activate: function() {
-    React.Children.forEach(function (comp) {
-      if (comp.activate) {
-        comp.activate();
-      }
+    this.activatable_children.forEach(function (comp) {
+      comp.activate();
     });
     this.setState({visible: true});
+  },
+  deactivate: function() {
+    activatable_children.forEach(function (comp) {
+      comp.deactivate();
+    });
+    this.setState({visible: false});
   },
   render: function () {
     var vp_name = this.props.definition.viewport;
@@ -45,12 +54,12 @@ const Panel = React.createClass({
     var key = 1000;  // KSL: Not so nice but should be enough...
     this.props.definition.icons.forEach(function (ic_def) {
       widgets.push(
-        <Icon key={key++} definition={ic_def} context={this.props.context} parentframe={this.frame} />
+        <Icon ref={this.register_activatable_child} key={key++} definition={ic_def} context={this.props.context} parentframe={this.frame} />
       );
     }, this);
     this.props.definition.fields.forEach(function (fl_def) {
       widgets.push(
-        <Field key={key++} definition={fl_def} context={this.props.context} parentframe={this.frame} />
+        <Field ref={this.register_activatable_child} key={key++} definition={fl_def} context={this.props.context} parentframe={this.frame} />
       );
     }, this);
 
