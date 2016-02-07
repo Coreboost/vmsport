@@ -1,4 +1,5 @@
 const React = require('react');
+const ReactDOM = require('react-dom');
 const _ = require('lodash');
 const Icon = require('./icon.js');
 const Field = require('./field.js');
@@ -32,6 +33,11 @@ const Panel = React.createClass({
     });
     this.setState({visible: false});
   },
+  focus: function() {
+    if (this.activatable_children.length > 0) {
+      ReactDOM.findDOMNode(this.activatable_children[0]).focus();
+    }
+  },
   render: function () {
     var vp_name = this.props.definition.viewport;
     var vp = _.find(this.props.viewports, function (vps) {
@@ -52,14 +58,14 @@ const Panel = React.createClass({
                                 this.props.definition.polyline_literals,
                                 this.props.definition.rectangle_literals);
     var key = 1000;  // KSL: Not so nice but should be enough...
-    this.props.definition.icons.forEach(function (ic_def) {
-      widgets.push(
-        <Icon ref={this.register_activatable_child} key={key++} definition={ic_def} context={this.props.context} parentframe={this.frame} />
-      );
-    }, this);
     this.props.definition.fields.forEach(function (fl_def) {
       widgets.push(
         <Field ref={this.register_activatable_child} key={key++} definition={fl_def} context={this.props.context} parentframe={this.frame} />
+      );
+    }, this);
+    this.props.definition.icons.forEach(function (ic_def) {
+      widgets.push(
+        <Icon ref={this.register_activatable_child} key={key++} definition={ic_def} context={this.props.context} parentframe={this.frame} />
       );
     }, this);
 

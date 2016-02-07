@@ -240,7 +240,12 @@ const Context = function() {
       }
     },
     position_to_panel: function (panel_name) {
-      console.log("position_to_panel not implemented in context.js");
+      var panel = _.find(this.panels, function (panel) {
+        return panel.props.definition.name === panel_name;
+      });
+      if (panel) {
+        panel.focus();
+      }
     },
   };
 };
