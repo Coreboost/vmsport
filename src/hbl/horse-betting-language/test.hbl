@@ -11,17 +11,14 @@ be types exactly as they are shown below
 -------------------------------------------------------------------------------
 -- There are also single line comments that are introduces with a double hyphen.
 
-
-
-
 Accounts:
   AA1      : 100,
   AA2      : 400,
-  AA[4-10] : 600.
+  AA[4-10] : 600.  -- Genereate 7 accounts AA4, AA5...AA10 with 600 in funds.
 
 Horses:
-  HH1   : 1,
-  HH2   : 3,
+  HH1   : 1,  -- The number is the relative ranking, if two horses have the same
+  HH2   : 3,  -- rank then the start numer in the race will be uses as rank.
   HH3   : 5.
 
 Tracks:
@@ -30,8 +27,20 @@ Tracks:
   "Bergsåker".  -- If the name of the track contains spaces they must be quoted, otherwise quoting is optional.
 
 Races:
-  
+  Solvalla 2016-02-01 16:00
+  V5: 1, 2, 3, 4, 5.
+  Leg 1: HH1, HH2, HH3.
+  Leg 2:
+    (3, 4),
+    1,
+    2,
+    3,
+  Leg 3:
+
 RaceDays:
+  Bets:
+
+
 
 using
 -- Two hyphens makes the rest of the line a comment.
