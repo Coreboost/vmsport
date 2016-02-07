@@ -1,0 +1,43 @@
+-------------------------------------------------------------------------------
+This is an example of what it looks like to define a test case in the Horse
+Beetting Language.
+
+A multiline comment, like this one, can be inserted by having at least three
+hyphens on a line. Note that you cannot have anything before or after the
+hyphens.
+
+Keywords, lile Accounts:, Horses: and so on are casew sensitive and must
+be types exactly as they are shown below
+-------------------------------------------------------------------------------
+-- There are also single line comments that are introduces with a double hyphen.
+
+
+
+
+Accounts:
+  AA1      : 100,
+  AA2      : 400,
+  AA[4-10] : 600.
+
+Horses:
+  HH1   : 1,
+  HH2   : 3,
+  HH3   : 5.
+
+Tracks:
+  Solvalla,
+  Åby,
+  "Bergsåker".  -- If the name of the track contains spaces they must be quoted, otherwise quoting is optional.
+
+Races:
+  
+RaceDays:
+
+using
+-- Two hyphens makes the rest of the line a comment.
+
+
+
+// sdsdsdasd
+/*
+*/s
