@@ -6,6 +6,12 @@ const Field = React.createClass({
     this.frame = this.props.context.
                         new_child_frame(this.props.parentframe).
                         add_handlers(this.props.definition);
+    this.props.context.register_data_changed_listener(this.on_data_changed);
+  },
+  on_data_changed: function () {
+    if (this.data_item.value !== this.state.field_value) {
+      this.setState({field_value: this.data_item.value});
+    }
   },
   getInitialState: function () {
     this.data_item = this.props.context.get_data_item(this.props.definition.name);

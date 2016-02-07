@@ -5,6 +5,7 @@ const Context = function() {
   return {
     layout: null,
     panels: [],
+    data_changed_listeners: [],
     form_data: {},
     form_records: {},
     root_frame: null,
@@ -18,20 +19,22 @@ const Context = function() {
       _.forOwn(this.form_data, function (data_item) {
         data_item.value = null;
       });
+      this.fire_data_changed();
     },
     get_data_item: function (item_name) {
       return this.form_data[item_name];
     },
     set_data_item: function (item_name, value) {
       this.form_data[item_name].value = value;
+      this.fire_data_changed();
     },
-    add_form_data_updated_listener(listener) {
-      // Check out how I did this in coolgraphy
+    register_data_changed_listener(listener) {
+      this.data_changed_listeners.push(listener);
     },
-    remove_form_data_updated_listener(listener) {
-      // Check out how I did this in coolgraphy
-    },
-    fire_form_data_updated(key) {
+    fire_data_changed() {
+      this.data_changed_listeners.forEach(function (listener) {
+        listener();
+      });
       // Check out how I did this in coolgraphy
     },
     // Note the confused terminology receive means receive in the application, i.e.,

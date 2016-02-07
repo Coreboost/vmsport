@@ -74,7 +74,7 @@
       "functions": [
         {
           "name": "f_RESET_DATA",
-          "behavior": "(function(context, widget) {context.reset_all(); context.display_message('Data discarded.'); context.signal(); context.position_to_panel('TRIPS_INFO_PANEL');})"
+          "behavior": "(function(context, widget) {context.reset_all(); context.display_message('Data discarded.'); context.signal(); context.position_to_panel('HEADER_INFO_PANEL');})"
         },
         {
           "name": "f_RECORD_DATA",
