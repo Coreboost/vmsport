@@ -1,14 +1,6 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
-
-#
-#  ** Add installation of Gfortran sudo apt-get install gfortran
-#
-
-
 Vagrant.configure(2) do |config|
-  # Every Vagrant development environment requires a box. You can search for
-  # boxes at https://atlas.hashicorp.com/search.
   config.vm.box = "artem-sidorenko/mint-17.3-cinnamon"
   config.vm.network "forwarded_port", guest: 80, host: 8080
   config.vm.network "private_network", ip: "192.168.33.10"
@@ -16,7 +8,7 @@ Vagrant.configure(2) do |config|
 #  config.vm.synced_folder "./", "/home/vagrant/vmsport"
 
   config.vm.provider "virtualbox" do |vb|
-    vb.name ="openvms"
+    vb.name ="atg-svante"
     vb.gui = true
     vb.memory = "2048"
     vb.cpus = 2
@@ -24,9 +16,9 @@ Vagrant.configure(2) do |config|
     vb.customize ["modifyvm", :id, "--accelerate3d", "on"]
   end
 
-  config.proxy.http     = ENV['http_proxy']
-  config.proxy.https    = ENV['https_proxy']
-  config.proxy.no_proxy = "localhost,127.0.0.1,*.atg.se"
+#  config.proxy.http     = ENV['http_proxy']
+#  config.proxy.https    = ENV['https_proxy']
+#  config.proxy.no_proxy = "localhost,127.0.0.1,*.atg.se"
 
   config.vm.provision "shell", inline: <<-SHELL
     apt-get update
@@ -34,27 +26,27 @@ Vagrant.configure(2) do |config|
     apt-get install -y curl
     apt-get install -y git
     apt-get install -y gfortran
-#    curl -sL https://deb.nodesource.com/setup_4.x | bash -
-#    apt-get install -y nodejs
+    curl -sL https://deb.nodesource.com/setup_4.x | bash -
+    apt-get install -y nodejs
     apt-get install -y build-essential
-#    npm install -g gulp
+    npm install -g gulp
     apt-get install -y python-dev
     apt-get install -y python-pip
     pip install virtualenv
-#    pip install flask
-#    pip install flask-login
-#    pip install flask-openid
-#    pip install python-socketio
+    pip install flask
+    pip install flask-login
+    pip install flask-openid
+    pip install python-socketio
     pip install 'git+https://github.com/mk-fg/yapps.git#egg=yapps'
-#    curl --fail --silent --show-error https://storage.googleapis.com/golang/go1.5.2.linux-amd64.tar.gz | tar -C /usr/local -xzf -
-#    sudo sed -i '$a export PATH=$PATH:/usr/local/go/bin' /etc/profile
+    curl --fail --silent --show-error https://storage.googleapis.com/golang/go1.5.2.linux-amd64.tar.gz | tar -C /usr/local -xzf -
+    sudo sed -i '$a export PATH=$PATH:/usr/local/go/bin' /etc/profile
     apt-get install -y libtool
     apt-get install -y build-essential
     apt-get install -y autoconf
     apt-get install -y automake
     curl --fail --silent --show-error https://download.libsodium.org/libsodium/releases/libsodium-1.0.7.tar.gz | tar -C . -xzf -
-    cd libsodium-1.0.7
-    ./configure
+   cd libsodium-1.0.7
+   ./configure
     make
     make install
     cd ..
