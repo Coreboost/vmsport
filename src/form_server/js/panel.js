@@ -22,15 +22,21 @@ const Panel = React.createClass({
     };
   },
   activate: function() {
+    this.setState({visible: true});
+    if (this.frame.on_entry) {
+      this.frame.on_entry(this.props.context, this);
+    }
     this.activatable_children.forEach(function (comp) {
       comp.activate();
     });
-    this.setState({visible: true});
   },
   deactivate: function() {
     activatable_children.forEach(function (comp) {
       comp.deactivate();
     });
+    if (this.frame.on_exit) {
+      this.frame.on_exit(this.props.context, this);
+    }
     this.setState({visible: false});
   },
   focus: function() {

@@ -42,7 +42,7 @@ const Context = function() {
     receive_data: function (record_name) {
       // Maybe we should have a state variable here of some kind, i.e., pending receive or similar.
       if (this.form_records[record_name]) {
-        var handler = _.find(this.root_frame.on_receive_handlers, function (handler) {
+        var handler = _.find(this.root_frame.on_receive, function (handler) {
           return handler.record_type === record_name;
         });
         if (handler) {
@@ -102,11 +102,11 @@ const Context = function() {
     new_child_frame: function (parent_frame) {
       var frame = {
         functions: [],
-        on_key_handlers: [],
-        on_receive_handlers: [],
-        on_disable_handler: null,
-        on_entry_handler: null,
-        on_exit_handler: null,
+        on_key: [],
+        on_receive: [],
+        on_disable: null,
+        on_entry: null,
+        on_exit: null,
         key_bindings: [],
         child_frames: [],
         parent_frame: parent_frame,
@@ -122,10 +122,10 @@ const Context = function() {
               );
             }, this);
           }
-          if (definition.on_key_handlers) {
-            definition.on_key_handlers.forEach(function (handler) {
+          if (definition.on_key) {
+            definition.on_key.forEach(function (handler) {
               var fn = eval(handler.behavior);
-              this.on_key_handlers.push(
+              this.on_key.push(
                 {
                   name: handler.name,
                   behavior: fn
@@ -133,10 +133,10 @@ const Context = function() {
               );
             }, this);
           }
-          if (definition.on_receive_handlers) {
-            definition.on_receive_handlers.forEach(function (handler) {
+          if (definition.on_receive) {
+            definition.on_receive.forEach(function (handler) {
               var fn = eval(handler.behavior);
-              this.on_receive_handlers.push(
+              this.on_receive.push(
                 {
                   record_type: handler.record_type,
                   behavior: fn
@@ -144,14 +144,14 @@ const Context = function() {
               );
             }, this);
           }
-          if (definition.on_disable_handler) {
-            this.on_disable_handler = eval(definition.on_disable_handler);
+          if (definition.on_disable) {
+            this.on_disable = eval(definition.on_disable);
           }
-          if (definition.on_entry_handler) {
-            this.on_entry_handler = eval(definition.on_entry_handler);
+          if (definition.on_entry) {
+            this.on_entry = eval(definition.on_entry);
           }
-          if (definition.on_exit_handler) {
-            this.on_exit_handler = eval(definition.on_exit_handler);
+          if (definition.on_exit) {
+            this.on_exit = eval(definition.on_exit);
           }
           if (definition.key_bindings) {
             definition.key_bindings.forEach(function (binding) {
@@ -196,11 +196,11 @@ const Context = function() {
         console.log("Function not found: " + function_name)
       }
     },
-    invoke_on_key_handler: function (widget, handler_name) {
+    invoke_on_key: function (widget, handler_name) {
       var hdef;
       var i_frame = widget.frame;
       while (i_frame && !hdef) {
-        hdef = _.find(i_frame.on_key_handlers, function (hdef) {
+        hdef = _.find(i_frame.on_key, function (hdef) {
           return hdef.name === handler_name;
         });
         i_frame = i_frame.parent_frame;

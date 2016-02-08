@@ -81,14 +81,14 @@
           "behavior": "(function(context, widget) {context.display_message('Data recieved. Program exiting.'); context.signal(); context.return_immediate();})"
         }
       ],
-      "on_disable_handler": "(function(context) {context.remove_all();})",
-      "on_receive_handlers":[
+      "on_disable": "(function(context) {context.remove_all();})",
+      "on_receive":[
         {
           "record_type": "HEADER_INFO_RECORD",
           "behavior": "(function(context) {context.activate_panel('HEADER_INFO_PANEL'); context.position_to_panel('HEADER_INFO_PANEL');})"
         }
       ],
-      "on_key_handlers": [
+      "on_key": [
         {
           "name": "DISCARD",
           "behavior": "(function(context, widget) {context.invoke_function(widget, 'f_RESET_DATA');})"
@@ -101,9 +101,9 @@
         {
           "name": "HEADER_INFO_PANEL",
           "viewport": "MAIN_VIEWPORT",
-          "on_entry": "function(context, widget) {context.display_message('Press Help for information on how to use this application.')}",
-          "on_exit": "function(context, widget) {context.display_message('Displaying next screen...')}",
-          "on_key_handlers": [
+          "on_entry": "(function(context, widget) {context.display_message('Press Help for information on how to use this application.');})",
+          "on_exit": "(function(context, widget) {context.display_message('Displaying next screen...');})",
+          "on_key": [
             {
               "name": "TRANSMIT",
               "behavior": "(function(context, widget) {context.invoke_function(widget, 'f_RECORD_DATA');})"
@@ -156,7 +156,7 @@
           "icons": [
             {
               "name": "DISCARD_DATA",
-              "on_key_handlers": [
+              "on_key": [
                 {
                   "name": "SELECT",
                   "behavior": "(function(context, widget) {context.invoke_function(widget, 'f_RESET_DATA');})"
@@ -184,7 +184,7 @@
             },
             {
               "name": "RECORD_AND_EXIT",
-              "on_key_handlers": [
+              "on_key": [
                 {
                   "name": "SELECT",
                   "behavior": "(function(context, widget) {context.invoke_function(widget, 'f_UPDATE_TOTALS'); context.invoke_function(widget, 'f_RECORD_DATA');})"
