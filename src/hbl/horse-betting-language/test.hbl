@@ -105,10 +105,10 @@ Races:
   Solvalla 2016-02-01 16:00
   V5: 1, 2, 3, 4, 5.
   Leg 1: HH1, HH2, HH3.
-  Leg 3:
+  Leg 2:
 
 RaceDays:
-  Bets:
+  Bet:
   Leg 2:
     (3, 4),
     1,
