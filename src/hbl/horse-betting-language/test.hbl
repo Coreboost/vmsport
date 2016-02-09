@@ -1,52 +1,118 @@
 -------------------------------------------------------------------------------
-This is an example of what it looks like to define a test case in the Horse
-Beetting Language.
 
-A multiline comment, like this one, can be inserted by having at least three
+               Introducing HBL, the Horse Betting Language
+               ===========================================
+The Horse Betting Language is a proposed language for defining executable test
+specifications for the betting system. This file is both a description of HBL
+and an example of what a test specification written in HBL can look like.
+
+A multi-line comment, like this one, can be inserted by having at least three
 hyphens on a line. Note that you cannot have anything before or after the
-hyphens.
-
-Keywords, lile Accounts:, Horses: and so on are casew sensitive and must
-be types exactly as they are shown below
+hyphens. Note the full line with hyphens that is before and after the text you
+currently are reading. That is what makes this a comment.
 -------------------------------------------------------------------------------
--- There are also single line comments that are introduces with a double hyphen.
+
+-- In addition to multi-line comments you can have single line comments that
+-- last through the end of the line. Single line comments can start anywhere on
+-- the line, i.e., you can have keywords, definitions or similar in the
+-- beginning of the line followed by a comment.
+
+------------------------------------------------------------------------------
+
+                           Concepts
+                           ========
+There are a number of concepts that are supported directly in HBL that allows
+you to, in a compact and a for the domain natural way, define test data and test
+scenarios. The following are the most important concepts in HBL.
+
+Accounts
+Defines betting accounts that can be used to place bets and the funds available
+for betting.
+
+Horses
+Defines identity of horses that can race. A rank can optionally be defined for a
+horse which is used in the lack of reserves selected by the better.
+
+Tracks
+Defines what tracks exists.
+
+Race calendar
+Defines the racing calendar, i.e., which races that will take place at which
+tracks, the number of legs, horses in each race and how different types of
+betting pools are mapped to the different races.
+
+Race days
+Defines, for a particular race day, what bets that are made, and what the
+results where for each leg. You can also define checks, i.e., this Defines
+whether a particular test passes or fails. Bets and results will be applied in
+strict order but you cannot specify, for example, the exact time a bet is made
+nor the specific time that a result becomes official. You can, however mix Bets,
+Results, and Checks freely. Any bet that is made at an illegal point in time
+(i.e. a bet on V5 after the first leg) is caught by the HBL validator.
+
+Note that the order is significant in that you always must structure things in
+the order Accounts, Horses, Tracks, Race calendar, Race days
+
+              Structuring your test specification with Include
+              ================================================
+Typically when you write test specifications you will find that you want to
+use the same accounts, same horses and so on in different test specifications.
+To help with this you can put, for example, your account definitions in a
+separate file and include them in different test specificiations with the
+Include directive.
+
+It looks like this:
+Include: <path_name>
+
+<path_name> is the relative path to the included file starting from the location
+of the current file. If the path contains spaces it needs to be enclosed in
+double(") or single quoutes (').
+
+                               Lists
+                               =====
+When you create a test specification in HBL you will often find that you specify
+a list of some kind. Examples of this include listing the accounts eligible for
+betting, listing the legs in a particular race, listing the results in a race
+and so on.
+
+All lists have a similar form in HBL. The list starts out with a keyword
+followed by a colon(:). After the initial keyword follows a list of items.
+List items are separated by commas and a period ends the list.
+
+Example: when defining a race day you Would define that legs 2, 3, and 4
+constitutes a V3 on that particular race day.
+V3: 2, 3, 4.
+
+Below follows a few examples of how you use the Horse Betting Language.
+------------------------------------------------------------------------------
 
 Accounts:
-  AA1      : 100,
+  AA1      : 100,  -- Create 1 account AA1 with 100 in funds.
   AA2      : 400,
-  AA[4-10] : 600.  -- Genereate 7 accounts AA4, AA5...AA10 with 600 in funds.
+  AA[4-10] : 600.  -- Create 7 accounts AA4, AA5...AA10 with 600 in funds.
 
 Horses:
   HH1   : 1,  -- The number is the relative ranking, if two horses have the same
-  HH2   : 3,  -- rank then the start numer in the race will be uses as rank.
-  HH3   : 5.
+  HH2   : 3,  -- rank then the start number in the race will be used as their
+  HH3   : 5.  -- relative rank.
 
 Tracks:
-  Solvalla,
-  Åby,
-  "Bergsåker".  -- If the name of the track contains spaces they must be quoted, otherwise quoting is optional.
+  Solvalla,   -- If the name of the track contains spaces they must be quoted
+  "Åby",      -- otherwise quoting is optional.
+  Bergsåker.
 
 Races:
   Solvalla 2016-02-01 16:00
   V5: 1, 2, 3, 4, 5.
   Leg 1: HH1, HH2, HH3.
+  Leg 3:
+
+RaceDays:
+  Bets:
   Leg 2:
     (3, 4),
     1,
     2,
     3,
-  Leg 3:
 
-RaceDays:
-  Bets:
-
-
-
-using
--- Two hyphens makes the rest of the line a comment.
-
-
-
-// sdsdsdasd
-/*
-*/s
+-- End of example
