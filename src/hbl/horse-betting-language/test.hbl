@@ -101,14 +101,160 @@ Tracks:
   "Åby",      -- otherwise quoting is optional.
   Bergsåker.
 
-Races:
-  Solvalla 2016-02-01 16:00
-  V5: 1, 2, 3, 4, 5.
+Race: Solvalla 2016-02-01
+  Tvilling: 2.
+  Trio:     1.
+  DD:       1, 2.
+  V3:       3, 4, 5.
+  V5:       1, 2, 3, 4, 5.
+  V64:      1, 2, 3, 4, 5, 6.
+  V65:      1, 2, 3, 4, 5, 6.
+  V75:      1, 2, 3, 4, 5, 6, 7.
+  V86:      1, 2, 3, 4, 5, 6, 7, 8.
+
   Leg 1: HH1, HH2, HH3.
   Leg 2:
 
-RaceDays:
-  Bet:
+RaceDay: Solvalla 2016-02-01
+
+--------------------------------------------------------------------------------
+                                Double
+Below is an example of making a bet on DD. DDB1 is the id of the bet and must be
+a unique string, if the id contains blanks it must be enclosed in double quotes.
+10 is the bet amount per combination.
+
+You can then, optionally, specify that the bet is tied to a particular account.
+If no account is specified then it is a traditional cash bet with a receipt that
+is independent of any account.
+
+Finally you specify the selected horses for each of the legs in the DD.
+--------------------------------------------------------------------------------
+  Bet DD: DDB1, 10.
+    Account: AA1.
+    DD-1: 2, 3.
+    DD-2: 3, 4.
+
+--------------------------------------------------------------------------------
+                           Double Fortuna
+Below is an example of making a Fortuna bet on DD. This is similar to a regular
+DD with the following differences:
+* Instead of a bet amount per combination, you specify the total maximum amount
+  for the bet.
+* For each leg you can either:
+  * let Fortuna select the horses, in this case you simply leave the leg out
+    in the specification.
+  * Specify all horses yourself, in this case you simply list the numbers.
+  * Specify some horses but allow Fortuna to add additional horses for the leg.
+    in this case you add an A to the end of the list of horses.
+--------------------------------------------------------------------------------
+  Bet DD: DDB2, Fortuna 100.
+    DD-1: 2, 3.
+    DD-2: 3 A.
+
+
+
+--------------------------------------------------------------------------------
+                                V3
+Below is an example of making a bet on V3. V3B1 is the id of the bet and must be
+a unque string, if the id contains blanks it must be enclosed in double quotes.
+X2 is the size of the bet, i.e., the coupons in this case. Valid values are X1,
+X2, X3, X4, X5, X10, X50, or X100. If you omit the size it will defaults to X1
+
+You can then, optionally, specify that the bet is tied to a particular account.
+If no account is specified then it is a traditional cash bet with a receipt that
+is independent of any account.
+
+Finally you specify the selected horses for each of the legs in the V3.
+--------------------------------------------------------------------------------
+  Bet V3: V3B1, X2.
+    Account: AA1.     -- The bet should be tied to the account AA1.
+    V3-1: 2, 3.      -- Select horses 2 and 3 for this leg
+    V3-2: 1.
+    V3-3: 1.
+
+--------------------------------------------------------------------------------
+                                 V4
+A V4 bet is specified in much the same way as a V3 bet. The difference, in
+addition to covering four legs instead of 3, is that you for each leg can
+specify up to two reserves for each leg. For each leg you first list the
+primary horses and then preceeded by an R you list the reserves.
+--------------------------------------------------------------------------------
+  Bet V4: V4B1, X2.
+    V4-1: 2, 3 R 4, 5.
+    V4-2: 1 R 2, 3.
+    V4-3: 1 R 2, 3.
+    V4-4: 2, 3 R 6, 7.
+--------------------------------------------------------------------------------
+                              V4 Fortuna
+You can also specify a Fortuna V4. This is similar to a regular V4 with the
+following differences:
+* You cannot specify a multiplier (X2, X3 and so on) for Fortuna bet.
+* You must specify an amount for the Fortuna bet.
+* You cannot specify reserves.
+* For each leg you can either:
+  * let Fortuna select the horses, in this case you simply leave the leg out
+    in the specification.
+  * Specify all horses yourself, in this case you simply list the numbers.
+  * Specify some horses but allow Fortuna to add additional horses for the leg.
+    in this case you add an A to the end of the list of horses.
+--------------------------------------------------------------------------------
+  Bet V4: V4B2, Fortuna 50.
+    V4-1: 2.
+    V4-4: 3 A.
+
+--------------------------------------------------------------------------------
+                                V5
+A V5 bet is specified in the same way as a V4 bet with the obvious difference
+that there also is a fifth leg.
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+                            V5 Fortuna
+A V5 Fortuba bet is specified in the same way as a V4 bet with the obvious
+difference that there also is a fifth leg.
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+                                  V64
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+                                  V65
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+                                  V75
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+                                  V86
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+                                 Win
+*** PLACE THIS AND THE FOLLOWING FIRST
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+                                Place
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+                                Twin
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+                                Combo
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+                                Triple
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+                                Rocket
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+                                Lucky 7
+--------------------------------------------------------------------------------
+
+  Check Odds:
+  Check Coupon
+  Check Dividends
   Leg 2:
     (3, 4),
     1,

@@ -60,7 +60,7 @@
     'name': 'comment.line.double-hyphen.hbl'
   }
   {
-    'match': '^\\s*(Accounts|Horses|Tracks|Races|RaceDays):'
+    'match': '^\\s*(Accounts|Horses|Tracks|Race|RaceDay|Leg|Bet|V3):'
     'name': 'keyword.declarations.hbl'
   }
   {
