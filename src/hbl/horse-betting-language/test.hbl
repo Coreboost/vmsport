@@ -151,8 +151,6 @@ DD with the following differences:
     DD-1: 2, 3.
     DD-2: 3 A.
 
-
-
 --------------------------------------------------------------------------------
                                 V3
 Below is an example of making a bet on V3. V3B1 is the id of the bet and must be
@@ -207,19 +205,47 @@ following differences:
 A V5 bet is specified in the same way as a V4 bet with the obvious difference
 that there also is a fifth leg.
 --------------------------------------------------------------------------------
+-- No example provided, see V4 above instead.
+
 --------------------------------------------------------------------------------
                             V5 Fortuna
-A V5 Fortuba bet is specified in the same way as a V4 bet with the obvious
+A V5 Fortuna bet is specified in the same way as a V4 bet with the obvious
 difference that there also is a fifth leg.
 --------------------------------------------------------------------------------
+-- No example provided, see V4 Fortuna above instead.
 
 --------------------------------------------------------------------------------
                                   V64
+A V64 bet is specified in the same way as a V4 bet with the following
+differences:
+* There are 6 legs instead of 4
+* You cannot specify a multiplier (X1, X2, and so on)
+--------------------------------------------------------------------------------
+  Bet V64: V64B1.
+    Account AA2.
+    V64-1: 2, 3 R 4, 5.
+    V64-2: 1 R 2, 3.
+    V64-3: 1 R 2, 3.
+    V64-4: 2, 3 R 6, 7.
+    V64-5: 2, 3 R 6, 7.
+    V64-6: 2, 3 R 6, 7.
+
+--------------------------------------------------------------------------------
+                            V64 Fortuna
+A V64 Fortuna bet is specified in the same way as a V4 bet with the following
+difference:
+* There are 6 legs instead of 4
+--------------------------------------------------------------------------------
+-- No example provided, see V4 Fortuna above instead.
+
+--------------------------------------------------------------------------------
+                                  V65
 --------------------------------------------------------------------------------
 
 --------------------------------------------------------------------------------
                                   V65
 --------------------------------------------------------------------------------
+
 
 --------------------------------------------------------------------------------
                                   V75
