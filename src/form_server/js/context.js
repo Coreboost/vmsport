@@ -158,7 +158,7 @@ const Context = function() {
               this.key_bindings.push(
                 {
                   key: binding.key,
-                  scan_code: binding.scan_code,
+                  key_code: binding.key_code,
                   handler: binding.handler
                 }
               );
@@ -174,8 +174,19 @@ const Context = function() {
       }
       return frame;
     },
-    handle_key_press: function(scan_code, frame) {
-      // search the on_key_handlers if there is a match, return true if the key was handled, false otherwise.
+    handle_key_up: function(e, widget) {
+      var hdef;
+      var i_frame = widget.frame;
+      while (i_frame && !hdef) {
+        hdef = _.find(i_frame.key_bindings, function (hdef) {
+          return hdef.key_code === e.keyCode;
+        });
+        i_frame = i_frame.parent_frame;
+      }
+      if (hdef) {
+        this.invoke_on_key(widget, hdef.handler);
+        e.preventDefault();
+      }
     },
     handle_disable: function() {
       // This should be firec when the disable message is recieved from the server

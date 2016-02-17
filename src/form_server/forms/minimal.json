@@ -61,13 +61,13 @@
       ],
       "key_bindings" : [
         {
-          "key": "F8",
-          "scan_code": 119,
+          "key": "F7",
+          "key_code": 118,
           "handler": "DISCARD"
         },
         {
           "key": "%KP_PERIOD",
-          "scan_code": 110,
+          "key_code": 110,
           "handler": "SELECT"
         }
       ],
