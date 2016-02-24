@@ -1,0 +1,32 @@
+options {
+  STATIC = false;
+}
+PARSER_BEGIN(Hbl)
+  class Hbl {
+    public static void main( String[] args ) throws ParseException, TokenMgrError {
+      Hbl parser = new Hbl( System.in );
+      parser.Start() ;
+    }
+  }
+PARSER_END(Hbl)
+
+SKIP : { " " }
+SKIP : { "\n" | "\r" | "\r\n" }
+TOKEN : { < PERIOD : "." > }
+TOKEN : { < COMMA : "," > }
+TOKEN : { < COLON : ":" > }
+TOKEN : { < NUMBER : (["0"-"9"])+ > }
+TOKEN : { < ACCOUNTS : "Accounts:" > }
+TOKEN : { < IDENTIFIER : (["A"-"Z"])+ > }
+
+void Start() :
+{}
+{
+  <ACCOUNTS>
+  <IDENTIFIER> <COLON> <NUMBER>
+  (
+  <COMMA> <IDENTIFIER> <COLON> <NUMBER>
+  )*
+  <PERIOD>
+<EOF>
+}
