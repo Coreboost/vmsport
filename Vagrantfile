@@ -39,6 +39,8 @@ Vagrant.configure(2) do |config|
     update-alternatives --set java /opt/java/jdk1.8.0_73/bin/java
     update-alternatives --install '/usr/bin/javac' 'java' '/opt/java/jdk1.8.0_73/bin/javac' 1
     update-alternatives --set javac /opt/java/jdk1.8.0_73/bin/javac
+    curl https://java.net/downloads/javacc/javacc-6.0.zip > javacc.zip
+    unzip javacc.zip
     curl -sL https://deb.nodesource.com/setup_4.x | bash -
     apt-get install -y nodejs
     npm config set proxy $HTTP_PROXY
