@@ -2,10 +2,19 @@ options {
   STATIC = false;
 }
 PARSER_BEGIN(Hbl)
-  class Hbl {
-    public static void main( String[] args ) throws ParseException, TokenMgrError {
+  public class Hbl {
+    public static void main( String[] args ) {
+      System.out.println("Reading from standard input...");
       Hbl parser = new Hbl( System.in );
-      parser.Start() ;
+      try {
+        SimpleNode node = parser.Start();
+        node.dump("");
+        System.out.println("Thank you.");
+      } catch (Exception e) {
+        System.out.println("Oops.");
+        System.out.println(e.getMessage());
+        e.printStackTrace();
+      }
     }
   }
 PARSER_END(Hbl)
@@ -40,115 +49,98 @@ TOKEN : { < V75 : "V75:" > }
 TOKEN : { < IDENTIFIER : (["A"-"Z", "a"-"z", "_"])(["A"-"Z", "a"-"z", "0"-"9", "_"])* > }
 TOKEN : { < STRING_LITERAL : ("\"")(~["\""])*("\"") > }
 
-void Start() :
-{}
+SimpleNode Start() : {}
 {
-(Accounts() | Horses() | Tracks() | Include())*
-(Meeting())*
-<EOF>
+  (Accounts() | Horses() | Tracks() | Include())*
+  (Meeting())*
+  <EOF>
+  { return jjtThis; }
 }
 
-void Name() :
-{}
+void Name()  #void : {}
 {
   <IDENTIFIER>|<STRING_LITERAL>
 }
 
-void Include() :
-{}
+void Include() : {}
 {
   <INCLUDE> <STRING_LITERAL>
 }
 
-void AccountSpec() :
-{}
+void AccountSpec() : {}
 {
   Name() <COLON> <NUMBER>
 }
 
-void Accounts() :
-{}
+void Accounts() : {}
 {
   <ACCOUNTS>
   AccountSpec() (<COMMA> AccountSpec())*<PERIOD>
 }
 
-void HorseSpec() :
-{}
+void HorseSpec() : {}
 {
   Name() <COLON> <NUMBER>
 }
 
-void Horses() :
-{}
+void Horses() : {}
 {
   <HORSES>
   HorseSpec()(<COMMA> HorseSpec())*<PERIOD>
 }
 
-void TrackSpec() :
-{}
+void TrackSpec() : {}
 {
   Name()
 }
 
-void Tracks() :
-{}
+void Tracks() : {}
 {
   <TRACKS>
   TrackSpec()(<COMMA> TrackSpec())*<PERIOD>
 }
 
-void Date() :
-{}
+void Date() #void : {}
 {
   <NUMBER><DASH><NUMBER><DASH><NUMBER>
 }
 
-void DDSpec() :
-{}
+void DDSpec() : {}
 {
   <DD>LegList()<PERIOD>
 }
 
-void LegList() :
-{}
+void LegList() : {}
 {
   <NUMBER>(<COMMA> <NUMBER>)*
 }
 
-void V75Spec() :
-{}
+void V75Spec() : {}
 {
   <V75>LegList()<PERIOD>
 }
 
-void PoolSpecs() :
-{}
+void PoolSpecs() #void : {}
 {
   (DDSpec()|V75Spec())*
 }
 
-void StartList() :
-{}
+void StartList() #void : {}
 {
   Name()(<COMMA> Name())*
 }
 
-void LegSpec() :
-{}
+void LegSpec() : {}
 {
   <LEG><NUMBER><COLON>StartList()<PERIOD>
 }
 
-void LegSpecs() :
-{}
+void LegSpecs() #void : {}
 {
     (LegSpec())+
 }
 
-void Meeting() :
-{}
+void Meeting() : {}
 {
   <MEETING> Name() Date()
   PoolSpecs()

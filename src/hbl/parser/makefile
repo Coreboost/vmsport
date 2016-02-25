@@ -11,5 +11,6 @@ test : Hbl.class
 	java Hbl < test.hbl
 
 clean :
-	rm *.java
-	rm *.class
+	rm -f *.java
+	rm -f *.class
+	rm -f *.jj
