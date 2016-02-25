@@ -1,5 +1,5 @@
 options {
-  STATIC = false;
+  MULTI=true;
 }
 PARSER_BEGIN(Hbl)
   public class Hbl {
@@ -67,9 +67,15 @@ void Include() : {}
   <INCLUDE> <STRING_LITERAL>
 }
 
-void AccountSpec() : {}
+void AccountSpec() :
 {
-  Name() <COLON> <NUMBER>
+  Token number;
+}
+{
+  Name() <COLON> number=<NUMBER>
+  {
+    jjtThis.setNumber(number.image);
+  }
 }
 
 void Accounts() : {}
