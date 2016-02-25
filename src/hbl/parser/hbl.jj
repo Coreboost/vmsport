@@ -30,33 +30,59 @@ TOKEN : { < COLON : ":" > }
 TOKEN : { < NUMBER : (["0"-"9"])+ > }
 TOKEN : { < ACCOUNTS : "Accounts:" > }
 TOKEN : { < HORSES : "Horses:" > }
+TOKEN : { < TRACKS : "Tracks:" > }
 TOKEN : { < IDENTIFIER : (["A"-"Z", "a"-"z", "_"])(["A"-"Z", "a"-"z", "0"-"9", "_"])* > }
+TOKEN : { < STRING_LITERAL : ("\"")(~["\""])*("\"") > }
 
 void Start() :
 {}
 {
-(Accounts() | Horses()) *
+(Accounts() | Horses() | Tracks()) *
 <EOF>
+}
+
+void Name() :
+{}
+{
+  <IDENTIFIER>|<STRING_LITERAL>
+}
+
+
+void AccountSpec() :
+{}
+{
+  Name() <COLON> <NUMBER>
 }
 
 void Accounts() :
 {}
 {
   <ACCOUNTS>
-  <IDENTIFIER> <COLON> <NUMBER>
-  (
-  <COMMA> <IDENTIFIER> <COLON> <NUMBER>
-  )*
-  <PERIOD>
+  AccountSpec() (<COMMA> AccountSpec())*<PERIOD>
+}
+
+void HorseSpec() :
+{}
+{
+  Name() <COLON> <NUMBER>
 }
 
 void Horses() :
 {}
 {
   <HORSES>
-  <IDENTIFIER> <COLON> <NUMBER>
-  (
-  <COMMA> <IDENTIFIER> <COLON> <NUMBER>
-  )*
-  <PERIOD>
+  HorseSpec()(<COMMA> HorseSpec())*<PERIOD>
+}
+
+void TrackSpec() :
+{}
+{
+  Name()
+}
+
+void Tracks() :
+{}
+{
+  <TRACKS>
+  TrackSpec()(<COMMA> TrackSpec())*<PERIOD>
 }

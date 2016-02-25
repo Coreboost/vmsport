@@ -3,10 +3,15 @@ This is a multi-line comment.
 -----------------------------
 -- This is a single line comment.
 Accounts:
-  A1 : 1000,
-  aaa : 2000.
+  A1                : 1000,
+  "Bengt Bengtsson" : 2000.
 
 Horses:
-  HH1 : 1, -- The number is the relative ranking, if two horses have the same
-  HH2 : 3, -- rank then the start number in the race will be used as their
-  HH3 : 5. -- relative rank.
+  "Kalle Kula"  : 1,   -- The number is the relative ranking, if two horses have the same
+  HH2           : 3,   -- rank then the start number in the race will be used as their
+  HH3           : 5.   -- relative rank.
+
+Tracks:
+  Solvalla, -- If the name of the track contains spaces or funky characters it must be quoted
+  "Åby",    -- otherwise quoting is optional.
+  "Bergsåker".
