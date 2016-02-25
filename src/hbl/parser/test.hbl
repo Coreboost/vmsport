@@ -1,6 +1,12 @@
 -----------------------------
 This is a multi-line comment.
 -----------------------------
+-- This is a single line comment.
 Accounts:
   A1 : 1000,
   aaa : 2000.
+
+Horses:
+  HH1 : 1, -- The number is the relative ranking, if two horses have the same
+  HH2 : 3, -- rank then the start number in the race will be used as their
+  HH3 : 5. -- relative rank.

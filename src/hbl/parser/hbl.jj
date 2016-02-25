@@ -19,6 +19,9 @@ SKIP : { "---" : FirstlineMultilineComment }
 <WithinMultilineComment> SKIP : { <~[]> }
 <LastlineMultilineComment> SKIP : {"\n" : DEFAULT}
 <LastlineMultilineComment> SKIP : { <~[]> }
+SKIP : { "--" : SinglelineComment }
+<SinglelineComment> SKIP : {"\n" : DEFAULT}
+<SinglelineComment> SKIP : { <~[]> }
 SKIP : { " " }
 SKIP : { "\n" | "\r" | "\r\n" }
 TOKEN : { < PERIOD : "." > }
@@ -26,9 +29,17 @@ TOKEN : { < COMMA : "," > }
 TOKEN : { < COLON : ":" > }
 TOKEN : { < NUMBER : (["0"-"9"])+ > }
 TOKEN : { < ACCOUNTS : "Accounts:" > }
+TOKEN : { < HORSES : "Horses:" > }
 TOKEN : { < IDENTIFIER : (["A"-"Z", "a"-"z", "_"])(["A"-"Z", "a"-"z", "0"-"9", "_"])* > }
 
 void Start() :
+{}
+{
+(Accounts() | Horses()) *
+<EOF>
+}
+
+void Accounts() :
 {}
 {
   <ACCOUNTS>
@@ -37,5 +48,15 @@ void Start() :
   <COMMA> <IDENTIFIER> <COLON> <NUMBER>
   )*
   <PERIOD>
-<EOF>
+}
+
+void Horses() :
+{}
+{
+  <HORSES>
+  <IDENTIFIER> <COLON> <NUMBER>
+  (
+  <COMMA> <IDENTIFIER> <COLON> <NUMBER>
+  )*
+  <PERIOD>
 }
