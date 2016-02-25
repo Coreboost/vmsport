@@ -27,17 +27,24 @@ SKIP : { "\n" | "\r" | "\r\n" }
 TOKEN : { < PERIOD : "." > }
 TOKEN : { < COMMA : "," > }
 TOKEN : { < COLON : ":" > }
+TOKEN : { < DASH : "-" > }
 TOKEN : { < NUMBER : (["0"-"9"])+ > }
 TOKEN : { < ACCOUNTS : "Accounts:" > }
 TOKEN : { < HORSES : "Horses:" > }
 TOKEN : { < TRACKS : "Tracks:" > }
+TOKEN : { < INCLUDE : "Include:" > }
+TOKEN : { < MEETING : "Meeting:" > }
+TOKEN : { < LEG : "Leg" > }
+TOKEN : { < DD : "DD:" > }
+TOKEN : { < V75 : "V75:" > }
 TOKEN : { < IDENTIFIER : (["A"-"Z", "a"-"z", "_"])(["A"-"Z", "a"-"z", "0"-"9", "_"])* > }
 TOKEN : { < STRING_LITERAL : ("\"")(~["\""])*("\"") > }
 
 void Start() :
 {}
 {
-(Accounts() | Horses() | Tracks()) *
+(Accounts() | Horses() | Tracks() | Include())*
+(Meeting())*
 <EOF>
 }
 
@@ -47,6 +54,11 @@ void Name() :
   <IDENTIFIER>|<STRING_LITERAL>
 }
 
+void Include() :
+{}
+{
+  <INCLUDE> <STRING_LITERAL>
+}
 
 void AccountSpec() :
 {}
@@ -85,4 +97,61 @@ void Tracks() :
 {
   <TRACKS>
   TrackSpec()(<COMMA> TrackSpec())*<PERIOD>
+}
+
+void Date() :
+{}
+{
+  <NUMBER><DASH><NUMBER><DASH><NUMBER>
+}
+
+void DDSpec() :
+{}
+{
+  <DD>LegList()<PERIOD>
+}
+
+void LegList() :
+{}
+{
+  <NUMBER>(<COMMA> <NUMBER>)*
+}
+
+void V75Spec() :
+{}
+{
+  <V75>LegList()<PERIOD>
+}
+
+void PoolSpecs() :
+{}
+{
+  (DDSpec()|V75Spec())*
+}
+
+void StartList() :
+{}
+{
+  Name()(<COMMA> Name())*
+}
+
+void LegSpec() :
+{}
+{
+  <LEG><NUMBER><COLON>StartList()<PERIOD>
+}
+
+void LegSpecs() :
+{}
+{
+    (LegSpec())+
+}
+
+void Meeting() :
+{}
+{
+  <MEETING> Name() Date()
+  PoolSpecs()
+  LegSpecs()
+  <PERIOD>
 }
