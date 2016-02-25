@@ -10,6 +10,15 @@ PARSER_BEGIN(Hbl)
   }
 PARSER_END(Hbl)
 
+
+
+SKIP : { "---" : FirstlineMultilineComment }
+<FirstlineMultilineComment> SKIP : {"\n" : WithinMultilineComment}
+<FirstlineMultilineComment> SKIP : { <~[]> }
+<WithinMultilineComment> SKIP : { "---" : LastlineMultilineComment }
+<WithinMultilineComment> SKIP : { <~[]> }
+<LastlineMultilineComment> SKIP : {"\n" : DEFAULT}
+<LastlineMultilineComment> SKIP : { <~[]> }
 SKIP : { " " }
 SKIP : { "\n" | "\r" | "\r\n" }
 TOKEN : { < PERIOD : "." > }
@@ -17,7 +26,7 @@ TOKEN : { < COMMA : "," > }
 TOKEN : { < COLON : ":" > }
 TOKEN : { < NUMBER : (["0"-"9"])+ > }
 TOKEN : { < ACCOUNTS : "Accounts:" > }
-TOKEN : { < IDENTIFIER : (["A"-"Z"])+ > }
+TOKEN : { < IDENTIFIER : (["A"-"Z", "a"-"z", "_"])(["A"-"Z", "a"-"z", "0"-"9", "_"])* > }
 
 void Start() :
 {}
