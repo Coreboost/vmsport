@@ -1,5 +1,8 @@
+hbl.jj : hbl.jjt
+	jjtree hbl.jjt
+
 Hbl.java : hbl.jj
-	javacc hbl.jj
+		javacc hbl.jj
 
 Hbl.class : Hbl.java
 	javac *.java
