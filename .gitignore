@@ -3,13 +3,6 @@
 *.a
 *.class
 .vagrant/
-src/hbl/parser/Hbl.java
-src/hbl/parser/HblConstants.java
-src/hbl/parser/HblTokenManager.java
-src/hbl/parser/ParseException.java
-src/hbl/parser/SimpleCharStream.java
-src/hbl/parser/Token.java
-src/hbl/parser/TokenMgrError.java
 src/hbl/parser/hbl.jj
 src/ifdlparser/*.pyc
 src/ifdlparser/grammar.py

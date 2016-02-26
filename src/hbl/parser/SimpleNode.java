@@ -72,6 +72,26 @@ class SimpleNode implements Node {
       }
     }
   }
+
+  protected void generateChildren() {
+    if (children != null) {
+      for (int i = 0; i < children.length; ++i) {
+        SimpleNode n = (SimpleNode)children[i];
+        if (n != null) {
+          n.generate();
+        }
+      }
+    }
+  }
+
+  protected void generateThis() {
+    System.out.println( HblTreeConstants.jjtNodeName[id]);
+  }
+
+  public void generate() {
+    generateThis();
+    generateChildren();
+  }
 }
 
 /* JavaCC - OriginalChecksum=7dd58bf17abf4df3dfb8f399b5a32381 (do not edit this line) */
