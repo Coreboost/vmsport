@@ -3,7 +3,8 @@
 import javax.json.*;
 public
 class ASTAccountSpec extends SimpleNode {
-  private String amount;
+  private String name;
+  private Integer amount;
 
   public ASTAccountSpec(int id) {
     super(id);
@@ -13,11 +14,16 @@ class ASTAccountSpec extends SimpleNode {
     super(p, id);
   }
 
-  public void setAmount(String n) {
+  public void setName(String n) {
+    name = n;
+  }
+
+  public void setAmount(Integer n) {
     amount = n;
   }
 
   public void generateSpecifics(JsonObjectBuilder builder) {
+    builder.add("name", name);
     builder.add("amount", amount);
   }
 

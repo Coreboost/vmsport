@@ -3,9 +3,9 @@
 import javax.json.*;
 public
 class ASTDate extends SimpleNode {
-  private String year;
-  private String month;
-  private String day;
+  private Integer year;
+  private Integer month;
+  private Integer day;
 
   public ASTDate(int id) {
     super(id);
@@ -15,14 +15,18 @@ class ASTDate extends SimpleNode {
     super(p, id);
   }
 
-  public void setDate(String y, String m, String d) {
+  public void setDate(Integer y, Integer m, Integer d) {
     year = y;
     month = m;
     day = d;
   }
 
   public void generateSpecifics(JsonObjectBuilder builder) {
-    builder.add("rank", year + "-" + month + "-" + day);
+    builder.add("date", year + "-" + month + "-" + day);
+  }
+
+  public String toString() {
+    return year.toString() + "-" + month.toString() + "-" + day.toString();
   }
 
 

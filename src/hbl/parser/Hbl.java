@@ -90,7 +90,7 @@
     throw new Error("Missing return statement in function");
   }
 
-  static final public void Name() throws ParseException {
+  static final public ASTName Name() throws ParseException {
  /*@bgen(jjtree) Name */
   ASTName jjtn000 = new ASTName(JJTNAME);
   boolean jjtc000 = true;
@@ -101,13 +101,13 @@
         name = jj_consume_token(IDENTIFIER);
                       jjtree.closeNodeScope(jjtn000, true);
                       jjtc000 = false;
-                     jjtn000.setName(name.image);
+                     jjtn000.setName(name.image);{if (true) return jjtn000;}
         break;
       case STRING_LITERAL:
         name = jj_consume_token(STRING_LITERAL);
-                                                                            jjtree.closeNodeScope(jjtn000, true);
-                                                                            jjtc000 = false;
-                                                                           jjtn000.setName(name.image.substring(1, name.image.length()-1));
+                                                                                           jjtree.closeNodeScope(jjtn000, true);
+                                                                                           jjtc000 = false;
+                                                                                          jjtn000.setName(name.image.substring(1, name.image.length()-1));{if (true) return jjtn000;}
         break;
       default:
         jj_la1[3] = jj_gen;
@@ -119,6 +119,7 @@
       jjtree.closeNodeScope(jjtn000, true);
     }
     }
+    throw new Error("Missing return statement in function");
   }
 
   static final public void Include() throws ParseException {
@@ -131,7 +132,7 @@
       path = jj_consume_token(STRING_LITERAL);
                                    jjtree.closeNodeScope(jjtn000, true);
                                    jjtc000 = false;
-                                  jjtn000.setPath(path.image);
+                                  jjtn000.setPath(path.image.substring(1, path.image.length()-1));
     } finally {
     if (jjtc000) {
       jjtree.closeNodeScope(jjtn000, true);
@@ -144,13 +145,15 @@
   ASTAccountSpec jjtn000 = new ASTAccountSpec(JJTACCOUNTSPEC);
   boolean jjtc000 = true;
   jjtree.openNodeScope(jjtn000);Token amount;
+  ASTName name;
     try {
-      Name();
+      name = Name();
       jj_consume_token(COLON);
       amount = jj_consume_token(NUMBER);
     jjtree.closeNodeScope(jjtn000, true);
     jjtc000 = false;
-    jjtn000.setAmount(amount.image);
+    jjtn000.setName(name.getName());
+    jjtn000.setAmount(Integer.parseInt(amount.image));
     } catch (Throwable jjte000) {
     if (jjtc000) {
       jjtree.clearNodeScope(jjtn000);
@@ -220,13 +223,15 @@
   ASTHorseSpec jjtn000 = new ASTHorseSpec(JJTHORSESPEC);
   boolean jjtc000 = true;
   jjtree.openNodeScope(jjtn000);Token rank;
+  ASTName name;
     try {
-      Name();
+      name = Name();
       jj_consume_token(COLON);
       rank = jj_consume_token(NUMBER);
     jjtree.closeNodeScope(jjtn000, true);
     jjtc000 = false;
-    jjtn000.setRank(rank.image);
+    jjtn000.setName(name.getName());
+    jjtn000.setRank(Integer.parseInt(rank.image));
     } catch (Throwable jjte000) {
     if (jjtc000) {
       jjtree.clearNodeScope(jjtn000);
@@ -292,12 +297,15 @@
   }
 
   static final public void TrackSpec() throws ParseException {
-                    /*@bgen(jjtree) TrackSpec */
+ /*@bgen(jjtree) TrackSpec */
   ASTTrackSpec jjtn000 = new ASTTrackSpec(JJTTRACKSPEC);
   boolean jjtc000 = true;
-  jjtree.openNodeScope(jjtn000);
+  jjtree.openNodeScope(jjtn000);ASTName name;
     try {
-      Name();
+      name = Name();
+    jjtree.closeNodeScope(jjtn000, true);
+    jjtc000 = false;
+    jjtn000.setName(name.getName());
     } catch (Throwable jjte000) {
     if (jjtc000) {
       jjtree.clearNodeScope(jjtn000);
@@ -362,7 +370,7 @@
     }
   }
 
-  static final public void Date() throws ParseException {
+  static final public ASTDate Date() throws ParseException {
  /*@bgen(jjtree) Date */
   ASTDate jjtn000 = new ASTDate(JJTDATE);
   boolean jjtc000 = true;
@@ -377,12 +385,14 @@
       day = jj_consume_token(NUMBER);
     jjtree.closeNodeScope(jjtn000, true);
     jjtc000 = false;
-    jjtn000.setDate(year.image, month.image, day.image);
+    jjtn000.setDate(Integer.parseInt(year.image), Integer.parseInt(month.image), Integer.parseInt(day.image));
+    {if (true) return jjtn000;}
     } finally {
     if (jjtc000) {
       jjtree.closeNodeScope(jjtn000, true);
     }
     }
+    throw new Error("Missing return statement in function");
   }
 
   static final public void DDSpec() throws ParseException {
@@ -416,12 +426,13 @@
   }
 
   static final public void LegList() throws ParseException {
-                  /*@bgen(jjtree) LegList */
+ /*@bgen(jjtree) LegList */
   ASTLegList jjtn000 = new ASTLegList(JJTLEGLIST);
   boolean jjtc000 = true;
-  jjtree.openNodeScope(jjtn000);
+  jjtree.openNodeScope(jjtn000);Token leg;
     try {
-      jj_consume_token(NUMBER);
+      leg = jj_consume_token(NUMBER);
+                jjtn000.addLeg(Integer.parseInt(leg.image));
       label_6:
       while (true) {
         switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
@@ -433,7 +444,8 @@
           break label_6;
         }
         jj_consume_token(COMMA);
-        jj_consume_token(NUMBER);
+        leg = jj_consume_token(NUMBER);
+                                                                                     jjtn000.addLeg(Integer.parseInt(leg.image));
       }
     } finally {
     if (jjtc000) {
@@ -524,12 +536,13 @@
   }
 
   static final public void StartList() throws ParseException {
-                    /*@bgen(jjtree) StartList */
+ /*@bgen(jjtree) StartList */
   ASTStartList jjtn000 = new ASTStartList(JJTSTARTLIST);
   boolean jjtc000 = true;
-  jjtree.openNodeScope(jjtn000);
+  jjtree.openNodeScope(jjtn000);ASTName name;
     try {
-      Name();
+      name = Name();
+               jjtn000.addHorse(name.getName());
       label_8:
       while (true) {
         switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
@@ -541,7 +554,8 @@
           break label_8;
         }
         jj_consume_token(COMMA);
-        Name();
+        name = Name();
+                                                                        jjtn000.addHorse(name.getName());
       }
     } catch (Throwable jjte000) {
     if (jjtc000) {
@@ -565,16 +579,19 @@
   }
 
   static final public void LegSpec() throws ParseException {
-                  /*@bgen(jjtree) LegSpec */
+ /*@bgen(jjtree) LegSpec */
   ASTLegSpec jjtn000 = new ASTLegSpec(JJTLEGSPEC);
   boolean jjtc000 = true;
-  jjtree.openNodeScope(jjtn000);
+  jjtree.openNodeScope(jjtn000);Token leg;
     try {
       jj_consume_token(LEG);
-      jj_consume_token(NUMBER);
+      leg = jj_consume_token(NUMBER);
       jj_consume_token(COLON);
       StartList();
       jj_consume_token(PERIOD);
+    jjtree.closeNodeScope(jjtn000, true);
+    jjtc000 = false;
+    jjtn000.setLeg(Integer.parseInt(leg.image));
     } catch (Throwable jjte000) {
     if (jjtc000) {
       jjtree.clearNodeScope(jjtn000);
@@ -636,17 +653,22 @@
   }
 
   static final public void Meeting() throws ParseException {
-                  /*@bgen(jjtree) Meeting */
+ /*@bgen(jjtree) Meeting */
   ASTMeeting jjtn000 = new ASTMeeting(JJTMEETING);
   boolean jjtc000 = true;
-  jjtree.openNodeScope(jjtn000);
+  jjtree.openNodeScope(jjtn000);ASTName track;
+  ASTDate date;
     try {
       jj_consume_token(MEETING);
-      Name();
-      Date();
+      track = Name();
+      date = Date();
       PoolSpecs();
       LegSpecs();
       jj_consume_token(PERIOD);
+    jjtree.closeNodeScope(jjtn000, true);
+    jjtc000 = false;
+    jjtn000.setTrack(track.getName());
+    jjtn000.setTrack(date.toString());
     } catch (Throwable jjte000) {
     if (jjtc000) {
       jjtree.clearNodeScope(jjtn000);

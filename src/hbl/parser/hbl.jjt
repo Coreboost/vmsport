@@ -57,12 +57,12 @@ SimpleNode Start() : {}
   { return jjtThis; }
 }
 
-void Name():
+ASTName Name():
 {
   Token name;
 }
 {
-  (name=<IDENTIFIER>{jjtThis.setName(name.image);})|(name=<STRING_LITERAL>{jjtThis.setName(name.image.substring(1, name.image.length()-1));})
+  (name=<IDENTIFIER>{jjtThis.setName(name.image);return jjtThis;})|(name=<STRING_LITERAL>{jjtThis.setName(name.image.substring(1, name.image.length()-1));return jjtThis;})
 }
 
 void Include() :
@@ -70,17 +70,19 @@ void Include() :
   Token path;
 }
 {
-  <INCLUDE> path=<STRING_LITERAL>{jjtThis.setPath(path.image);}
+  <INCLUDE> path=<STRING_LITERAL>{jjtThis.setPath(path.image.substring(1, path.image.length()-1));}
 }
 
 void AccountSpec() :
 {
   Token amount;
+  ASTName name;
 }
 {
-  Name() <COLON> amount=<NUMBER>
+  name=Name() <COLON> amount=<NUMBER>
   {
-    jjtThis.setAmount(amount.image);
+    jjtThis.setName(name.getName());
+    jjtThis.setAmount(Integer.parseInt(amount.image));
   }
 }
 
@@ -93,11 +95,13 @@ void Accounts() : {}
 void HorseSpec() :
 {
   Token rank;
+  ASTName name;
 }
 {
-  Name() <COLON> rank=<NUMBER>
+  name=Name() <COLON> rank=<NUMBER>
   {
-    jjtThis.setRank(rank.image);
+    jjtThis.setName(name.getName());
+    jjtThis.setRank(Integer.parseInt(rank.image));
   }
 }
 
@@ -107,9 +111,15 @@ void Horses() : {}
   HorseSpec()(<COMMA> HorseSpec())*<PERIOD>
 }
 
-void TrackSpec() : {}
+void TrackSpec() :
 {
-  Name()
+  ASTName name;
+}
+{
+  name=Name()
+  {
+    jjtThis.setName(name.getName());
+  }
 }
 
 void Tracks() : {}
@@ -118,7 +128,7 @@ void Tracks() : {}
   TrackSpec()(<COMMA> TrackSpec())*<PERIOD>
 }
 
-void Date() :
+ASTDate Date() :
 {
   Token year;
   Token month;
@@ -127,7 +137,8 @@ void Date() :
 {
   year=<NUMBER><DASH>month=<NUMBER><DASH>day=<NUMBER>
   {
-    jjtThis.setDate(year.image, month.image, day.image);
+    jjtThis.setDate(Integer.parseInt(year.image), Integer.parseInt(month.image), Integer.parseInt(day.image));
+    return jjtThis;
   }
 }
 
@@ -136,9 +147,12 @@ void DDSpec() : {}
   <DD>LegList()<PERIOD>
 }
 
-void LegList() : {}
+void LegList() :
 {
-  <NUMBER>(<COMMA> <NUMBER>)*
+  Token leg;
+}
+{
+  leg=<NUMBER>{ jjtThis.addLeg(Integer.parseInt(leg.image)); }(<COMMA> leg=<NUMBER>{ jjtThis.addLeg(Integer.parseInt(leg.image)); })*
 }
 
 void V75Spec() : {}
@@ -151,14 +165,21 @@ void PoolSpecs() : {}
   (DDSpec()|V75Spec())*
 }
 
-void StartList() : {}
+void StartList() :
 {
-  Name()(<COMMA> Name())*
+  ASTName name;
+}
+{
+  name=Name(){ jjtThis.addHorse(name.getName()); }(<COMMA> name=Name(){ jjtThis.addHorse(name.getName()); })*
 }
 
-void LegSpec() : {}
+void LegSpec() :
 {
-  <LEG><NUMBER><COLON>StartList()<PERIOD>
+  Token leg;
+}
+{
+  <LEG>leg=<NUMBER><COLON>StartList()<PERIOD>
+  { jjtThis.setLeg(Integer.parseInt(leg.image)); }
 }
 
 void LegSpecs() : {}
@@ -166,10 +187,18 @@ void LegSpecs() : {}
     (LegSpec())+
 }
 
-void Meeting() : {}
+void Meeting() :
 {
-  <MEETING> Name() Date()
+  ASTName track;
+  ASTDate date;
+}
+{
+  <MEETING> track=Name() date=Date()
   PoolSpecs()
   LegSpecs()
   <PERIOD>
+  {
+    jjtThis.setTrack(track.getName());
+    jjtThis.setTrack(date.toString());
+  }
 }

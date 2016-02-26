@@ -3,7 +3,8 @@
 import javax.json.*;
 public
 class ASTHorseSpec extends SimpleNode {
-  private String rank;
+  private String name;
+  private Integer rank;
 
   public ASTHorseSpec(int id) {
     super(id);
@@ -13,11 +14,16 @@ class ASTHorseSpec extends SimpleNode {
     super(p, id);
   }
 
-  public void setRank(String r) {
+  public void setName(String n) {
+    name = n;
+  }
+
+  public void setRank(Integer r) {
     rank = r;
   }
 
   public void generateSpecifics(JsonObjectBuilder builder) {
+    builder.add("name", name);
     builder.add("rank", rank);
   }
 }

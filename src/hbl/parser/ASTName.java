@@ -21,5 +21,9 @@ class ASTName extends SimpleNode {
     builder.add("name", name);
   }
 
+  public String getName() {
+      return name;
+  }
+
 }
 /* JavaCC - OriginalChecksum=47d8fdd92350a44c5583751480b802ce (do not edit this line) */
