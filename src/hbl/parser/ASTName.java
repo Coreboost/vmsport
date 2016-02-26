@@ -17,12 +17,12 @@ class ASTName extends SimpleNode {
     name = n;
   }
 
-  public void generateSpecifics(JsonObjectBuilder builder) {
-    builder.add("name", name);
-  }
-
   public String getName() {
       return name;
+  }
+
+  public Boolean skipNode() {
+    return true;
   }
 
 }

@@ -81,11 +81,12 @@ class SimpleNode implements Node {
     JsonArrayBuilder builder = Json.createArrayBuilder();
     for (int i = 0; i < children.length; ++i) {
       SimpleNode n = (SimpleNode)children[i];
-      if (n != null) {
+      if (n != null && !n.skipNode()) {
         builder.add(n.generate());
       }
     }
-    return builder.build();
+    JsonArray a = builder.build();
+    return a.size() > 0 ? a : null; 
   }
 
   protected JsonObject generateThis(JsonArray children) {
@@ -104,6 +105,10 @@ class SimpleNode implements Node {
 
   public JsonObject generate() {
     return generateThis(generateChildren());
+  }
+
+  public Boolean skipNode() {
+    return false;
   }
 }
 

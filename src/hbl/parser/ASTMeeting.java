@@ -4,6 +4,7 @@ import javax.json.*;
 public
 class ASTMeeting extends SimpleNode {
   private String track;
+  private String date;
 
   public ASTMeeting(int id) {
     super(id);
@@ -17,8 +18,13 @@ class ASTMeeting extends SimpleNode {
     track = t;
   }
 
+  public void setDate(String d) {
+    date = d;
+  }
+
   public void generateSpecifics(JsonObjectBuilder builder) {
     builder.add("track", track);
+    builder.add("date", date);
   }
 }
 /* JavaCC - OriginalChecksum=2607718fc99ec42de0641dee96a7094f (do not edit this line) */

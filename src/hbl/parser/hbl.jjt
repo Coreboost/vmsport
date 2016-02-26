@@ -57,7 +57,7 @@ SimpleNode Start() : {}
   { return jjtThis; }
 }
 
-ASTName Name():
+ASTName Name() :
 {
   Token name;
 }
@@ -199,6 +199,6 @@ void Meeting() :
   <PERIOD>
   {
     jjtThis.setTrack(track.getName());
-    jjtThis.setTrack(date.toString());
+    jjtThis.setDate(date.toString());
   }
 }
