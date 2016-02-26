@@ -57,24 +57,30 @@ SimpleNode Start() : {}
   { return jjtThis; }
 }
 
-void Name(): {}
+void Name():
 {
-  <IDENTIFIER>|<STRING_LITERAL>
+  Token name;
+}
+{
+  (name=<IDENTIFIER>{jjtThis.setName(name.image);})|(name=<STRING_LITERAL>{jjtThis.setName(name.image.substring(1, name.image.length()-1));})
 }
 
-void Include() : {}
+void Include() :
 {
-  <INCLUDE> <STRING_LITERAL>
+  Token path;
+}
+{
+  <INCLUDE> path=<STRING_LITERAL>{jjtThis.setPath(path.image);}
 }
 
 void AccountSpec() :
 {
-  Token number;
+  Token amount;
 }
 {
-  Name() <COLON> number=<NUMBER>
+  Name() <COLON> amount=<NUMBER>
   {
-    jjtThis.setAmount(number.image);
+    jjtThis.setAmount(amount.image);
   }
 }
 
@@ -84,9 +90,15 @@ void Accounts() : {}
   AccountSpec() (<COMMA> AccountSpec())*<PERIOD>
 }
 
-void HorseSpec() : {}
+void HorseSpec() :
 {
-  Name() <COLON> <NUMBER>
+  Token rank;
+}
+{
+  Name() <COLON> rank=<NUMBER>
+  {
+    jjtThis.setRank(rank.image);
+  }
 }
 
 void Horses() : {}
@@ -106,9 +118,17 @@ void Tracks() : {}
   TrackSpec()(<COMMA> TrackSpec())*<PERIOD>
 }
 
-void Date() : {}
+void Date() :
 {
-  <NUMBER><DASH><NUMBER><DASH><NUMBER>
+  Token year;
+  Token month;
+  Token day;
+}
+{
+  year=<NUMBER><DASH>month=<NUMBER><DASH>day=<NUMBER>
+  {
+    jjtThis.setDate(year.image, month.image, day.image);
+  }
 }
 
 void DDSpec() : {}

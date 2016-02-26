@@ -10,7 +10,7 @@ JCC_J = Token.java TokenMgrError.java SimpleCharStream.java ParseException.java
 
 HBL_J = Hbl.java HblConstants.java HblTokenManager.java HblTreeConstants.java
 
-JJT_C = ASTAccounts.class ASTAccountSpec.class ASTDDSpec.class ASTHorses.class \
+AST_C = ASTAccounts.class ASTAccountSpec.class ASTDDSpec.class ASTHorses.class \
 				ASTHorseSpec.class ASTInclude.class ASTLegList.class ASTLegSpec.class \
 				ASTMeeting.class ASTStart.class ASTTracks.class ASTTrackSpec.class \
 				ASTV75Spec.class ASTDate.class ASTLegSpecs.class ASTName.class \
