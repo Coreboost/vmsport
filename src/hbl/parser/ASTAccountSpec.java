@@ -3,7 +3,7 @@
 public
 class ASTAccountSpec extends SimpleNode {
   private String name;
-  private String number;
+  private String amount;
 
   public ASTAccountSpec(int id) {
     super(id);
@@ -17,8 +17,12 @@ class ASTAccountSpec extends SimpleNode {
     name = n;
   }
 
-  public void setNumber(String n) {
-    number = n;
+  public void setAmount(String n) {
+    amount = n;
+  }
+
+  public void generateThis () {
+    System.out.println("{ name: " + name + ", amount: " + amount + "}");
   }
 
 }

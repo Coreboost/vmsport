@@ -8,7 +8,7 @@ PARSER_BEGIN(Hbl)
       Hbl parser = new Hbl( System.in );
       try {
         SimpleNode node = parser.Start();
-        node.dump("");
+        System.out.println(node.generate().toString());
         System.out.println("Thank you.");
       } catch (Exception e) {
         System.out.println("Oops.");
@@ -57,7 +57,7 @@ SimpleNode Start() : {}
   { return jjtThis; }
 }
 
-void Name()  #void : {}
+void Name(): {}
 {
   <IDENTIFIER>|<STRING_LITERAL>
 }
@@ -74,7 +74,7 @@ void AccountSpec() :
 {
   Name() <COLON> number=<NUMBER>
   {
-    jjtThis.setNumber(number.image);
+    jjtThis.setAmount(number.image);
   }
 }
 
@@ -106,7 +106,7 @@ void Tracks() : {}
   TrackSpec()(<COMMA> TrackSpec())*<PERIOD>
 }
 
-void Date() #void : {}
+void Date() : {}
 {
   <NUMBER><DASH><NUMBER><DASH><NUMBER>
 }
@@ -126,12 +126,12 @@ void V75Spec() : {}
   <V75>LegList()<PERIOD>
 }
 
-void PoolSpecs() #void : {}
+void PoolSpecs() : {}
 {
   (DDSpec()|V75Spec())*
 }
 
-void StartList() #void : {}
+void StartList() : {}
 {
   Name()(<COMMA> Name())*
 }
@@ -141,7 +141,7 @@ void LegSpec() : {}
   <LEG><NUMBER><COLON>StartList()<PERIOD>
 }
 
-void LegSpecs() #void : {}
+void LegSpecs() : {}
 {
     (LegSpec())+
 }

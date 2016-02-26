@@ -4,6 +4,7 @@
    machinery for constructing the parent and child relationships
    between nodes. */
 
+import javax.json.*;
 public
 interface Node {
 
@@ -31,6 +32,6 @@ interface Node {
   /** Return the number of children the node has. */
   public int jjtGetNumChildren();
 
-  public void generate();
+  public JsonObject generate();
 }
 /* JavaCC - OriginalChecksum=77d9f6c6ec5657539851d2d8cc26461d (do not edit this line) */

@@ -1,3 +1,5 @@
+CLP   = ./javax.json-api-1.0.jar:./javax.json-1.0.4.jar:./
+
 AST_J = ASTAccounts.java ASTAccountSpec.java ASTDDSpec.java ASTHorses.java \
 				ASTHorseSpec.java ASTInclude.java ASTLegList.java ASTLegSpec.java \
 				ASTMeeting.java ASTStart.java ASTTracks.java ASTTrackSpec.java \
@@ -24,11 +26,11 @@ hbl.jj : hbl.jjt $(AST_J) $(JJT_J) $(JCC_J) $(HBL_J)
 	jjtree hbl.jjt
 	javacc hbl.jj
 
-%.class : %.java
-		javac $<
+%.class : %.java hbl.jj
+		javac -classpath $(CLP) $<
 
 test : $(AST_C) $(JJT_C) $(JCC_C) $(HBL_C)
-	java Hbl < test.hbl
+	java -classpath $(CLP) Hbl < test.hbl
 
 clean :
 	rm -f *.class

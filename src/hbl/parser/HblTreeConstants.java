@@ -2,7 +2,7 @@
 public interface HblTreeConstants
 {
   public int JJTSTART = 0;
-  public int JJTVOID = 1;
+  public int JJTNAME = 1;
   public int JJTINCLUDE = 2;
   public int JJTACCOUNTSPEC = 3;
   public int JJTACCOUNTS = 4;
@@ -10,16 +10,20 @@ public interface HblTreeConstants
   public int JJTHORSES = 6;
   public int JJTTRACKSPEC = 7;
   public int JJTTRACKS = 8;
-  public int JJTDDSPEC = 9;
-  public int JJTLEGLIST = 10;
-  public int JJTV75SPEC = 11;
-  public int JJTLEGSPEC = 12;
-  public int JJTMEETING = 13;
+  public int JJTDATE = 9;
+  public int JJTDDSPEC = 10;
+  public int JJTLEGLIST = 11;
+  public int JJTV75SPEC = 12;
+  public int JJTPOOLSPECS = 13;
+  public int JJTSTARTLIST = 14;
+  public int JJTLEGSPEC = 15;
+  public int JJTLEGSPECS = 16;
+  public int JJTMEETING = 17;
 
 
   public String[] jjtNodeName = {
     "Start",
-    "void",
+    "Name",
     "Include",
     "AccountSpec",
     "Accounts",
@@ -27,11 +31,15 @@ public interface HblTreeConstants
     "Horses",
     "TrackSpec",
     "Tracks",
+    "Date",
     "DDSpec",
     "LegList",
     "V75Spec",
+    "PoolSpecs",
+    "StartList",
     "LegSpec",
+    "LegSpecs",
     "Meeting",
   };
 }
-/* JavaCC - OriginalChecksum=d11ef2d0bbeed7910e9fdb6e415bc1fa (do not edit this line) */
+/* JavaCC - OriginalChecksum=b19e8fe8e43025394b28e82ac00e5b72 (do not edit this line) */
