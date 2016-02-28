@@ -29,15 +29,17 @@ public interface HblConstants {
   /** RegularExpression Id. */
   int MEETING = 24;
   /** RegularExpression Id. */
-  int LEG = 25;
+  int RACEDAY = 25;
   /** RegularExpression Id. */
-  int DD = 26;
+  int LEG = 26;
   /** RegularExpression Id. */
-  int V75 = 27;
+  int DD = 27;
   /** RegularExpression Id. */
-  int IDENTIFIER = 28;
+  int V75 = 28;
   /** RegularExpression Id. */
-  int STRING_LITERAL = 29;
+  int IDENTIFIER = 29;
+  /** RegularExpression Id. */
+  int STRING_LITERAL = 30;
 
   /** Lexical state. */
   int DEFAULT = 0;
@@ -77,6 +79,7 @@ public interface HblConstants {
     "\"Tracks:\"",
     "\"Include:\"",
     "\"Meeting:\"",
+    "\"RaceDay:\"",
     "\"Leg\"",
     "\"DD:\"",
     "\"V75:\"",

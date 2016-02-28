@@ -32,6 +32,7 @@ Meeting: Solvalla 2016-02-01
 .
 
 RaceDay: Solvalla 2016-02-01
+.
 --------------------------------------------------------------------------------
                                 Double
 Below is an example of making a bet on DD. DDB1 is the id of the bet and must be
@@ -47,7 +48,7 @@ also specify an A to indicate that you select all the horses in the particular
 leg.
 --------------------------------------------------------------------------------
 ---
-  Bet DD: DDB1, 10.
+  Bet DD: DDB1, 10
     Account: AA1.
     DD-1: 2, 3.
     DD-2: A.
@@ -67,7 +68,7 @@ DD with the following differences:
   * Specify an A to select all of the horses in the race.
 --------------------------------------------------------------------------------
 ---
-  Bet DD: DDB2, Fortuna 100.
+  Bet DD: DDB2, Fortuna 100
     DD-1: 2, 3.
     DD-2: 3 O.
 ---

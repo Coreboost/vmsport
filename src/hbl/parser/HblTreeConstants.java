@@ -19,6 +19,7 @@ public interface HblTreeConstants
   public int JJTLEGSPEC = 15;
   public int JJTLEGSPECS = 16;
   public int JJTMEETING = 17;
+  public int JJTRACEDAY = 18;
 
 
   public String[] jjtNodeName = {
@@ -40,6 +41,7 @@ public interface HblTreeConstants
     "LegSpec",
     "LegSpecs",
     "Meeting",
+    "RaceDay",
   };
 }
-/* JavaCC - OriginalChecksum=b19e8fe8e43025394b28e82ac00e5b72 (do not edit this line) */
+/* JavaCC - OriginalChecksum=656270e6f5423281d14b359bb945642c (do not edit this line) */

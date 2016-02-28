@@ -43,6 +43,7 @@ TOKEN : { < HORSES : "Horses:" > }
 TOKEN : { < TRACKS : "Tracks:" > }
 TOKEN : { < INCLUDE : "Include:" > }
 TOKEN : { < MEETING : "Meeting:" > }
+TOKEN : { < RACEDAY : "RaceDay:" > }
 TOKEN : { < LEG : "Leg" > }
 TOKEN : { < DD : "DD:" > }
 TOKEN : { < V75 : "V75:" > }
@@ -53,6 +54,7 @@ SimpleNode Start() : {}
 {
   (Accounts() | Horses() | Tracks() | Include())*
   (Meeting())*
+  (RaceDay())*
   <EOF>
   { return jjtThis; }
 }
@@ -201,4 +203,14 @@ void Meeting() :
     jjtThis.setTrack(track.getName());
     jjtThis.setDate(date.toString());
   }
+}
+
+void RaceDay() :
+{
+  ASTName track;
+  ASTDate date;
+}
+{
+  <RACEDAY> track=Name() date=Date()
+  <PERIOD>
 }
