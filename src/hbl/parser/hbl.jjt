@@ -40,6 +40,7 @@ TOKEN : { < LEFT_PAREN : "(" > }
 TOKEN : { < RIGHT_PAREN : ")" > }
 TOKEN : { < NUMBER : (["0"-"9"])+ > }
 TOKEN : { < ACCOUNTS : "Accounts:" > }
+TOKEN : { < ACCOUNT : "Account:" > }
 TOKEN : { < HORSES : "Horses:" > }
 TOKEN : { < TRACKS : "Tracks:" > }
 TOKEN : { < INCLUDE : "Include:" > }
@@ -48,6 +49,10 @@ TOKEN : { < RACEDAY : "RaceDay:" > }
 TOKEN : { < LEG : "Leg" > }
 TOKEN : { < DD : "DD:" > }
 TOKEN : { < V75 : "V75:" > }
+TOKEN : { < BET : "Bet" > }
+TOKEN : { < DD_1 : "DD-1" > }
+TOKEN : { < DD_2 : "DD-2" > }
+TOKEN : { < ALL_HORSES : "A" > }
 TOKEN : { < IDENTIFIER : (["A"-"Z", "a"-"z", "_"])(["A"-"Z", "a"-"z", "0"-"9", "_"])* > }
 TOKEN : { < STRING_LITERAL : ("\"")(~["\""])*("\"") > }
 
@@ -213,7 +218,7 @@ void RaceDay() :
 }
 {
   <RACEDAY> track=Name() date=Date()
-  (LegResult())+
+  (Bet())* (LegResult()[Bet()]) +
   <PERIOD>
   {
     jjtThis.setTrack(track.getName());
@@ -255,4 +260,31 @@ ASTTie Tie() :
 {
   <LEFT_PAREN> horse=<NUMBER>{ jjtThis.addHorse(Integer.parseInt(horse.image)); } (<COMMA> horse=<NUMBER> { jjtThis.addHorse(Integer.parseInt(horse.image)); })* <RIGHT_PAREN>
   { return jjtThis; }
+}
+
+void Bet() : {}
+{
+  DDBet()
+}
+
+void DDBet() :
+{
+  Token amount;
+  ASTName betID;
+  ASTName accountID;
+}
+{
+  <BET> <DD> betID=Name() {jjtThis.setBetID(betID.getName());} amount=<NUMBER> {jjtThis.setAmount(Integer.parseInt(amount.image));}
+  [<ACCOUNT> accountID=Name() {jjtThis.setAccountID(accountID.getName());} [<PERIOD>]]
+  <DD_1> [<COLON>] HorseSelection(1)
+  <DD_2> [<COLON>] HorseSelection(2)
+}
+
+void HorseSelection(Integer race) :
+{
+  Token horse;
+}
+{
+  {jjtThis.setRace(race);}
+  (<ALL_HORSES> {jjtThis.setAllHorses(true);} [<PERIOD>]) | (horse=<NUMBER>{ jjtThis.addHorse(Integer.parseInt(horse.image)); } (<COMMA> horse=<NUMBER> { jjtThis.addHorse(Integer.parseInt(horse.image)); })*) <PERIOD>
 }

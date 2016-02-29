@@ -714,14 +714,34 @@
       date = Date();
       label_11:
       while (true) {
-        LegResult();
         switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-        case LEG:
+        case BET:
           ;
           break;
         default:
           jj_la1[13] = jj_gen;
           break label_11;
+        }
+        Bet();
+      }
+      label_12:
+      while (true) {
+        LegResult();
+        switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+        case BET:
+          Bet();
+          break;
+        default:
+          jj_la1[14] = jj_gen;
+          ;
+        }
+        switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+        case LEG:
+          ;
+          break;
+        default:
+          jj_la1[15] = jj_gen;
+          break label_12;
         }
       }
       jj_consume_token(PERIOD);
@@ -765,7 +785,7 @@
         ResultList();
         break;
       default:
-        jj_la1[14] = jj_gen;
+        jj_la1[16] = jj_gen;
         ;
       }
       jj_consume_token(PERIOD);
@@ -801,15 +821,15 @@
     try {
       entry = ResultEntry();
                        jjtn000.addEntry(entry.getHorses());
-      label_12:
+      label_13:
       while (true) {
         switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
         case COMMA:
           ;
           break;
         default:
-          jj_la1[15] = jj_gen;
-          break label_12;
+          jj_la1[17] = jj_gen;
+          break label_13;
         }
         jj_consume_token(COMMA);
         entry = ResultEntry();
@@ -857,7 +877,7 @@
                                                                                                       jjtn000.setEntry(tie.getHorses()); {if (true) return jjtn000;}
         break;
       default:
-        jj_la1[16] = jj_gen;
+        jj_la1[18] = jj_gen;
         jj_consume_token(-1);
         throw new ParseException();
       }
@@ -892,15 +912,15 @@
       jj_consume_token(LEFT_PAREN);
       horse = jj_consume_token(NUMBER);
                                jjtn000.addHorse(Integer.parseInt(horse.image));
-      label_13:
+      label_14:
       while (true) {
         switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
         case COMMA:
           ;
           break;
         default:
-          jj_la1[17] = jj_gen;
-          break label_13;
+          jj_la1[19] = jj_gen;
+          break label_14;
         }
         jj_consume_token(COMMA);
         horse = jj_consume_token(NUMBER);
@@ -918,6 +938,158 @@
     throw new Error("Missing return statement in function");
   }
 
+  static final public void Bet() throws ParseException {
+              /*@bgen(jjtree) Bet */
+  ASTBet jjtn000 = new ASTBet(JJTBET);
+  boolean jjtc000 = true;
+  jjtree.openNodeScope(jjtn000);
+    try {
+      DDBet();
+    } catch (Throwable jjte000) {
+    if (jjtc000) {
+      jjtree.clearNodeScope(jjtn000);
+      jjtc000 = false;
+    } else {
+      jjtree.popNode();
+    }
+    if (jjte000 instanceof RuntimeException) {
+      {if (true) throw (RuntimeException)jjte000;}
+    }
+    if (jjte000 instanceof ParseException) {
+      {if (true) throw (ParseException)jjte000;}
+    }
+    {if (true) throw (Error)jjte000;}
+    } finally {
+    if (jjtc000) {
+      jjtree.closeNodeScope(jjtn000, true);
+    }
+    }
+  }
+
+  static final public void DDBet() throws ParseException {
+ /*@bgen(jjtree) DDBet */
+  ASTDDBet jjtn000 = new ASTDDBet(JJTDDBET);
+  boolean jjtc000 = true;
+  jjtree.openNodeScope(jjtn000);Token amount;
+  ASTName betID;
+  ASTName accountID;
+    try {
+      jj_consume_token(BET);
+      jj_consume_token(DD);
+      betID = Name();
+                           jjtn000.setBetID(betID.getName());
+      amount = jj_consume_token(NUMBER);
+                                                                                jjtn000.setAmount(Integer.parseInt(amount.image));
+      switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+      case ACCOUNT:
+        jj_consume_token(ACCOUNT);
+        accountID = Name();
+                               jjtn000.setAccountID(accountID.getName());
+        switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+        case PERIOD:
+          jj_consume_token(PERIOD);
+          break;
+        default:
+          jj_la1[20] = jj_gen;
+          ;
+        }
+        break;
+      default:
+        jj_la1[21] = jj_gen;
+        ;
+      }
+      jj_consume_token(DD_1);
+      switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+      case COLON:
+        jj_consume_token(COLON);
+        break;
+      default:
+        jj_la1[22] = jj_gen;
+        ;
+      }
+      HorseSelection(1);
+      jj_consume_token(DD_2);
+      switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+      case COLON:
+        jj_consume_token(COLON);
+        break;
+      default:
+        jj_la1[23] = jj_gen;
+        ;
+      }
+      HorseSelection(2);
+    } catch (Throwable jjte000) {
+    if (jjtc000) {
+      jjtree.clearNodeScope(jjtn000);
+      jjtc000 = false;
+    } else {
+      jjtree.popNode();
+    }
+    if (jjte000 instanceof RuntimeException) {
+      {if (true) throw (RuntimeException)jjte000;}
+    }
+    if (jjte000 instanceof ParseException) {
+      {if (true) throw (ParseException)jjte000;}
+    }
+    {if (true) throw (Error)jjte000;}
+    } finally {
+    if (jjtc000) {
+      jjtree.closeNodeScope(jjtn000, true);
+    }
+    }
+  }
+
+  static final public void HorseSelection(Integer race) throws ParseException {
+ /*@bgen(jjtree) HorseSelection */
+  ASTHorseSelection jjtn000 = new ASTHorseSelection(JJTHORSESELECTION);
+  boolean jjtc000 = true;
+  jjtree.openNodeScope(jjtn000);Token horse;
+    try {
+      switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+      case ALL_HORSES:
+   jjtn000.setRace(race);
+        jj_consume_token(ALL_HORSES);
+                 jjtn000.setAllHorses(true);
+        switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+        case PERIOD:
+          jj_consume_token(PERIOD);
+          break;
+        default:
+          jj_la1[24] = jj_gen;
+          ;
+        }
+        break;
+      case NUMBER:
+        horse = jj_consume_token(NUMBER);
+                                                                             jjtn000.addHorse(Integer.parseInt(horse.image));
+        label_15:
+        while (true) {
+          switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+          case COMMA:
+            ;
+            break;
+          default:
+            jj_la1[25] = jj_gen;
+            break label_15;
+          }
+          jj_consume_token(COMMA);
+          horse = jj_consume_token(NUMBER);
+                                                                                                                                                          jjtn000.addHorse(Integer.parseInt(horse.image));
+        }
+        jj_consume_token(PERIOD);
+        break;
+      default:
+        jj_la1[26] = jj_gen;
+        jj_consume_token(-1);
+        throw new ParseException();
+      }
+    } finally {
+    if (jjtc000) {
+      jjtree.closeNodeScope(jjtn000, true);
+    }
+    }
+  }
+
   static private boolean jj_initialized_once = false;
   /** Generated Token Manager. */
   static public HblTokenManager token_source;
@@ -928,7 +1100,7 @@
   static public Token jj_nt;
   static private int jj_ntk;
   static private int jj_gen;
-  static final private int[] jj_la1 = new int[18];
+  static final private int[] jj_la1 = new int[27];
   static private int[] jj_la1_0;
   static private int[] jj_la1_1;
   static {
@@ -936,10 +1108,10 @@
       jj_la1_init_1();
    }
    private static void jj_la1_init_0() {
-      jj_la1_0 = new int[] {0x3c00000,0x3c00000,0x4000000,0x8000000,0x80000000,0x10000,0x10000,0x10000,0x10000,0x60000000,0x60000000,0x10000,0x10000000,0x10000000,0x280000,0x10000,0x280000,0x10000,};
+      jj_la1_0 = new int[] {0x7400000,0x7400000,0x8000000,0x10000000,0x0,0x10000,0x10000,0x10000,0x10000,0xc0000000,0xc0000000,0x10000,0x20000000,0x0,0x0,0x20000000,0x280000,0x10000,0x280000,0x10000,0x8000,0x800000,0x20000,0x20000,0x8000,0x10000,0x200000,};
    }
    private static void jj_la1_init_1() {
-      jj_la1_1 = new int[] {0x0,0x0,0x0,0x0,0x1,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,};
+      jj_la1_1 = new int[] {0x0,0x0,0x0,0x0,0x30,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x1,0x1,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x8,};
    }
 
   /** Constructor with InputStream. */
@@ -960,7 +1132,7 @@
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 18; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 27; i++) jj_la1[i] = -1;
   }
 
   /** Reinitialise. */
@@ -975,7 +1147,7 @@
     jj_ntk = -1;
     jjtree.reset();
     jj_gen = 0;
-    for (int i = 0; i < 18; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 27; i++) jj_la1[i] = -1;
   }
 
   /** Constructor. */
@@ -992,7 +1164,7 @@
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 18; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 27; i++) jj_la1[i] = -1;
   }
 
   /** Reinitialise. */
@@ -1003,7 +1175,7 @@
     jj_ntk = -1;
     jjtree.reset();
     jj_gen = 0;
-    for (int i = 0; i < 18; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 27; i++) jj_la1[i] = -1;
   }
 
   /** Constructor with generated Token Manager. */
@@ -1019,7 +1191,7 @@
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 18; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 27; i++) jj_la1[i] = -1;
   }
 
   /** Reinitialise. */
@@ -1029,7 +1201,7 @@
     jj_ntk = -1;
     jjtree.reset();
     jj_gen = 0;
-    for (int i = 0; i < 18; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 27; i++) jj_la1[i] = -1;
   }
 
   static private Token jj_consume_token(int kind) throws ParseException {
@@ -1080,12 +1252,12 @@
   /** Generate ParseException. */
   static public ParseException generateParseException() {
     jj_expentries.clear();
-    boolean[] la1tokens = new boolean[33];
+    boolean[] la1tokens = new boolean[38];
     if (jj_kind >= 0) {
       la1tokens[jj_kind] = true;
       jj_kind = -1;
     }
-    for (int i = 0; i < 18; i++) {
+    for (int i = 0; i < 27; i++) {
       if (jj_la1[i] == jj_gen) {
         for (int j = 0; j < 32; j++) {
           if ((jj_la1_0[i] & (1<<j)) != 0) {
@@ -1097,7 +1269,7 @@
         }
       }
     }
-    for (int i = 0; i < 33; i++) {
+    for (int i = 0; i < 38; i++) {
       if (la1tokens[i]) {
         jj_expentry = new int[1];
         jj_expentry[0] = i;
