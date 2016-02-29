@@ -272,19 +272,20 @@ void DDBet() :
   Token amount;
   ASTName betID;
   ASTName accountID;
+  ASTHorseSelection selection;
 }
 {
   <BET> <DD> betID=Name() {jjtThis.setBetID(betID.getName());} amount=<NUMBER> {jjtThis.setAmount(Integer.parseInt(amount.image));}
   [<ACCOUNT> accountID=Name() {jjtThis.setAccountID(accountID.getName());} [<PERIOD>]]
-  <DD_1> [<COLON>] HorseSelection(1)
-  <DD_2> [<COLON>] HorseSelection(2)
+  <DD_1> [<COLON>] selection=HorseSelection() { selection.setRace(1); }
+  <DD_2> [<COLON>] selection=HorseSelection() { selection.setRace(2); }
 }
 
-void HorseSelection(Integer race) :
+ASTHorseSelection HorseSelection() :
 {
   Token horse;
 }
 {
-  {jjtThis.setRace(race);}
-  (<ALL_HORSES> {jjtThis.setAllHorses(true);} [<PERIOD>]) | (horse=<NUMBER>{ jjtThis.addHorse(Integer.parseInt(horse.image)); } (<COMMA> horse=<NUMBER> { jjtThis.addHorse(Integer.parseInt(horse.image)); })*) <PERIOD>
+  (<ALL_HORSES> {jjtThis.setAllHorses(true);} <PERIOD>) { return jjtThis; } |
+   (horse=<NUMBER>{ jjtThis.addHorse(Integer.parseInt(horse.image)); } (<COMMA> horse=<NUMBER> { jjtThis.addHorse(Integer.parseInt(horse.image)); })*) <PERIOD> { return jjtThis; }
 }

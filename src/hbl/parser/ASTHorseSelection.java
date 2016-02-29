@@ -30,6 +30,7 @@ class ASTHorseSelection extends SimpleNode {
   }
 
   public void generateSpecifics(JsonObjectBuilder builder) {
+    builder.add("race", race);
     if (allHorses) {
       builder.add("allHorses", allHorses);
     } else {
