@@ -32,7 +32,7 @@ Meeting: Solvalla 2016-02-01
 .
 
 RaceDay: Solvalla 2016-02-01
-.
+
 --------------------------------------------------------------------------------
                                 Double
 Below is an example of making a bet on DD. DDB1 is the id of the bet and must be
@@ -101,14 +101,20 @@ following difference:
 * You can select to "Boost" the bet, see example above under V75.
 --------------------------------------------------------------------------------
 
+--------------------------------------------------------------------------------
+                            Leg Results
 
+Description TBD.
+
+--------------------------------------------------------------------------------
+Leg 2: (3, 4), 7, 8, 9.
+
+Leg 3: .
+
+Leg 4: 9, 10.
+.
 ---
   Check Odds:
   Check Coupon
   Check Dividends
-  Leg 2:
-    (3, 4),
-    1,
-    2,
-    3,
 ---

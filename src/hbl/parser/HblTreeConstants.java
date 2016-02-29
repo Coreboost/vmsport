@@ -20,6 +20,10 @@ public interface HblTreeConstants
   public int JJTLEGSPECS = 16;
   public int JJTMEETING = 17;
   public int JJTRACEDAY = 18;
+  public int JJTLEGRESULT = 19;
+  public int JJTRESULTLIST = 20;
+  public int JJTRESULTENTRY = 21;
+  public int JJTTIE = 22;
 
 
   public String[] jjtNodeName = {
@@ -42,6 +46,10 @@ public interface HblTreeConstants
     "LegSpecs",
     "Meeting",
     "RaceDay",
+    "LegResult",
+    "ResultList",
+    "ResultEntry",
+    "Tie",
   };
 }
-/* JavaCC - OriginalChecksum=656270e6f5423281d14b359bb945642c (do not edit this line) */
+/* JavaCC - OriginalChecksum=00c270d92f66785ef0c30b838cad1452 (do not edit this line) */

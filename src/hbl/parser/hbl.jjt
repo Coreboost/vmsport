@@ -36,6 +36,8 @@ TOKEN : { < PERIOD : "." > }
 TOKEN : { < COMMA : "," > }
 TOKEN : { < COLON : ":" > }
 TOKEN : { < DASH : "-" > }
+TOKEN : { < LEFT_PAREN : "(" > }
+TOKEN : { < RIGHT_PAREN : ")" > }
 TOKEN : { < NUMBER : (["0"-"9"])+ > }
 TOKEN : { < ACCOUNTS : "Accounts:" > }
 TOKEN : { < HORSES : "Horses:" > }
@@ -211,9 +213,46 @@ void RaceDay() :
 }
 {
   <RACEDAY> track=Name() date=Date()
+  (LegResult())+
   <PERIOD>
   {
     jjtThis.setTrack(track.getName());
     jjtThis.setDate(date.toString());
   }
+}
+
+void LegResult() :
+{
+  Token leg;
+}
+{
+  <LEG>leg=<NUMBER><COLON> [ResultList()] <PERIOD>
+  {jjtThis.setLeg(Integer.parseInt(leg.image));}
+}
+
+void ResultList() :
+{
+  ASTResultEntry entry;
+}
+{
+  entry=ResultEntry(){ jjtThis.addEntry(entry.getHorses()); } (<COMMA> entry=ResultEntry(){ jjtThis.addEntry(entry.getHorses()); })*
+}
+
+ASTResultEntry ResultEntry() :
+{
+  Token number;
+  ASTTie tie;
+}
+{
+  (number=<NUMBER>{jjtThis.setEntry(Integer.parseInt(number.image)); return jjtThis; } | tie=Tie()  { jjtThis.setEntry(tie.getHorses()); return jjtThis; }
+)
+}
+
+ASTTie Tie() :
+{
+  Token horse;
+}
+{
+  <LEFT_PAREN> horse=<NUMBER>{ jjtThis.addHorse(Integer.parseInt(horse.image)); } (<COMMA> horse=<NUMBER> { jjtThis.addHorse(Integer.parseInt(horse.image)); })* <RIGHT_PAREN>
+  { return jjtThis; }
 }

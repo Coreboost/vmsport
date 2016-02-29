@@ -17,29 +17,33 @@ public interface HblConstants {
   /** RegularExpression Id. */
   int DASH = 18;
   /** RegularExpression Id. */
-  int NUMBER = 19;
+  int LEFT_PAREN = 19;
   /** RegularExpression Id. */
-  int ACCOUNTS = 20;
+  int RIGHT_PAREN = 20;
   /** RegularExpression Id. */
-  int HORSES = 21;
+  int NUMBER = 21;
   /** RegularExpression Id. */
-  int TRACKS = 22;
+  int ACCOUNTS = 22;
   /** RegularExpression Id. */
-  int INCLUDE = 23;
+  int HORSES = 23;
   /** RegularExpression Id. */
-  int MEETING = 24;
+  int TRACKS = 24;
   /** RegularExpression Id. */
-  int RACEDAY = 25;
+  int INCLUDE = 25;
   /** RegularExpression Id. */
-  int LEG = 26;
+  int MEETING = 26;
   /** RegularExpression Id. */
-  int DD = 27;
+  int RACEDAY = 27;
   /** RegularExpression Id. */
-  int V75 = 28;
+  int LEG = 28;
   /** RegularExpression Id. */
-  int IDENTIFIER = 29;
+  int DD = 29;
   /** RegularExpression Id. */
-  int STRING_LITERAL = 30;
+  int V75 = 30;
+  /** RegularExpression Id. */
+  int IDENTIFIER = 31;
+  /** RegularExpression Id. */
+  int STRING_LITERAL = 32;
 
   /** Lexical state. */
   int DEFAULT = 0;
@@ -73,6 +77,8 @@ public interface HblConstants {
     "\",\"",
     "\":\"",
     "\"-\"",
+    "\"(\"",
+    "\")\"",
     "<NUMBER>",
     "\"Accounts:\"",
     "\"Horses:\"",
