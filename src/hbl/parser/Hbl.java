@@ -713,6 +713,10 @@
       track = Name();
       date = Date();
       jj_consume_token(PERIOD);
+    jjtree.closeNodeScope(jjtn000, true);
+    jjtc000 = false;
+    jjtn000.setTrack(track.getName());
+    jjtn000.setDate(date.toString());
     } catch (Throwable jjte000) {
     if (jjtc000) {
       jjtree.clearNodeScope(jjtn000);

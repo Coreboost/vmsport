@@ -20,7 +20,6 @@ PARSER_BEGIN(Hbl)
 PARSER_END(Hbl)
 
 
-
 SKIP : { "---" : FirstlineMultilineComment }
 <FirstlineMultilineComment> SKIP : {"\n" : WithinMultilineComment}
 <FirstlineMultilineComment> SKIP : { <~[]> }
@@ -213,4 +212,8 @@ void RaceDay() :
 {
   <RACEDAY> track=Name() date=Date()
   <PERIOD>
+  {
+    jjtThis.setTrack(track.getName());
+    jjtThis.setDate(date.toString());
+  }
 }
