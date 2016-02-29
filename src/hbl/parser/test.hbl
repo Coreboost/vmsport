@@ -47,10 +47,10 @@ Finally you specify the selected horses for each of the legs in the DD. You can
 also specify an A to indicate that you select all the horses in the particular
 leg.
 --------------------------------------------------------------------------------
-  Bet DD: DDB1 10
-    Account: AA1
+  Bet DD: DDB1 10 Account: AA1
     DD-1: 2, 3.
     DD-2: A.
+  .
 --------------------------------------------------------------------------------
                            Double Fortuna
 Below is an example of making a Fortuna bet on DD. This is similar to a regular
@@ -62,14 +62,13 @@ DD with the following differences:
     in the specification.
   * Specify all horses yourself, in this case you simply list the numbers.
   * Specify some horses but keep it open fir  Fortuna to add additional horses
-    for the leg. In this case you add an O to the end of the list of horses.
+    for the leg. In this case you add an F to the end of the list of horses.
   * Specify an A to select all of the horses in the race.
 --------------------------------------------------------------------------------
----
   Bet DD: DDB2 Fortuna 100
     DD-1: 2, 3.
-    DD-2: 3 O.
----
+    DD-2: 3 F.
+  .
 --------------------------------------------------------------------------------
                                   V75
 A V75 bet is specified in the same way as a V4 bet with the following

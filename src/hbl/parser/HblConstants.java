@@ -49,11 +49,15 @@ public interface HblConstants {
   /** RegularExpression Id. */
   int DD_2 = 34;
   /** RegularExpression Id. */
-  int ALL_HORSES = 35;
+  int FORTUNA = 35;
   /** RegularExpression Id. */
-  int IDENTIFIER = 36;
+  int FORTUNA_SELECT = 36;
   /** RegularExpression Id. */
-  int STRING_LITERAL = 37;
+  int ALL_HORSES = 37;
+  /** RegularExpression Id. */
+  int IDENTIFIER = 38;
+  /** RegularExpression Id. */
+  int STRING_LITERAL = 39;
 
   /** Lexical state. */
   int DEFAULT = 0;
@@ -103,6 +107,8 @@ public interface HblConstants {
     "\"Bet\"",
     "\"DD-1\"",
     "\"DD-2\"",
+    "\"Fortuna\"",
+    "\"F\"",
     "\"A\"",
     "<IDENTIFIER>",
     "<STRING_LITERAL>",

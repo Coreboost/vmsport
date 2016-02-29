@@ -6,6 +6,7 @@ class ASTDDBet extends SimpleNode {
   private String accountID = null;
   private String betID;
   private Integer amount;
+  private Boolean fortuna=false;
 
   public ASTDDBet(int id) {
     super(id);
@@ -27,8 +28,15 @@ class ASTDDBet extends SimpleNode {
     amount = a;
   }
 
+  public void setFortuna(Boolean f) {
+    fortuna = f;
+  }
+
   public void generateSpecifics(JsonObjectBuilder builder) {
     builder.add("betID", betID);
+    if (fortuna) {
+      builder.add("fortuna", fortuna);
+    }
     if (accountID != null) {
       builder.add("accountID", accountID);
     }

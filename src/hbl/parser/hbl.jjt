@@ -1,5 +1,7 @@
 options {
-  MULTI=true;
+  MULTI = true;
+  LOOKAHEAD = 2;
+  FORCE_LA_CHECK = true;
 }
 PARSER_BEGIN(Hbl)
   public class Hbl {
@@ -52,6 +54,8 @@ TOKEN : { < V75 : "V75:" > }
 TOKEN : { < BET : "Bet" > }
 TOKEN : { < DD_1 : "DD-1" > }
 TOKEN : { < DD_2 : "DD-2" > }
+TOKEN : { < FORTUNA : "Fortuna" > }
+TOKEN : { < FORTUNA_SELECT : "F" > }
 TOKEN : { < ALL_HORSES : "A" > }
 TOKEN : { < IDENTIFIER : (["A"-"Z", "a"-"z", "_"])(["A"-"Z", "a"-"z", "0"-"9", "_"])* > }
 TOKEN : { < STRING_LITERAL : ("\"")(~["\""])*("\"") > }
@@ -264,7 +268,7 @@ ASTTie Tie() :
 
 void Bet() : {}
 {
-  DDBet()
+  DDBet()<PERIOD>
 }
 
 void DDBet() :
@@ -275,10 +279,10 @@ void DDBet() :
   ASTHorseSelection selection;
 }
 {
-  <BET> <DD> betID=Name() {jjtThis.setBetID(betID.getName());} amount=<NUMBER> {jjtThis.setAmount(Integer.parseInt(amount.image));}
-  [<ACCOUNT> accountID=Name() {jjtThis.setAccountID(accountID.getName());} [<PERIOD>]]
-  <DD_1> [<COLON>] selection=HorseSelection() { selection.setRace(1); }
-  <DD_2> [<COLON>] selection=HorseSelection() { selection.setRace(2); }
+  <BET> <DD> betID=Name() {jjtThis.setBetID(betID.getName());} [<FORTUNA> {jjtThis.setFortuna(true);}] amount=<NUMBER> {jjtThis.setAmount(Integer.parseInt(amount.image));}
+  [<ACCOUNT> accountID=Name() {jjtThis.setAccountID(accountID.getName());} ]
+  [<DD_1> [<COLON>] selection=HorseSelection() { selection.setRace(1); }]
+  [<DD_2> [<COLON>] selection=HorseSelection() { selection.setRace(2); }]
 }
 
 ASTHorseSelection HorseSelection() :
@@ -287,5 +291,5 @@ ASTHorseSelection HorseSelection() :
 }
 {
   (<ALL_HORSES> {jjtThis.setAllHorses(true);} <PERIOD>) { return jjtThis; } |
-   (horse=<NUMBER>{ jjtThis.addHorse(Integer.parseInt(horse.image)); } (<COMMA> horse=<NUMBER> { jjtThis.addHorse(Integer.parseInt(horse.image)); })*) <PERIOD> { return jjtThis; }
+   ([horse=<NUMBER>{ jjtThis.addHorse(Integer.parseInt(horse.image)); }]  (<COMMA> horse=<NUMBER> { jjtThis.addHorse(Integer.parseInt(horse.image)); })* [[<COMMA>]<FORTUNA_SELECT> {jjtThis.setFortunaSelect(true);}]) <PERIOD> { return jjtThis; }
 }
