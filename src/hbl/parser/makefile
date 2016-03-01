@@ -20,11 +20,11 @@ JCC_C = Token.class TokenMgrError.class SimpleCharStream.class ParseException.cl
 
 HBL_C = Hbl.class HblConstants.class HblTokenManager.class HblTreeConstants.class
 
-hbl.jj : hbl.jjt
-	jjtree hbl.jjt
-	javacc hbl.jj
+Hbl.jj : Hbl.jjt
+	jjtree Hbl.jjt
+	javacc Hbl.jj
 
-%.class : %.java hbl.jj
+%.class : %.java Hbl.jj
 		javac -classpath $(CLP) $<
 
 test : $(AST_C) $(JCC_C) $(HBL_C)
