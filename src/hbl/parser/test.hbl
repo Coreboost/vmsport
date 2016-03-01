@@ -8,14 +8,14 @@ Accounts:
 .
 
 Horses:
-  "Kalle Kula"  : 1,   -- The number is the relative ranking, if two horses have the same
-  HH2           : 3,   -- rank then the start number in the race will be used as their
-  HH3           : 5    -- relative rank.
+  "Kalle Kula"  : 1,
+  HH2           : 3,
+  HH3           : 5
 .
 
 Tracks:
-  Solvalla, -- If the name of the track contains spaces or funky characters it must be quoted
-  "Åby",    -- otherwise quoting is optional.
+  Solvalla,
+  "Åby",
   "Bergsåker"
 .
 
@@ -32,88 +32,40 @@ Meeting: Solvalla 2016-02-01
 .
 
 RaceDay: Solvalla 2016-02-01
-
---------------------------------------------------------------------------------
-                                Double
-Below is an example of making a bet on DD. DDB1 is the id of the bet and must be
-a unique string, if the id contains blanks it must be enclosed in double quotes.
-10 is the bet amount per combination.
-
-You can then, optionally, specify that the bet is tied to a particular account.
-If no account is specified then it is a traditional cash bet with a receipt that
-is independent of any account.
-
-Finally you specify the selected horses for each of the legs in the DD. You can
-also specify an A to indicate that you select all the horses in the particular
-leg.
---------------------------------------------------------------------------------
   Bet DD: DDB1 10 Account: AA1
     DD-1: 2, 3.
     DD-2: A.
   .
---------------------------------------------------------------------------------
-                           Double Fortuna
-Below is an example of making a Fortuna bet on DD. This is similar to a regular
-DD with the following differences:
-* Instead of a bet amount per combination, you specify the total maximum amount
-  for the bet.
-* For each leg you can either:
-  * let Fortuna select the horses, in this case you simply leave the leg out
-    in the specification.
-  * Specify all horses yourself, in this case you simply list the numbers.
-  * Specify some horses but keep it open fir  Fortuna to add additional horses
-    for the leg. In this case you add an F to the end of the list of horses.
-  * Specify an A to select all of the horses in the race.
---------------------------------------------------------------------------------
+
   Bet DD: DDB2 Fortuna 100
     DD-1: 2, 3.
     DD-2: 3 F.
   .
---------------------------------------------------------------------------------
-                                  V75
-A V75 bet is specified in the same way as a V4 bet with the following
-differences:
-* There are 7 legs instead of 4
-* You can select to "Boost" the bet, see example below.
-* You cannot specify the X3, and X4 multipliers on a V75 but only X1, X2, X5,
-  X10, X20, X50, and X100.
---------------------------------------------------------------------------------
 
-Bet V75: V75B1 X2 Boost Account: AA2
-  V75-1: 2, 3 R 4, 5.
-  V75-2: 1 R 2, 3.
-  V75-3: 1 R 2, 3.
-  V75-4: 2, 3 R 6, 7.
-  V75-5: 2, 3 R 6, 7.
-  V75-6: 2, 3 R 6, 7.
-  V75-7: 2, 3 R 6, 7.
+  Bet V75: V75B1 X2 Boost Account: AA2
+    V75-1: 2, 3 R 4, 5.
+    V75-2: 1 R 2, 3.
+    V75-3: 1 R 2, 3.
+    V75-4: 2, 3 R 6, 7.
+    V75-5: 2, 3 R 6, 7.
+    V75-6: 2, 3 R 6, 7.
+    V75-7: 2, 3 R 6, 7.
+  .
+
+  Bet V75: V75B1 Fortuna 100 Boost Account: AA3
+    V75-1: 2, 3.
+    V75-2: 1.
+    V75-7: 2, 3 F.
+  .
+  Leg 2: (3, 4), 7, 8, 9.
+  Leg 3: .
+  Leg 4: 9, 10.
 .
---------------------------------------------------------------------------------
-                              V75 Fortuna
-A V75 Fortuna bet is specified in the same way as a V4 Fortuna bet with the
-following difference:
-* There are 7 legs instead of 4
-* You can select to "Boost" the bet, see example above under V75.
---------------------------------------------------------------------------------
-Bet V75: V75B1 Fortuna 100 Boost Account: AA3
-  V75-1: 2, 3.
-  V75-2: 1.
-  V75-7: 2, 3 F.
-.
---------------------------------------------------------------------------------
-                            Leg Results
 
-Description TBD.
-
---------------------------------------------------------------------------------
-Leg 2: (3, 4), 7, 8, 9.
-
-Leg 3: .
-
-Leg 4: 9, 10.
-.
 ---
-  Check Odds:
-  Check Coupon
-  Check Dividends
+  Need to check up more in QC here what we should be able to check.
+  Check Odds DD 1, 2 = 23.12
+  Check Coupons V75 = 10.
+  Check Coupons DD = 10.
+  Check Dividends V75 = 200 30 0.
 ---
