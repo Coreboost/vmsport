@@ -47,7 +47,7 @@ TOKEN : { < HORSES : "Horses" > }
 TOKEN : { < TRACKS : "Tracks" > }
 TOKEN : { < INCLUDE : "Include" > }
 TOKEN : { < PROGRAM : "Program" > }
-TOKEN : { < RACEDAY : "RaceDay" > }
+TOKEN : { < MEETING : "Meeting" > }
 TOKEN : { < LEG : "Leg" > }
 TOKEN : { < DD : "DD" > }
 TOKEN : { < V75 : "V75" > }
@@ -82,7 +82,7 @@ SimpleNode Start() : {}
 {
   (Accounts() | Horses() | Tracks() | Include())*
   (Program())*
-  (RaceDay())*
+  (Meeting())*
   <EOF>
   { return jjtThis; }
 }
@@ -233,13 +233,13 @@ void Program() :
   }
 }
 
-void RaceDay() :
+void Meeting() :
 {
   ASTName track;
   ASTDate date;
 }
 {
-  <RACEDAY> track=Name() date=Date()
+  <MEETING> track=Name() date=Date()
   ( (Bet()) | (LegResult()) )*
   <PERIOD>
   {

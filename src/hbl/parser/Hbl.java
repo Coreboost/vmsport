@@ -56,7 +56,7 @@
         } else {
           break label_3;
         }
-        RaceDay();
+        Meeting();
       }
       jj_consume_token(0);
     jjtree.closeNodeScope(jjtn000, true);
@@ -682,14 +682,14 @@
     }
   }
 
-  static final public void RaceDay() throws ParseException {
- /*@bgen(jjtree) RaceDay */
-  ASTRaceDay jjtn000 = new ASTRaceDay(JJTRACEDAY);
+  static final public void Meeting() throws ParseException {
+ /*@bgen(jjtree) Meeting */
+  ASTMeeting jjtn000 = new ASTMeeting(JJTMEETING);
   boolean jjtc000 = true;
   jjtree.openNodeScope(jjtn000);ASTName track;
   ASTDate date;
     try {
-      jj_consume_token(RACEDAY);
+      jj_consume_token(MEETING);
       track = Name();
       date = Date();
       label_11:
@@ -2534,7 +2534,7 @@
   }
 
   static private boolean jj_3R_20() {
-    if (jj_scan_token(RACEDAY)) return true;
+    if (jj_scan_token(MEETING)) return true;
     if (jj_3R_26()) return true;
     return false;
   }

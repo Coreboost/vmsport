@@ -35,7 +35,7 @@ public interface HblConstants {
   /** RegularExpression Id. */
   int PROGRAM = 27;
   /** RegularExpression Id. */
-  int RACEDAY = 28;
+  int MEETING = 28;
   /** RegularExpression Id. */
   int LEG = 29;
   /** RegularExpression Id. */
@@ -136,7 +136,7 @@ public interface HblConstants {
     "\"Tracks\"",
     "\"Include\"",
     "\"Program\"",
-    "\"RaceDay\"",
+    "\"Meeting\"",
     "\"Leg\"",
     "\"DD\"",
     "\"V75\"",
