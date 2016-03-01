@@ -7,6 +7,7 @@ public
 class ASTHorseSelection extends SimpleNode {
   private Integer race;
   private List<Integer> horses = new ArrayList<Integer>();
+  private List<Integer> reserves = new ArrayList<Integer>();
   private Boolean allHorses = false;
   private Boolean fortunaSelect = false;
 
@@ -30,6 +31,10 @@ class ASTHorseSelection extends SimpleNode {
     horses.add(h);
   }
 
+  public void addReserve(Integer r) {
+    reserves.add(r);
+  }
+
   public void setRace(Integer r) {
     race = r;
   }
@@ -47,6 +52,13 @@ class ASTHorseSelection extends SimpleNode {
         myBuilder.add(horse);
       });
       builder.add("horses", myBuilder.build());
+      if (reserves.size() > 0) {
+        final JsonArrayBuilder myBuilder2 = Json.createArrayBuilder();
+        reserves.forEach((reserve) -> {
+          myBuilder2.add(reserve);
+        });
+        builder.add("reserves", myBuilder2.build());
+      }
     }
   }
 }

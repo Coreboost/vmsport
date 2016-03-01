@@ -307,10 +307,15 @@ void DDBet() :
 ASTHorseSelection HorseSelection() :
 {
   Token horse;
+  Token reserve;
 }
 {
-  (<ALL_HORSES> {jjtThis.setAllHorses(true);} <PERIOD>) { return jjtThis; } |
-   ([horse=<NUMBER>{ jjtThis.addHorse(Integer.parseInt(horse.image)); }]  (<COMMA> horse=<NUMBER> { jjtThis.addHorse(Integer.parseInt(horse.image)); })* [[<COMMA>]<FORTUNA_SELECT> {jjtThis.setFortunaSelect(true);}]) <PERIOD> { return jjtThis; }
+  (<ALL_HORSES> {jjtThis.setAllHorses(true);} <PERIOD> { return jjtThis; }) |
+  (([horse=<NUMBER>{ jjtThis.addHorse(Integer.parseInt(horse.image)); }] (<COMMA> horse=<NUMBER> { jjtThis.addHorse(Integer.parseInt(horse.image)); })*)
+  [(<RESERVES> reserve=<NUMBER>{jjtThis.addReserve(Integer.parseInt(reserve.image));} [<COMMA> reserve=<NUMBER>{jjtThis.addReserve(Integer.parseInt(reserve.image));}]) |
+  ([<COMMA>]<FORTUNA_SELECT> {jjtThis.setFortunaSelect(true);})]
+   <PERIOD> { return jjtThis; })
+
 }
 
 void V75Bet() :
@@ -319,7 +324,7 @@ void V75Bet() :
   ASTName betID;
   ASTName accountID;
   ASTMultiplier mult;
-  ASTHorseSelectionVxy selection;
+  ASTHorseSelection selection;
 }
 {
   <BET> <V75> betID=Name(){jjtThis.setBetID(betID.getName());}
@@ -329,26 +334,14 @@ void V75Bet() :
   ]
   [<BOOST>{jjtThis.setBoost(true);}]
   [<ACCOUNT> accountID=Name() {jjtThis.setAccountID(accountID.getName());} ]
-  [<V75_1> [<COLON>] selection=HorseSelectionVxy() { selection.setRace(1); }]
-  [<V75_2> [<COLON>] selection=HorseSelectionVxy() { selection.setRace(2); }]
-  [<V75_3> [<COLON>] selection=HorseSelectionVxy() { selection.setRace(3); }]
-  [<V75_4> [<COLON>] selection=HorseSelectionVxy() { selection.setRace(4); }]
-  [<V75_5> [<COLON>] selection=HorseSelectionVxy() { selection.setRace(5); }]
-  [<V75_6> [<COLON>] selection=HorseSelectionVxy() { selection.setRace(6); }]
-  [<V75_7> [<COLON>] selection=HorseSelectionVxy() { selection.setRace(7); }]
+  [<V75_1> [<COLON>] selection=HorseSelection() { selection.setRace(1); }]
+  [<V75_2> [<COLON>] selection=HorseSelection() { selection.setRace(2); }]
+  [<V75_3> [<COLON>] selection=HorseSelection() { selection.setRace(3); }]
+  [<V75_4> [<COLON>] selection=HorseSelection() { selection.setRace(4); }]
+  [<V75_5> [<COLON>] selection=HorseSelection() { selection.setRace(5); }]
+  [<V75_6> [<COLON>] selection=HorseSelection() { selection.setRace(6); }]
+  [<V75_7> [<COLON>] selection=HorseSelection() { selection.setRace(7); }]
   <PERIOD>
-}
-
-ASTHorseSelectionVxy HorseSelectionVxy() :
-{
-  Token horse;
-  Token reserve;
-}
-{
-   ([horse=<NUMBER>{ jjtThis.addHorse(Integer.parseInt(horse.image)); }] (<COMMA> horse=<NUMBER> { jjtThis.addHorse(Integer.parseInt(horse.image)); })*)
-   [(<RESERVES> reserve=<NUMBER>{jjtThis.addReserve(Integer.parseInt(reserve.image));} [<COMMA> reserve=<NUMBER>{jjtThis.addReserve(Integer.parseInt(reserve.image));}]) |
-   ([<COMMA>]<FORTUNA_SELECT> {jjtThis.setFortunaSelect(true);})]
-    <PERIOD> { return jjtThis; }
 }
 
 ASTMultiplier Multiplier() :
