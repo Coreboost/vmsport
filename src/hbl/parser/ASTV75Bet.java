@@ -2,14 +2,7 @@
 /* JavaCCOptions:MULTI=true,NODE_USES_PARSER=false,VISITOR=false,TRACK_TOKENS=false,NODE_PREFIX=AST,NODE_EXTENDS=,NODE_FACTORY=,SUPPORT_CLASS_VISIBILITY_PUBLIC=true */
 import javax.json.*;
 public
-class ASTV75Bet extends SimpleNode {
-  private String betID;
-  private String accountID;
-  private Boolean boost;
-  private Integer multiplier;
-  private Integer amount;
-  private Boolean fortuna=false;
-
+class ASTV75Bet extends AbstractBet {
 
   public ASTV75Bet(int id) {
     super(id);
@@ -17,44 +10,6 @@ class ASTV75Bet extends SimpleNode {
 
   public ASTV75Bet(Hbl p, int id) {
     super(p, id);
-  }
-
-  public void setAccountID(String id) {
-    accountID = id;
-  }
-
-  public void setBetID(String id) {
-    betID = id;
-  }
-
-  public void setBoost(Boolean b) {
-    boost = b;
-  }
-
-  public void setMultiplier(Integer m) {
-    multiplier = m;
-  }
-
-  public void setAmount(Integer a) {
-    amount = a;
-  }
-
-  public void setFortuna(Boolean f) {
-    fortuna = f;
-  }
-
-  public void generateSpecifics(JsonObjectBuilder builder) {
-    builder.add("betID", betID);
-    if (fortuna) {
-      builder.add("fortuna", fortuna);
-      builder.add("amount", amount);
-    } else {
-      builder.add("multiplier", multiplier);
-    }
-    builder.add("boost", boost);
-    if (accountID != null) {
-      builder.add("accountID", accountID);
-    }
   }
 
 }

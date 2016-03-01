@@ -3,7 +3,8 @@
 *.a
 *.class
 .vagrant/
-src/hbl/parser/hbl.jj
+src/hbl/parser/Hbl.jj
+src/hbl/parser/*.class
 src/ifdlparser/*.pyc
 src/ifdlparser/grammar.py
 src/wrap/c/ftest
