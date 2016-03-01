@@ -9,6 +9,7 @@ class AbstractBet extends SimpleNode {
   private Boolean fortuna=false;
   private Boolean boost = false;
   private Integer multiplier = 1;
+  private Integer repeat = 1;
 
 
   public AbstractBet(int id) {
@@ -43,6 +44,10 @@ class AbstractBet extends SimpleNode {
     multiplier = m;
   }
 
+  public void setRepeat(Integer r) {
+    repeat = r;
+  }
+
   public void generateSpecifics(JsonObjectBuilder builder) {
     if (betID != null) {
       builder.add("betID", betID);
@@ -55,6 +60,9 @@ class AbstractBet extends SimpleNode {
     }
     if (multiplier > 1) {
       builder.add("multiplier", multiplier);
+    }
+    if (repeat > 1) {
+      builder.add("repeat", repeat);
     }
     if (boost) {
       builder.add("boost", boost);

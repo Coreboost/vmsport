@@ -1,6 +1,6 @@
 options {
   MULTI = true;
-  LOOKAHEAD = 2;
+  LOOKAHEAD = 3;
   FORCE_LA_CHECK = true;
 }
 PARSER_BEGIN(Hbl)
@@ -292,12 +292,13 @@ void Bet() : {}
 void DDBet() :
 {
   Token amount;
+  Token repeat;
   ASTName betID;
   ASTName accountID;
   ASTHorseSelection selection;
 }
 {
-  <BET> <DD> [betID=Name() {jjtThis.setBetID(betID.getName());}] [<FORTUNA> {jjtThis.setFortuna(true);}] amount=<NUMBER> {jjtThis.setAmount(Integer.parseInt(amount.image));}
+  <BET> [repeat=<NUMBER>{ jjtThis.setRepeat(Integer.parseInt(repeat.image)); }] <DD> [betID=Name() {jjtThis.setBetID(betID.getName());}] [<FORTUNA> {jjtThis.setFortuna(true);}] amount=<NUMBER> {jjtThis.setAmount(Integer.parseInt(amount.image));}
   [<ACCOUNT> accountID=Name() {jjtThis.setAccountID(accountID.getName());} ]
   [<DD_1> [<COLON>] selection=HorseSelection() { selection.setRace(1); }]
   [<DD_2> [<COLON>] selection=HorseSelection() { selection.setRace(2); }]
@@ -321,13 +322,14 @@ ASTHorseSelection HorseSelection() :
 void V75Bet() :
 {
   Token amount;
+  Token repeat;
   ASTName betID;
   ASTName accountID;
   ASTMultiplier mult;
   ASTHorseSelection selection;
 }
 {
-  <BET> <V75> [betID=Name(){jjtThis.setBetID(betID.getName());}]
+  <BET> [repeat=<NUMBER>{ jjtThis.setRepeat(Integer.parseInt(repeat.image)); }] <V75> [betID=Name(){jjtThis.setBetID(betID.getName());}]
   [
    (mult=Multiplier(){jjtThis.setMultiplier(mult.getValue());}) |
    (<FORTUNA> {jjtThis.setFortuna(true);} amount=<NUMBER> {jjtThis.setAmount(Integer.parseInt(amount.image));})
