@@ -297,7 +297,7 @@ void DDBet() :
   ASTHorseSelection selection;
 }
 {
-  <BET> <DD> betID=Name() {jjtThis.setBetID(betID.getName());} [<FORTUNA> {jjtThis.setFortuna(true);}] amount=<NUMBER> {jjtThis.setAmount(Integer.parseInt(amount.image));}
+  <BET> <DD> [betID=Name() {jjtThis.setBetID(betID.getName());}] [<FORTUNA> {jjtThis.setFortuna(true);}] amount=<NUMBER> {jjtThis.setAmount(Integer.parseInt(amount.image));}
   [<ACCOUNT> accountID=Name() {jjtThis.setAccountID(accountID.getName());} ]
   [<DD_1> [<COLON>] selection=HorseSelection() { selection.setRace(1); }]
   [<DD_2> [<COLON>] selection=HorseSelection() { selection.setRace(2); }]
@@ -327,7 +327,7 @@ void V75Bet() :
   ASTHorseSelection selection;
 }
 {
-  <BET> <V75> betID=Name(){jjtThis.setBetID(betID.getName());}
+  <BET> <V75> [betID=Name(){jjtThis.setBetID(betID.getName());}]
   [
    (mult=Multiplier(){jjtThis.setMultiplier(mult.getValue());}) |
    (<FORTUNA> {jjtThis.setFortuna(true);} amount=<NUMBER> {jjtThis.setAmount(Integer.parseInt(amount.image));})

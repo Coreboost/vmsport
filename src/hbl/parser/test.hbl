@@ -38,7 +38,7 @@ RaceDay Solvalla 2016-02-01
     DD-2 A.
   .
 
-  Bet DD DDB2 Fortuna 100
+  Bet DD Fortuna 100  -- Bet ID is optional
     DD-1 2 3. -- Commas between horse numbers are optional.
     DD-2 3 F.
   .
@@ -53,7 +53,7 @@ RaceDay Solvalla 2016-02-01
     V75-7 2, 3 R 6, 7.
   .
 
-  Bet V75 V75B1 Fortuna 100 Boost Account AA3
+  Bet V75 Fortuna 100 Boost Account AA3  -- Bet ID is optional.
     V75-1 2, 3.
     V75-2 1.
     V75-7 2, 3 F.
