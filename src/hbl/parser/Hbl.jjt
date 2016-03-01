@@ -41,16 +41,16 @@ TOKEN : { < DASH : "-" > }
 TOKEN : { < LEFT_PAREN : "(" > }
 TOKEN : { < RIGHT_PAREN : ")" > }
 TOKEN : { < NUMBER : (["0"-"9"])+ > }
-TOKEN : { < ACCOUNTS : "Accounts:" > }
-TOKEN : { < ACCOUNT : "Account:" > }
-TOKEN : { < HORSES : "Horses:" > }
-TOKEN : { < TRACKS : "Tracks:" > }
-TOKEN : { < INCLUDE : "Include:" > }
-TOKEN : { < MEETING : "Meeting:" > }
-TOKEN : { < RACEDAY : "RaceDay:" > }
+TOKEN : { < ACCOUNTS : "Accounts" > }
+TOKEN : { < ACCOUNT : "Account" > }
+TOKEN : { < HORSES : "Horses" > }
+TOKEN : { < TRACKS : "Tracks" > }
+TOKEN : { < INCLUDE : "Include" > }
+TOKEN : { < MEETING : "Meeting" > }
+TOKEN : { < RACEDAY : "RaceDay" > }
 TOKEN : { < LEG : "Leg" > }
-TOKEN : { < DD : "DD:" > }
-TOKEN : { < V75 : "V75:" > }
+TOKEN : { < DD : "DD" > }
+TOKEN : { < V75 : "V75" > }
 TOKEN : { < BET : "Bet" > }
 TOKEN : { < DD_1 : "DD-1" > }
 TOKEN : { < DD_2 : "DD-2" > }
@@ -109,7 +109,7 @@ void AccountSpec() :
   ASTName name;
 }
 {
-  name=Name() <COLON> amount=<NUMBER>
+  name=Name() [<COLON>] amount=<NUMBER>
   {
     jjtThis.setName(name.getName());
     jjtThis.setAmount(Integer.parseInt(amount.image));
@@ -119,7 +119,7 @@ void AccountSpec() :
 void Accounts() : {}
 {
   <ACCOUNTS>
-  AccountSpec() (<COMMA> AccountSpec())*<PERIOD>
+  AccountSpec() ([<COMMA>] AccountSpec())*<PERIOD>
 }
 
 void HorseSpec() :
@@ -128,7 +128,7 @@ void HorseSpec() :
   ASTName name;
 }
 {
-  name=Name() <COLON> rank=<NUMBER>
+  name=Name() [<COLON>] rank=<NUMBER>
   {
     jjtThis.setName(name.getName());
     jjtThis.setRank(Integer.parseInt(rank.image));
@@ -138,7 +138,7 @@ void HorseSpec() :
 void Horses() : {}
 {
   <HORSES>
-  HorseSpec()(<COMMA> HorseSpec())*<PERIOD>
+  HorseSpec()([<COMMA>] HorseSpec())*<PERIOD>
 }
 
 void TrackSpec() :
@@ -155,7 +155,7 @@ void TrackSpec() :
 void Tracks() : {}
 {
   <TRACKS>
-  TrackSpec()(<COMMA> TrackSpec())*<PERIOD>
+  TrackSpec()([<COMMA>] TrackSpec())*<PERIOD>
 }
 
 ASTDate Date() :
@@ -200,7 +200,7 @@ void StartList() :
   ASTName name;
 }
 {
-  name=Name(){ jjtThis.addHorse(name.getName()); }(<COMMA> name=Name(){ jjtThis.addHorse(name.getName()); })*
+  name=Name(){ jjtThis.addHorse(name.getName()); }([<COMMA>] name=Name(){ jjtThis.addHorse(name.getName()); })*
 }
 
 void LegSpec() :
@@ -208,7 +208,7 @@ void LegSpec() :
   Token leg;
 }
 {
-  <LEG>leg=<NUMBER><COLON>StartList()<PERIOD>
+  <LEG>leg=<NUMBER>[<COLON>]StartList()<PERIOD>
   { jjtThis.setLeg(Integer.parseInt(leg.image)); }
 }
 
@@ -253,7 +253,7 @@ void LegResult() :
   Token leg;
 }
 {
-  <LEG>leg=<NUMBER><COLON> [ResultList()] <PERIOD>
+  <LEG>leg=<NUMBER>[<COLON>] [ResultList()] <PERIOD>
   {jjtThis.setLeg(Integer.parseInt(leg.image));}
 }
 
@@ -262,7 +262,7 @@ void ResultList() :
   ASTResultEntry entry;
 }
 {
-  entry=ResultEntry(){ jjtThis.addEntry(entry.getHorses()); } (<COMMA> entry=ResultEntry(){ jjtThis.addEntry(entry.getHorses()); })*
+  entry=ResultEntry(){ jjtThis.addEntry(entry.getHorses()); } ([<COMMA>] entry=ResultEntry(){ jjtThis.addEntry(entry.getHorses()); })*
 }
 
 ASTResultEntry ResultEntry() :
@@ -280,7 +280,7 @@ ASTTie Tie() :
   Token horse;
 }
 {
-  <LEFT_PAREN> horse=<NUMBER>{ jjtThis.addHorse(Integer.parseInt(horse.image)); } (<COMMA> horse=<NUMBER> { jjtThis.addHorse(Integer.parseInt(horse.image)); })* <RIGHT_PAREN>
+  <LEFT_PAREN> horse=<NUMBER>{ jjtThis.addHorse(Integer.parseInt(horse.image)); } ([<COMMA>] horse=<NUMBER> { jjtThis.addHorse(Integer.parseInt(horse.image)); })* <RIGHT_PAREN>
   { return jjtThis; }
 }
 
@@ -311,8 +311,8 @@ ASTHorseSelection HorseSelection() :
 }
 {
   (<ALL_HORSES> {jjtThis.setAllHorses(true);} <PERIOD> { return jjtThis; }) |
-  (([horse=<NUMBER>{ jjtThis.addHorse(Integer.parseInt(horse.image)); }] (<COMMA> horse=<NUMBER> { jjtThis.addHorse(Integer.parseInt(horse.image)); })*)
-  [(<RESERVES> reserve=<NUMBER>{jjtThis.addReserve(Integer.parseInt(reserve.image));} [<COMMA> reserve=<NUMBER>{jjtThis.addReserve(Integer.parseInt(reserve.image));}]) |
+  (([horse=<NUMBER>{ jjtThis.addHorse(Integer.parseInt(horse.image)); }] ([<COMMA>] horse=<NUMBER> { jjtThis.addHorse(Integer.parseInt(horse.image)); })*)
+  [(<RESERVES> reserve=<NUMBER>{jjtThis.addReserve(Integer.parseInt(reserve.image));} [[<COMMA>] reserve=<NUMBER>{jjtThis.addReserve(Integer.parseInt(reserve.image));}]) |
   ([<COMMA>]<FORTUNA_SELECT> {jjtThis.setFortunaSelect(true);})]
    <PERIOD> { return jjtThis; })
 
