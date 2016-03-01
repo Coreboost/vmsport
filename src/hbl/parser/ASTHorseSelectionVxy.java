@@ -8,6 +8,8 @@ class ASTHorseSelectionVxy extends SimpleNode {
   private Integer race;
   private List<Integer> horses = new ArrayList<Integer>();
   private List<Integer> reserves = new ArrayList<Integer>();
+  private Boolean fortunaSelect = false;
+
   public ASTHorseSelectionVxy(int id) {
     super(id);
   }
@@ -28,8 +30,15 @@ class ASTHorseSelectionVxy extends SimpleNode {
     reserves.add(r);
   }
 
+  public void setFortunaSelect(Boolean val) {
+    fortunaSelect = val;
+  }
+
   public void generateSpecifics(JsonObjectBuilder builder) {
     builder.add("race", race);
+    if (fortunaSelect) {
+      builder.add("fortunaSelect", fortunaSelect);
+    }
     final JsonArrayBuilder myBuilder = Json.createArrayBuilder();
     horses.forEach((horse) -> {
       myBuilder.add(horse);

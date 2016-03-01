@@ -315,13 +315,19 @@ ASTHorseSelection HorseSelection() :
 
 void V75Bet() :
 {
+  Token amount;
   ASTName betID;
   ASTName accountID;
   ASTMultiplier mult;
   ASTHorseSelectionVxy selection;
 }
 {
-  <BET> <V75> betID=Name(){jjtThis.setBetID(betID.getName());} [mult=Multiplier(){jjtThis.setMultiplier(mult.getValue());}] [<BOOST>{jjtThis.setBoost(true);}]
+  <BET> <V75> betID=Name(){jjtThis.setBetID(betID.getName());}
+  [
+   (mult=Multiplier(){jjtThis.setMultiplier(mult.getValue());}) |
+   (<FORTUNA> {jjtThis.setFortuna(true);} amount=<NUMBER> {jjtThis.setAmount(Integer.parseInt(amount.image));})
+  ]
+  [<BOOST>{jjtThis.setBoost(true);}]
   [<ACCOUNT> accountID=Name() {jjtThis.setAccountID(accountID.getName());} ]
   [<V75_1> [<COLON>] selection=HorseSelectionVxy() { selection.setRace(1); }]
   [<V75_2> [<COLON>] selection=HorseSelectionVxy() { selection.setRace(2); }]
@@ -340,7 +346,8 @@ ASTHorseSelectionVxy HorseSelectionVxy() :
 }
 {
    ([horse=<NUMBER>{ jjtThis.addHorse(Integer.parseInt(horse.image)); }] (<COMMA> horse=<NUMBER> { jjtThis.addHorse(Integer.parseInt(horse.image)); })*)
-   [<RESERVES> reserve=<NUMBER>{jjtThis.addReserve(Integer.parseInt(reserve.image));} [<COMMA> reserve=<NUMBER>{jjtThis.addReserve(Integer.parseInt(reserve.image));}]]
+   [(<RESERVES> reserve=<NUMBER>{jjtThis.addReserve(Integer.parseInt(reserve.image));} [<COMMA> reserve=<NUMBER>{jjtThis.addReserve(Integer.parseInt(reserve.image));}]) |
+   ([<COMMA>]<FORTUNA_SELECT> {jjtThis.setFortunaSelect(true);})]
     <PERIOD> { return jjtThis; }
 }
 

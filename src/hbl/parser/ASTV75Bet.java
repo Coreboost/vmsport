@@ -7,6 +7,9 @@ class ASTV75Bet extends SimpleNode {
   private String accountID;
   private Boolean boost;
   private Integer multiplier;
+  private Integer amount;
+  private Boolean fortuna=false;
+
 
   public ASTV75Bet(int id) {
     super(id);
@@ -32,9 +35,22 @@ class ASTV75Bet extends SimpleNode {
     multiplier = m;
   }
 
+  public void setAmount(Integer a) {
+    amount = a;
+  }
+
+  public void setFortuna(Boolean f) {
+    fortuna = f;
+  }
+
   public void generateSpecifics(JsonObjectBuilder builder) {
     builder.add("betID", betID);
-    builder.add("multiplier", multiplier);
+    if (fortuna) {
+      builder.add("fortuna", fortuna);
+      builder.add("amount", amount);
+    } else {
+      builder.add("multiplier", multiplier);
+    }
     builder.add("boost", boost);
     if (accountID != null) {
       builder.add("accountID", accountID);
