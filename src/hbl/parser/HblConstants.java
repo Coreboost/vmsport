@@ -49,15 +49,51 @@ public interface HblConstants {
   /** RegularExpression Id. */
   int DD_2 = 34;
   /** RegularExpression Id. */
-  int FORTUNA = 35;
+  int V75_1 = 35;
   /** RegularExpression Id. */
-  int FORTUNA_SELECT = 36;
+  int V75_2 = 36;
   /** RegularExpression Id. */
-  int ALL_HORSES = 37;
+  int V75_3 = 37;
   /** RegularExpression Id. */
-  int IDENTIFIER = 38;
+  int V75_4 = 38;
   /** RegularExpression Id. */
-  int STRING_LITERAL = 39;
+  int V75_5 = 39;
+  /** RegularExpression Id. */
+  int V75_6 = 40;
+  /** RegularExpression Id. */
+  int V75_7 = 41;
+  /** RegularExpression Id. */
+  int X1 = 42;
+  /** RegularExpression Id. */
+  int X2 = 43;
+  /** RegularExpression Id. */
+  int X3 = 44;
+  /** RegularExpression Id. */
+  int X4 = 45;
+  /** RegularExpression Id. */
+  int X5 = 46;
+  /** RegularExpression Id. */
+  int X10 = 47;
+  /** RegularExpression Id. */
+  int X20 = 48;
+  /** RegularExpression Id. */
+  int X50 = 49;
+  /** RegularExpression Id. */
+  int X100 = 50;
+  /** RegularExpression Id. */
+  int FORTUNA = 51;
+  /** RegularExpression Id. */
+  int RESERVES = 52;
+  /** RegularExpression Id. */
+  int FORTUNA_SELECT = 53;
+  /** RegularExpression Id. */
+  int ALL_HORSES = 54;
+  /** RegularExpression Id. */
+  int BOOST = 55;
+  /** RegularExpression Id. */
+  int IDENTIFIER = 56;
+  /** RegularExpression Id. */
+  int STRING_LITERAL = 57;
 
   /** Lexical state. */
   int DEFAULT = 0;
@@ -107,9 +143,27 @@ public interface HblConstants {
     "\"Bet\"",
     "\"DD-1\"",
     "\"DD-2\"",
+    "\"V75-1\"",
+    "\"V75-2\"",
+    "\"V75-3\"",
+    "\"V75-4\"",
+    "\"V75-5\"",
+    "\"V75-6\"",
+    "\"V75-7\"",
+    "\"X1\"",
+    "\"X2\"",
+    "\"X3\"",
+    "\"X4\"",
+    "\"X5\"",
+    "\"X10\"",
+    "\"X20\"",
+    "\"X50\"",
+    "\"X100\"",
     "\"Fortuna\"",
+    "\"R\"",
     "\"F\"",
     "\"A\"",
+    "\"Boost\"",
     "<IDENTIFIER>",
     "<STRING_LITERAL>",
   };

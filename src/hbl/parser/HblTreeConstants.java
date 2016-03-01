@@ -27,6 +27,9 @@ public interface HblTreeConstants
   public int JJTBET = 23;
   public int JJTDDBET = 24;
   public int JJTHORSESELECTION = 25;
+  public int JJTV75BET = 26;
+  public int JJTHORSESELECTIONVXY = 27;
+  public int JJTMULTIPLIER = 28;
 
 
   public String[] jjtNodeName = {
@@ -56,6 +59,9 @@ public interface HblTreeConstants
     "Bet",
     "DDBet",
     "HorseSelection",
+    "V75Bet",
+    "HorseSelectionVxy",
+    "Multiplier",
   };
 }
-/* JavaCC - OriginalChecksum=21a21f1721afcba7517ecf88d3056bee (do not edit this line) */
+/* JavaCC - OriginalChecksum=7ed19f4adf66616c74ce55c85800471d (do not edit this line) */

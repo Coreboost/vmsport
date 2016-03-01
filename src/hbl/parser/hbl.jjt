@@ -54,9 +54,27 @@ TOKEN : { < V75 : "V75:" > }
 TOKEN : { < BET : "Bet" > }
 TOKEN : { < DD_1 : "DD-1" > }
 TOKEN : { < DD_2 : "DD-2" > }
+TOKEN : { < V75_1 : "V75-1" > }
+TOKEN : { < V75_2 : "V75-2" > }
+TOKEN : { < V75_3 : "V75-3" > }
+TOKEN : { < V75_4 : "V75-4" > }
+TOKEN : { < V75_5 : "V75-5" > }
+TOKEN : { < V75_6 : "V75-6" > }
+TOKEN : { < V75_7 : "V75-7" > }
+TOKEN : { < X1 : "X1" > }
+TOKEN : { < X2 : "X2" > }
+TOKEN : { < X3 : "X3" > }
+TOKEN : { < X4 : "X4" > }
+TOKEN : { < X5 : "X5" > }
+TOKEN : { < X10 : "X10" > }
+TOKEN : { < X20 : "X20" > }
+TOKEN : { < X50 : "X50" > }
+TOKEN : { < X100 : "X100" > }
 TOKEN : { < FORTUNA : "Fortuna" > }
+TOKEN : { < RESERVES : "R" > }
 TOKEN : { < FORTUNA_SELECT : "F" > }
 TOKEN : { < ALL_HORSES : "A" > }
+TOKEN : { < BOOST : "Boost" > }
 TOKEN : { < IDENTIFIER : (["A"-"Z", "a"-"z", "_"])(["A"-"Z", "a"-"z", "0"-"9", "_"])* > }
 TOKEN : { < STRING_LITERAL : ("\"")(~["\""])*("\"") > }
 
@@ -222,7 +240,7 @@ void RaceDay() :
 }
 {
   <RACEDAY> track=Name() date=Date()
-  (Bet())* (LegResult()[Bet()]) +
+  ( (Bet()) | (LegResult()) )*
   <PERIOD>
   {
     jjtThis.setTrack(track.getName());
@@ -268,7 +286,7 @@ ASTTie Tie() :
 
 void Bet() : {}
 {
-  DDBet()<PERIOD>
+  DDBet()|V75Bet()
 }
 
 void DDBet() :
@@ -283,6 +301,7 @@ void DDBet() :
   [<ACCOUNT> accountID=Name() {jjtThis.setAccountID(accountID.getName());} ]
   [<DD_1> [<COLON>] selection=HorseSelection() { selection.setRace(1); }]
   [<DD_2> [<COLON>] selection=HorseSelection() { selection.setRace(2); }]
+  <PERIOD>
 }
 
 ASTHorseSelection HorseSelection() :
@@ -292,4 +311,50 @@ ASTHorseSelection HorseSelection() :
 {
   (<ALL_HORSES> {jjtThis.setAllHorses(true);} <PERIOD>) { return jjtThis; } |
    ([horse=<NUMBER>{ jjtThis.addHorse(Integer.parseInt(horse.image)); }]  (<COMMA> horse=<NUMBER> { jjtThis.addHorse(Integer.parseInt(horse.image)); })* [[<COMMA>]<FORTUNA_SELECT> {jjtThis.setFortunaSelect(true);}]) <PERIOD> { return jjtThis; }
+}
+
+void V75Bet() :
+{
+  ASTName betID;
+  ASTName accountID;
+  ASTMultiplier mult;
+  ASTHorseSelectionVxy selection;
+}
+{
+  <BET> <V75> betID=Name(){jjtThis.setBetID(betID.getName());} [mult=Multiplier(){jjtThis.setMultiplier(mult.getValue());}] [<BOOST>{jjtThis.setBoost(true);}]
+  [<ACCOUNT> accountID=Name() {jjtThis.setAccountID(accountID.getName());} ]
+  [<V75_1> [<COLON>] selection=HorseSelectionVxy() { selection.setRace(1); }]
+  [<V75_2> [<COLON>] selection=HorseSelectionVxy() { selection.setRace(2); }]
+  [<V75_3> [<COLON>] selection=HorseSelectionVxy() { selection.setRace(3); }]
+  [<V75_4> [<COLON>] selection=HorseSelectionVxy() { selection.setRace(4); }]
+  [<V75_5> [<COLON>] selection=HorseSelectionVxy() { selection.setRace(5); }]
+  [<V75_6> [<COLON>] selection=HorseSelectionVxy() { selection.setRace(6); }]
+  [<V75_7> [<COLON>] selection=HorseSelectionVxy() { selection.setRace(7); }]
+  <PERIOD>
+}
+
+ASTHorseSelectionVxy HorseSelectionVxy() :
+{
+  Token horse;
+  Token reserve;
+}
+{
+   ([horse=<NUMBER>{ jjtThis.addHorse(Integer.parseInt(horse.image)); }] (<COMMA> horse=<NUMBER> { jjtThis.addHorse(Integer.parseInt(horse.image)); })*)
+   [<RESERVES> reserve=<NUMBER>{jjtThis.addReserve(Integer.parseInt(reserve.image));} [<COMMA> reserve=<NUMBER>{jjtThis.addReserve(Integer.parseInt(reserve.image));}]]
+    <PERIOD> { return jjtThis; }
+}
+
+ASTMultiplier Multiplier() :
+{}
+{
+  (<X1>{ jjtThis.setValue(1); }|
+  <X2>{ jjtThis.setValue(2); }|
+  <X3>{ jjtThis.setValue(3); }|
+  <X4>{ jjtThis.setValue(4); }|
+  <X5>{ jjtThis.setValue(5); }|
+  <X10>{ jjtThis.setValue(10); }|
+  <X20>{ jjtThis.setValue(20); }|
+  <X50>{ jjtThis.setValue(50); }|
+  <X100>{ jjtThis.setValue(100); })
+  { return jjtThis; }
 }
