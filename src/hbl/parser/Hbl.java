@@ -47,7 +47,7 @@
         } else {
           break label_2;
         }
-        Meeting();
+        Program();
       }
       label_3:
       while (true) {
@@ -644,14 +644,14 @@
     }
   }
 
-  static final public void Meeting() throws ParseException {
- /*@bgen(jjtree) Meeting */
-  ASTMeeting jjtn000 = new ASTMeeting(JJTMEETING);
+  static final public void Program() throws ParseException {
+ /*@bgen(jjtree) Program */
+  ASTProgram jjtn000 = new ASTProgram(JJTPROGRAM);
   boolean jjtc000 = true;
   jjtree.openNodeScope(jjtn000);ASTName track;
   ASTDate date;
     try {
-      jj_consume_token(MEETING);
+      jj_consume_token(PROGRAM);
       track = Name();
       date = Date();
       PoolSpecs();
@@ -2545,7 +2545,7 @@
   }
 
   static private boolean jj_3R_19() {
-    if (jj_scan_token(MEETING)) return true;
+    if (jj_scan_token(PROGRAM)) return true;
     if (jj_3R_26()) return true;
     return false;
   }

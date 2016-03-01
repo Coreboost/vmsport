@@ -18,7 +18,7 @@ public interface HblTreeConstants
   public int JJTSTARTLIST = 14;
   public int JJTLEGSPEC = 15;
   public int JJTLEGSPECS = 16;
-  public int JJTMEETING = 17;
+  public int JJTPROGRAM = 17;
   public int JJTRACEDAY = 18;
   public int JJTLEGRESULT = 19;
   public int JJTRESULTLIST = 20;
@@ -49,7 +49,7 @@ public interface HblTreeConstants
     "StartList",
     "LegSpec",
     "LegSpecs",
-    "Meeting",
+    "Program",
     "RaceDay",
     "LegResult",
     "ResultList",
@@ -62,4 +62,4 @@ public interface HblTreeConstants
     "Multiplier",
   };
 }
-/* JavaCC - OriginalChecksum=9301aea4770cf5feb139bd1650a282c3 (do not edit this line) */
+/* JavaCC - OriginalChecksum=6fbf48c4c6081cf52abdeb7e5206c495 (do not edit this line) */
