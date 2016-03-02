@@ -34,7 +34,7 @@ Program Solvalla 2016-02-01
 
 Meeting Solvalla 2016-02-01
   DD DDB1 10 Account AA1
-    DD-1 2, 3.
+    DD-1 2 3.
     DD-2 A.
   .
 
@@ -51,19 +51,19 @@ Meeting Solvalla 2016-02-01
 
 
   V75 V75B1 X2 Boost Account AA2
-    V75-1 2, 3 R 4, 5.
-    V75-2 1 R 2, 3.
-    V75-3 1 R 2, 3.
+    V75-1 2 3 R 4 5.
+    V75-2 1 R 2 3.
+    V75-3 1 R 2 3.
     V75-4 2 3 R 6 7.  -- Commas between horse and reserve numbers are optional.
-    V75-5 2, 3 R 6, 7.
-    V75-6 2, 3 R 6, 7.
-    V75-7 2, 3 R 6, 7.
+    V75-5 2 3 R 6 7.
+    V75-6 2 3 R 6 7.
+    V75-7 2 3 R 6 7.
   .
 
   V75 Repeat 10 Fortuna 100 Boost Account AA3  -- Bet ID is optional.
-    V75-1 2, 3.
+    V75-1 2 3.
     V75-2 1.
-    V75-7 2, 3 F.
+    V75-7 2 3 F.
   .
 
   Leg 2: (3, 4), 7, 8, 9. -- The parents mean that horse 3 and 4 are tied for first place.

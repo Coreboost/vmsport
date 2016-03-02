@@ -346,9 +346,9 @@ ASTHorseSelection HorseSelection() :
 }
 {
   (<ALL_HORSES> {jjtThis.setAllHorses(true);} <PERIOD> { return jjtThis; }) |
-  (([horse=<NUMBER>{ jjtThis.addHorse(Integer.parseInt(horse.image)); }] ([<COMMA>] horse=<NUMBER> { jjtThis.addHorse(Integer.parseInt(horse.image)); })*)
-  [(<RESERVES> reserve=<NUMBER>{jjtThis.addReserve(Integer.parseInt(reserve.image));} [[<COMMA>] reserve=<NUMBER>{jjtThis.addReserve(Integer.parseInt(reserve.image));}]) |
-  ([<COMMA>]<FORTUNA_SELECT> {jjtThis.setFortunaSelect(true);})]
+  ((horse=<NUMBER> { jjtThis.addHorse(Integer.parseInt(horse.image));})*
+  [(<RESERVES>  (reserve=<NUMBER>{jjtThis.addReserve(Integer.parseInt(reserve.image));})+) |
+  (<FORTUNA_SELECT> {jjtThis.setFortunaSelect(true);})]
    <PERIOD> { return jjtThis; })
 
 }

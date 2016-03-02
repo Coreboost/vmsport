@@ -1212,90 +1212,54 @@ try {error_count += 1;
                                                          {if (true) return jjtn000;}
         break;
       case PERIOD:
-      case COMMA:
       case NUMBER:
       case RESERVES:
       case FORTUNA_SELECT:
-        switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-        case NUMBER:
-          horse = jj_consume_token(NUMBER);
-                     jjtn000.addHorse(Integer.parseInt(horse.image));
-          break;
-        default:
-          jj_la1[38] = jj_gen;
-          ;
-        }
         label_14:
         while (true) {
           switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-          case COMMA:
           case NUMBER:
             ;
             break;
           default:
-            jj_la1[39] = jj_gen;
+            jj_la1[38] = jj_gen;
             break label_14;
           }
-          switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-          case COMMA:
-            jj_consume_token(COMMA);
-            break;
-          default:
-            jj_la1[40] = jj_gen;
-            ;
-          }
           horse = jj_consume_token(NUMBER);
-                                                                                                     jjtn000.addHorse(Integer.parseInt(horse.image));
+                     jjtn000.addHorse(Integer.parseInt(horse.image));
         }
         switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-        case COMMA:
         case RESERVES:
         case FORTUNA_SELECT:
           switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
           case RESERVES:
             jj_consume_token(RESERVES);
-            reserve = jj_consume_token(NUMBER);
-                                jjtn000.addReserve(Integer.parseInt(reserve.image));
-            switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-            case COMMA:
-            case NUMBER:
+            label_15:
+            while (true) {
+              reserve = jj_consume_token(NUMBER);
+                                  jjtn000.addReserve(Integer.parseInt(reserve.image));
               switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-              case COMMA:
-                jj_consume_token(COMMA);
+              case NUMBER:
+                ;
                 break;
               default:
-                jj_la1[41] = jj_gen;
-                ;
+                jj_la1[39] = jj_gen;
+                break label_15;
               }
-              reserve = jj_consume_token(NUMBER);
-                                                                                                                  jjtn000.addReserve(Integer.parseInt(reserve.image));
-              break;
-            default:
-              jj_la1[42] = jj_gen;
-              ;
             }
             break;
-          case COMMA:
           case FORTUNA_SELECT:
-            switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-            case COMMA:
-              jj_consume_token(COMMA);
-              break;
-            default:
-              jj_la1[43] = jj_gen;
-              ;
-            }
             jj_consume_token(FORTUNA_SELECT);
-                              jjtn000.setFortunaSelect(true);
+                     jjtn000.setFortunaSelect(true);
             break;
           default:
-            jj_la1[44] = jj_gen;
+            jj_la1[40] = jj_gen;
             jj_consume_token(-1);
             throw new ParseException();
           }
           break;
         default:
-          jj_la1[45] = jj_gen;
+          jj_la1[41] = jj_gen;
           ;
         }
         jj_consume_token(PERIOD);
@@ -1304,7 +1268,7 @@ try {error_count += 1;
               {if (true) return jjtn000;}
         break;
       default:
-        jj_la1[46] = jj_gen;
+        jj_la1[42] = jj_gen;
         jj_consume_token(-1);
         throw new ParseException();
       }
@@ -1335,7 +1299,7 @@ try {error_count += 1;
                                         jjtn000.setRepeatCount(Integer.parseInt(repeatCount.image));
         break;
       default:
-        jj_la1[47] = jj_gen;
+        jj_la1[43] = jj_gen;
         ;
       }
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
@@ -1345,7 +1309,7 @@ try {error_count += 1;
                                                                                                                       jjtn000.setBetID(betID.getName());
         break;
       default:
-        jj_la1[48] = jj_gen;
+        jj_la1[44] = jj_gen;
         ;
       }
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
@@ -1379,13 +1343,13 @@ try {error_count += 1;
                                                            jjtn000.setAmount(Integer.parseInt(amount.image));
           break;
         default:
-          jj_la1[49] = jj_gen;
+          jj_la1[45] = jj_gen;
           jj_consume_token(-1);
           throw new ParseException();
         }
         break;
       default:
-        jj_la1[50] = jj_gen;
+        jj_la1[46] = jj_gen;
         ;
       }
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
@@ -1394,7 +1358,7 @@ try {error_count += 1;
            jjtn000.setBoost(true);
         break;
       default:
-        jj_la1[51] = jj_gen;
+        jj_la1[47] = jj_gen;
         ;
       }
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
@@ -1404,7 +1368,7 @@ try {error_count += 1;
                                jjtn000.setAccountID(accountID.getName());
         break;
       default:
-        jj_la1[52] = jj_gen;
+        jj_la1[48] = jj_gen;
         ;
       }
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
@@ -1415,14 +1379,14 @@ try {error_count += 1;
           jj_consume_token(COLON);
           break;
         default:
-          jj_la1[53] = jj_gen;
+          jj_la1[49] = jj_gen;
           ;
         }
         selection = HorseSelection();
                                                   selection.setRace(1);
         break;
       default:
-        jj_la1[54] = jj_gen;
+        jj_la1[50] = jj_gen;
         ;
       }
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
@@ -1433,14 +1397,14 @@ try {error_count += 1;
           jj_consume_token(COLON);
           break;
         default:
-          jj_la1[55] = jj_gen;
+          jj_la1[51] = jj_gen;
           ;
         }
         selection = HorseSelection();
                                                   selection.setRace(2);
         break;
       default:
-        jj_la1[56] = jj_gen;
+        jj_la1[52] = jj_gen;
         ;
       }
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
@@ -1451,14 +1415,14 @@ try {error_count += 1;
           jj_consume_token(COLON);
           break;
         default:
-          jj_la1[57] = jj_gen;
+          jj_la1[53] = jj_gen;
           ;
         }
         selection = HorseSelection();
                                                   selection.setRace(3);
         break;
       default:
-        jj_la1[58] = jj_gen;
+        jj_la1[54] = jj_gen;
         ;
       }
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
@@ -1469,14 +1433,14 @@ try {error_count += 1;
           jj_consume_token(COLON);
           break;
         default:
-          jj_la1[59] = jj_gen;
+          jj_la1[55] = jj_gen;
           ;
         }
         selection = HorseSelection();
                                                   selection.setRace(4);
         break;
       default:
-        jj_la1[60] = jj_gen;
+        jj_la1[56] = jj_gen;
         ;
       }
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
@@ -1487,14 +1451,14 @@ try {error_count += 1;
           jj_consume_token(COLON);
           break;
         default:
-          jj_la1[61] = jj_gen;
+          jj_la1[57] = jj_gen;
           ;
         }
         selection = HorseSelection();
                                                   selection.setRace(5);
         break;
       default:
-        jj_la1[62] = jj_gen;
+        jj_la1[58] = jj_gen;
         ;
       }
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
@@ -1505,14 +1469,14 @@ try {error_count += 1;
           jj_consume_token(COLON);
           break;
         default:
-          jj_la1[63] = jj_gen;
+          jj_la1[59] = jj_gen;
           ;
         }
         selection = HorseSelection();
                                                   selection.setRace(6);
         break;
       default:
-        jj_la1[64] = jj_gen;
+        jj_la1[60] = jj_gen;
         ;
       }
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
@@ -1523,14 +1487,14 @@ try {error_count += 1;
           jj_consume_token(COLON);
           break;
         default:
-          jj_la1[65] = jj_gen;
+          jj_la1[61] = jj_gen;
           ;
         }
         selection = HorseSelection();
                                                   selection.setRace(7);
         break;
       default:
-        jj_la1[66] = jj_gen;
+        jj_la1[62] = jj_gen;
         ;
       }
       jj_consume_token(PERIOD);
@@ -1599,7 +1563,7 @@ try {error_count += 1;
           jjtn000.setValue(100);
         break;
       default:
-        jj_la1[67] = jj_gen;
+        jj_la1[63] = jj_gen;
         jj_consume_token(-1);
         throw new ParseException();
       }
@@ -1624,7 +1588,7 @@ try {error_count += 1;
   static public Token jj_nt;
   static private int jj_ntk;
   static private int jj_gen;
-  static final private int[] jj_la1 = new int[68];
+  static final private int[] jj_la1 = new int[64];
   static private int[] jj_la1_0;
   static private int[] jj_la1_1;
   static {
@@ -1632,10 +1596,10 @@ try {error_count += 1;
       jj_la1_init_1();
    }
    private static void jj_la1_init_0() {
-      jj_la1_0 = new int[] {0x7400000,0x7400000,0x8000000,0x10000000,0x0,0x20000,0x10000,0x10000,0x20000,0x10000,0x10000,0x10000,0x10000,0x10000,0xc0000000,0xc0000000,0x10000,0x10000,0x20000,0x20000000,0xe0000000,0xe0000000,0x20000,0x280000,0x290000,0x10000,0x280000,0x210000,0x10000,0xc0000000,0x0,0x0,0x0,0x800000,0x20000,0x0,0x20000,0x0,0x200000,0x210000,0x10000,0x10000,0x210000,0x10000,0x10000,0x10000,0x218000,0x0,0x0,0x0,0x0,0x0,0x800000,0x20000,0x0,0x20000,0x0,0x20000,0x0,0x20000,0x0,0x20000,0x0,0x20000,0x0,0x20000,0x0,0x0,};
+      jj_la1_0 = new int[] {0x7400000,0x7400000,0x8000000,0x10000000,0x0,0x20000,0x10000,0x10000,0x20000,0x10000,0x10000,0x10000,0x10000,0x10000,0xc0000000,0xc0000000,0x10000,0x10000,0x20000,0x20000000,0xe0000000,0xe0000000,0x20000,0x280000,0x290000,0x10000,0x280000,0x210000,0x10000,0xc0000000,0x0,0x0,0x0,0x800000,0x20000,0x0,0x20000,0x0,0x200000,0x200000,0x0,0x0,0x208000,0x0,0x0,0x0,0x0,0x0,0x800000,0x20000,0x0,0x20000,0x0,0x20000,0x0,0x20000,0x0,0x20000,0x0,0x20000,0x0,0x20000,0x0,0x0,};
    }
    private static void jj_la1_init_1() {
-      jj_la1_1 = new int[] {0x0,0x0,0x0,0x0,0x6000000,0x0,0x6000000,0x0,0x0,0x6000000,0x0,0x6000000,0x0,0x0,0x0,0x0,0x6000000,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x80000,0x6000000,0x100000,0x0,0x0,0x2,0x0,0x4,0x0,0x0,0x0,0x0,0x0,0x0,0x600000,0x600000,0xe00000,0x80000,0x6000000,0x17fc00,0x17fc00,0x1000000,0x0,0x0,0x8,0x0,0x10,0x0,0x20,0x0,0x40,0x0,0x80,0x0,0x100,0x0,0x200,0x7fc00,};
+      jj_la1_1 = new int[] {0x0,0x0,0x0,0x0,0x6000000,0x0,0x6000000,0x0,0x0,0x6000000,0x0,0x6000000,0x0,0x0,0x0,0x0,0x6000000,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x80000,0x6000000,0x100000,0x0,0x0,0x2,0x0,0x4,0x0,0x0,0x600000,0x600000,0xe00000,0x80000,0x6000000,0x17fc00,0x17fc00,0x1000000,0x0,0x0,0x8,0x0,0x10,0x0,0x20,0x0,0x40,0x0,0x80,0x0,0x100,0x0,0x200,0x7fc00,};
    }
 
   /** Constructor with InputStream. */
@@ -1656,7 +1620,7 @@ try {error_count += 1;
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 68; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 64; i++) jj_la1[i] = -1;
   }
 
   /** Reinitialise. */
@@ -1671,7 +1635,7 @@ try {error_count += 1;
     jj_ntk = -1;
     jjtree.reset();
     jj_gen = 0;
-    for (int i = 0; i < 68; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 64; i++) jj_la1[i] = -1;
   }
 
   /** Constructor. */
@@ -1688,7 +1652,7 @@ try {error_count += 1;
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 68; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 64; i++) jj_la1[i] = -1;
   }
 
   /** Reinitialise. */
@@ -1699,7 +1663,7 @@ try {error_count += 1;
     jj_ntk = -1;
     jjtree.reset();
     jj_gen = 0;
-    for (int i = 0; i < 68; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 64; i++) jj_la1[i] = -1;
   }
 
   /** Constructor with generated Token Manager. */
@@ -1715,7 +1679,7 @@ try {error_count += 1;
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 68; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 64; i++) jj_la1[i] = -1;
   }
 
   /** Reinitialise. */
@@ -1725,7 +1689,7 @@ try {error_count += 1;
     jj_ntk = -1;
     jjtree.reset();
     jj_gen = 0;
-    for (int i = 0; i < 68; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 64; i++) jj_la1[i] = -1;
   }
 
   static private Token jj_consume_token(int kind) throws ParseException {
@@ -1781,7 +1745,7 @@ try {error_count += 1;
       la1tokens[jj_kind] = true;
       jj_kind = -1;
     }
-    for (int i = 0; i < 68; i++) {
+    for (int i = 0; i < 64; i++) {
       if (jj_la1[i] == jj_gen) {
         for (int j = 0; j < 32; j++) {
           if ((jj_la1_0[i] & (1<<j)) != 0) {
