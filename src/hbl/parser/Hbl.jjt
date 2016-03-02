@@ -162,7 +162,7 @@ void HorseSpec() :
   ASTName name;
 }
 {
-  name=Name() [<COLON>] rank=<NUMBER>
+  name=Name() rank=<NUMBER>
   {
     jjtThis.setName(name.getName());
     jjtThis.setRank(Integer.parseInt(rank.image));
@@ -172,7 +172,7 @@ void HorseSpec() :
 void Horses() : {}
 {
   <HORSES>
-  HorseSpec()([<COMMA>] HorseSpec())*<PERIOD>
+  (HorseSpec())+<PERIOD>
 }
 
 void TrackSpec() :
@@ -189,7 +189,8 @@ void TrackSpec() :
 void Tracks() : {}
 {
   <TRACKS>
-  TrackSpec()([<COMMA>] TrackSpec())*<PERIOD>
+  (TrackSpec())*
+  <PERIOD>
 }
 
 ASTDate Date() :
@@ -234,7 +235,7 @@ void StartList() :
   ASTName name;
 }
 {
-  name=Name(){ jjtThis.addHorse(name.getName()); }([<COMMA>] name=Name(){ jjtThis.addHorse(name.getName()); })*
+  (name=Name(){ jjtThis.addHorse(name.getName()); })+
 }
 
 void LegSpec() :
@@ -242,7 +243,7 @@ void LegSpec() :
   Token leg;
 }
 {
-  <LEG>leg=<NUMBER>[<COLON>]StartList()<PERIOD>
+  <LEG>leg=<NUMBER>StartList()<PERIOD>
   { jjtThis.setLeg(Integer.parseInt(leg.image)); }
 }
 
@@ -287,7 +288,7 @@ void LegResult() :
   Token leg;
 }
 {
-  <LEG>leg=<NUMBER>[<COLON>] [ResultList()] <PERIOD>
+  <LEG>leg=<NUMBER> [ResultList()] <PERIOD>
   {jjtThis.setLeg(Integer.parseInt(leg.image));}
 }
 
@@ -334,8 +335,8 @@ void DDBet() :
 {
   <DD> [<REPEAT> repeatCount=<NUMBER>{ jjtThis.setRepeatCount(Integer.parseInt(repeatCount.image)); }] [betID=Name() {jjtThis.setBetID(betID.getName());}] [<FORTUNA> {jjtThis.setFortuna(true);}] amount=<NUMBER> {jjtThis.setAmount(Integer.parseInt(amount.image));}
   [<ACCOUNT> accountID=Name() {jjtThis.setAccountID(accountID.getName());} ]
-  [<DD_1> [<COLON>] selection=HorseSelection() { selection.setRace(1); }]
-  [<DD_2> [<COLON>] selection=HorseSelection() { selection.setRace(2); }]
+  [<DD_1> selection=HorseSelection() { selection.setRace(1); }]
+  [<DD_2> selection=HorseSelection() { selection.setRace(2); }]
   <PERIOD>
 }
 
@@ -370,13 +371,13 @@ void V75Bet() :
   ]
   [<BOOST>{jjtThis.setBoost(true);}]
   [<ACCOUNT> accountID=Name() {jjtThis.setAccountID(accountID.getName());} ]
-  [<V75_1> [<COLON>] selection=HorseSelection() { selection.setRace(1); }]
-  [<V75_2> [<COLON>] selection=HorseSelection() { selection.setRace(2); }]
-  [<V75_3> [<COLON>] selection=HorseSelection() { selection.setRace(3); }]
-  [<V75_4> [<COLON>] selection=HorseSelection() { selection.setRace(4); }]
-  [<V75_5> [<COLON>] selection=HorseSelection() { selection.setRace(5); }]
-  [<V75_6> [<COLON>] selection=HorseSelection() { selection.setRace(6); }]
-  [<V75_7> [<COLON>] selection=HorseSelection() { selection.setRace(7); }]
+  [<V75_1> selection=HorseSelection() { selection.setRace(1); }]
+  [<V75_2> selection=HorseSelection() { selection.setRace(2); }]
+  [<V75_3> selection=HorseSelection() { selection.setRace(3); }]
+  [<V75_4> selection=HorseSelection() { selection.setRace(4); }]
+  [<V75_5> selection=HorseSelection() { selection.setRace(5); }]
+  [<V75_6> selection=HorseSelection() { selection.setRace(6); }]
+  [<V75_7> selection=HorseSelection() { selection.setRace(7); }]
   <PERIOD>
 }
 
