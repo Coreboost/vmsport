@@ -5,17 +5,20 @@ options {
 }
 PARSER_BEGIN(Hbl)
   public class Hbl {
+    private static Integer error_count = 0;
     public static void main( String[] args ) {
-      System.out.println("Reading from standard input...");
       Hbl parser = new Hbl( System.in );
       try {
         SimpleNode node = parser.Start();
-        System.out.println(node.generate().toString());
-        System.out.println("Thank you.");
+        if (error_count == 0) {
+          System.out.println(node.generate().toString());
+          System.exit(0);
+        } else {
+          System.exit(1);
+        }
       } catch (Exception e) {
-        System.out.println("Oops.");
         System.out.println(e.getMessage());
-        e.printStackTrace();
+        System.exit(2);
       }
     }
   }
@@ -77,14 +80,46 @@ TOKEN : { < ALL_HORSES : "A" > }
 TOKEN : { < BOOST : "Boost" > }
 TOKEN : { < IDENTIFIER : (["A"-"Z", "a"-"z", "_"])(["A"-"Z", "a"-"z", "0"-"9", "_"])* > }
 TOKEN : { < STRING_LITERAL : ("\"")(~["\""])*("\"") > }
+TOKEN : { < UNKNOWN : ~[] > }
 
 SimpleNode Start() : {}
 {
-  (Accounts() | Horses() | Tracks() | Include())*
-  (Program())*
-  (Meeting())*
-  <EOF>
+    (
+      try {
+        Accounts() | Horses() | Tracks() | Include()
+      }
+      catch (ParseException e) {
+        HandleParseException(PERIOD, e);
+      }
+    )*
+    (
+      try {
+        Program()
+      }
+      catch (ParseException e) {
+        HandleParseException(PERIOD, e);
+      }
+    )*
+    (
+      try {
+        Meeting()
+      }
+      catch (ParseException e) {
+        HandleParseException(PERIOD, e);
+      }
+    )*
+    <EOF>
   { return jjtThis; }
+}
+
+JAVACODE
+void HandleParseException(int skipTo, ParseException e) {
+  error_count += 1;
+  System.out.println(e.toString());
+  Token t;
+  do {
+    t = getNextToken();
+  } while (t.kind != skipTo);
 }
 
 ASTName Name() :

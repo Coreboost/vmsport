@@ -94,6 +94,8 @@ public interface HblConstants {
   int IDENTIFIER = 56;
   /** RegularExpression Id. */
   int STRING_LITERAL = 57;
+  /** RegularExpression Id. */
+  int UNKNOWN = 58;
 
   /** Lexical state. */
   int DEFAULT = 0;
@@ -166,6 +168,7 @@ public interface HblConstants {
     "\"Boost\"",
     "<IDENTIFIER>",
     "<STRING_LITERAL>",
+    "<UNKNOWN>",
   };
 
 }

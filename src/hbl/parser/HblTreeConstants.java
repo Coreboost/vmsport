@@ -2,37 +2,39 @@
 public interface HblTreeConstants
 {
   public int JJTSTART = 0;
-  public int JJTNAME = 1;
-  public int JJTINCLUDE = 2;
-  public int JJTACCOUNTSPEC = 3;
-  public int JJTACCOUNTS = 4;
-  public int JJTHORSESPEC = 5;
-  public int JJTHORSES = 6;
-  public int JJTTRACKSPEC = 7;
-  public int JJTTRACKS = 8;
-  public int JJTDATE = 9;
-  public int JJTDDSPEC = 10;
-  public int JJTLEGLIST = 11;
-  public int JJTV75SPEC = 12;
-  public int JJTPOOLSPECS = 13;
-  public int JJTSTARTLIST = 14;
-  public int JJTLEGSPEC = 15;
-  public int JJTLEGSPECS = 16;
-  public int JJTPROGRAM = 17;
-  public int JJTMEETING = 18;
-  public int JJTLEGRESULT = 19;
-  public int JJTRESULTLIST = 20;
-  public int JJTRESULTENTRY = 21;
-  public int JJTTIE = 22;
-  public int JJTBET = 23;
-  public int JJTDDBET = 24;
-  public int JJTHORSESELECTION = 25;
-  public int JJTV75BET = 26;
-  public int JJTMULTIPLIER = 27;
+  public int JJTHANDLEPARSEEXCEPTION = 1;
+  public int JJTNAME = 2;
+  public int JJTINCLUDE = 3;
+  public int JJTACCOUNTSPEC = 4;
+  public int JJTACCOUNTS = 5;
+  public int JJTHORSESPEC = 6;
+  public int JJTHORSES = 7;
+  public int JJTTRACKSPEC = 8;
+  public int JJTTRACKS = 9;
+  public int JJTDATE = 10;
+  public int JJTDDSPEC = 11;
+  public int JJTLEGLIST = 12;
+  public int JJTV75SPEC = 13;
+  public int JJTPOOLSPECS = 14;
+  public int JJTSTARTLIST = 15;
+  public int JJTLEGSPEC = 16;
+  public int JJTLEGSPECS = 17;
+  public int JJTPROGRAM = 18;
+  public int JJTMEETING = 19;
+  public int JJTLEGRESULT = 20;
+  public int JJTRESULTLIST = 21;
+  public int JJTRESULTENTRY = 22;
+  public int JJTTIE = 23;
+  public int JJTBET = 24;
+  public int JJTDDBET = 25;
+  public int JJTHORSESELECTION = 26;
+  public int JJTV75BET = 27;
+  public int JJTMULTIPLIER = 28;
 
 
   public String[] jjtNodeName = {
     "Start",
+    "HandleParseException",
     "Name",
     "Include",
     "AccountSpec",
@@ -62,4 +64,4 @@ public interface HblTreeConstants
     "Multiplier",
   };
 }
-/* JavaCC - OriginalChecksum=1136a90ff3f5d93121223b3e4d6c1e25 (do not edit this line) */
+/* JavaCC - OriginalChecksum=a902a487e13a2a9a51b1943d0fed3037 (do not edit this line) */
