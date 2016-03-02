@@ -66,10 +66,10 @@ Meeting Solvalla 2016-02-01
     V75-7 2 3 F.
   .
 
-  Leg 2: (3, 4), 7, 8, 9. -- The parents mean that horse 3 and 4 are tied for first place.
-  Leg 3: .
-  Leg 4 9, 10.        -- Colon after the leg number is optional.
-  Leg 5: (3 4) 7 8 9.  -- Commas between horse numbers are optional.
+  Leg 2 (3 4) 7 8 9. -- The parents mean that horse 3 and 4 are tied for first place.
+  Leg 3 .
+  Leg 4 9 10.
+  Leg 5 (3 4) 7 8 9.
 .
 
 ---

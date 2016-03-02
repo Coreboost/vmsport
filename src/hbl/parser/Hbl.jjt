@@ -296,7 +296,7 @@ void ResultList() :
   ASTResultEntry entry;
 }
 {
-  entry=ResultEntry(){ jjtThis.addEntry(entry.getHorses()); } ([<COMMA>] entry=ResultEntry(){ jjtThis.addEntry(entry.getHorses()); })*
+  entry=ResultEntry(){ jjtThis.addEntry(entry.getHorses()); } (entry=ResultEntry(){ jjtThis.addEntry(entry.getHorses()); })*
 }
 
 ASTResultEntry ResultEntry() :
@@ -314,7 +314,7 @@ ASTTie Tie() :
   Token horse;
 }
 {
-  <LEFT_PAREN> horse=<NUMBER>{ jjtThis.addHorse(Integer.parseInt(horse.image)); } ([<COMMA>] horse=<NUMBER> { jjtThis.addHorse(Integer.parseInt(horse.image)); })* <RIGHT_PAREN>
+  <LEFT_PAREN> horse=<NUMBER>{ jjtThis.addHorse(Integer.parseInt(horse.image)); } (horse=<NUMBER> { jjtThis.addHorse(Integer.parseInt(horse.image)); })* <RIGHT_PAREN>
   { return jjtThis; }
 }
 
