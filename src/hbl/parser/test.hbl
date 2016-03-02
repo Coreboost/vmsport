@@ -3,8 +3,8 @@ This is a multi-line comment.
 -----------------------------
 -- This is a single line comment.
 Accounts
-  A1                : 1000,   -- The colons and the commas are optional.
-  "Bengt Bengtsson" : 2000
+  A1                  1000
+  "Bengt Bengtsson"   2000
   NisseStruten        777
 .
 
