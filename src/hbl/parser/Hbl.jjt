@@ -1,7 +1,5 @@
 options {
   MULTI = true;
-  LOOKAHEAD = 3;
-  FORCE_LA_CHECK = true;
 }
 PARSER_BEGIN(Hbl)
   public class Hbl {
@@ -73,6 +71,7 @@ TOKEN : { < X10 : "X10" > }
 TOKEN : { < X20 : "X20" > }
 TOKEN : { < X50 : "X50" > }
 TOKEN : { < X100 : "X100" > }
+TOKEN : { < REPEAT : "Repeat" > }
 TOKEN : { < FORTUNA : "Fortuna" > }
 TOKEN : { < RESERVES : "R" > }
 TOKEN : { < FORTUNA_SELECT : "F" > }
@@ -327,13 +326,13 @@ void Bet() : {}
 void DDBet() :
 {
   Token amount;
-  Token repeat;
+  Token repeatCount;
   ASTName betID;
   ASTName accountID;
   ASTHorseSelection selection;
 }
 {
-  <BET> [repeat=<NUMBER>{ jjtThis.setRepeat(Integer.parseInt(repeat.image)); }] <DD> [betID=Name() {jjtThis.setBetID(betID.getName());}] [<FORTUNA> {jjtThis.setFortuna(true);}] amount=<NUMBER> {jjtThis.setAmount(Integer.parseInt(amount.image));}
+  <DD> [<REPEAT> repeatCount=<NUMBER>{ jjtThis.setRepeatCount(Integer.parseInt(repeatCount.image)); }] [betID=Name() {jjtThis.setBetID(betID.getName());}] [<FORTUNA> {jjtThis.setFortuna(true);}] amount=<NUMBER> {jjtThis.setAmount(Integer.parseInt(amount.image));}
   [<ACCOUNT> accountID=Name() {jjtThis.setAccountID(accountID.getName());} ]
   [<DD_1> [<COLON>] selection=HorseSelection() { selection.setRace(1); }]
   [<DD_2> [<COLON>] selection=HorseSelection() { selection.setRace(2); }]
@@ -357,14 +356,14 @@ ASTHorseSelection HorseSelection() :
 void V75Bet() :
 {
   Token amount;
-  Token repeat;
+  Token repeatCount;
   ASTName betID;
   ASTName accountID;
   ASTMultiplier mult;
   ASTHorseSelection selection;
 }
 {
-  <BET> [repeat=<NUMBER>{ jjtThis.setRepeat(Integer.parseInt(repeat.image)); }] <V75> [betID=Name(){jjtThis.setBetID(betID.getName());}]
+  <V75> [<REPEAT> repeatCount=<NUMBER>{ jjtThis.setRepeatCount(Integer.parseInt(repeatCount.image)); }] [betID=Name(){jjtThis.setBetID(betID.getName());}]
   [
    (mult=Multiplier(){jjtThis.setMultiplier(mult.getValue());}) |
    (<FORTUNA> {jjtThis.setFortuna(true);} amount=<NUMBER> {jjtThis.setAmount(Integer.parseInt(amount.image));})

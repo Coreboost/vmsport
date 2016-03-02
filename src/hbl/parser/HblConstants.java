@@ -81,21 +81,23 @@ public interface HblConstants {
   /** RegularExpression Id. */
   int X100 = 50;
   /** RegularExpression Id. */
-  int FORTUNA = 51;
+  int REPEAT = 51;
   /** RegularExpression Id. */
-  int RESERVES = 52;
+  int FORTUNA = 52;
   /** RegularExpression Id. */
-  int FORTUNA_SELECT = 53;
+  int RESERVES = 53;
   /** RegularExpression Id. */
-  int ALL_HORSES = 54;
+  int FORTUNA_SELECT = 54;
   /** RegularExpression Id. */
-  int BOOST = 55;
+  int ALL_HORSES = 55;
   /** RegularExpression Id. */
-  int IDENTIFIER = 56;
+  int BOOST = 56;
   /** RegularExpression Id. */
-  int STRING_LITERAL = 57;
+  int IDENTIFIER = 57;
   /** RegularExpression Id. */
-  int UNKNOWN = 58;
+  int STRING_LITERAL = 58;
+  /** RegularExpression Id. */
+  int UNKNOWN = 59;
 
   /** Lexical state. */
   int DEFAULT = 0;
@@ -161,6 +163,7 @@ public interface HblConstants {
     "\"X20\"",
     "\"X50\"",
     "\"X100\"",
+    "\"Repeat\"",
     "\"Fortuna\"",
     "\"R\"",
     "\"F\"",

@@ -33,24 +33,24 @@ Program Solvalla 2016-02-01
 .
 
 Meeting Solvalla 2016-02-01
-  Bet DD DDB1 10 Account AA1
+  DD DDB1 10 Account AA1
     DD-1 2, 3.
     DD-2 A.
   .
 
-  Bet DD Fortuna 100  -- Bet ID is optional
+  DD Fortuna 100  -- Bet ID is optional
     DD-1 2 3. -- Commas between horse numbers are optional.
     DD-2 3 F.
   .
 
-  Bet 100 DD MDDB 100  -- You can add a repeat after the Bet keyword to indicate,
+  DD Repeat 100 MDDB 100  -- You can add a repeat after the Bet keyword to indicate,
     DD-1 2 3.          -- in this case, that you want to make 100 equal bets.
     DD-2 5.            -- If you have specified a name for the bet, you can later on,
   .                    -- when you specify Check statements refer to the individual
                        --  bets as MDDB_1 MDDB_2...MDDB_100.
 
 
-  Bet V75 V75B1 X2 Boost Account AA2
+  V75 V75B1 X2 Boost Account AA2
     V75-1 2, 3 R 4, 5.
     V75-2 1 R 2, 3.
     V75-3 1 R 2, 3.
@@ -60,7 +60,7 @@ Meeting Solvalla 2016-02-01
     V75-7 2, 3 R 6, 7.
   .
 
-  Bet 10 V75 Fortuna 100 Boost Account AA3  -- Bet ID is optional.
+  V75 Repeat 10 Fortuna 100 Boost Account AA3  -- Bet ID is optional.
     V75-1 2, 3.
     V75-2 1.
     V75-7 2, 3 F.
