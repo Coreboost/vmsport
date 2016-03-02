@@ -21,8 +21,8 @@ Tracks
 .
 
 Program Solvalla 2016-02-01
-  DD 1, 2.
-  V75 1, 2, 3, 4, 5, 6, 7.
+  DD 1 2.
+  V75 1 2 3 4 5 6 7.
   Leg 1: HH1_1, HH1_2, HH1_3, HH1_3, HH1_4, HH1_5, HH1_6, HH1_7, HH1_8. -- The colon after the leg number is optional.
   Leg 2 HH2_1, HH2_2, HH2_3, HH2_3, HH2_4, HH2_5, HH2_6, HH2_7, HH2_8.  -- Commas between horse names are optional.
   Leg 3 HH3_1 HH3_2 HH3_3 HH3_3 HH3_4 HH3_5 HH3_6 HH3_7 HH3_8.

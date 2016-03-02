@@ -216,7 +216,7 @@ void LegList() :
   Token leg;
 }
 {
-  leg=<NUMBER>{ jjtThis.addLeg(Integer.parseInt(leg.image)); }(<COMMA> leg=<NUMBER>{ jjtThis.addLeg(Integer.parseInt(leg.image)); })*
+  (leg=<NUMBER>{ jjtThis.addLeg(Integer.parseInt(leg.image)); })+
 }
 
 void V75Spec() : {}
