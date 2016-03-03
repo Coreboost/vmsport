@@ -86,7 +86,7 @@ class SimpleNode implements Node {
       }
     }
     JsonArray a = builder.build();
-    return a.size() > 0 ? a : null; 
+    return a.size() > 0 ? a : null;
   }
 
   protected JsonObject generateThis(JsonArray children) {
@@ -109,6 +109,10 @@ class SimpleNode implements Node {
 
   public Boolean skipNode() {
     return false;
+  }
+
+  public void validate(java.util.List<String> messages) {
+    // Override in subclasses and add validation messages to messages
   }
 }
 
