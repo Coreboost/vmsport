@@ -86,45 +86,23 @@ public class ParseException extends Exception {
   private static String initialise(Token currentToken,
                            int[][] expectedTokenSequences,
                            String[] tokenImage) {
-    String eol = System.getProperty("line.separator", "\n");
-    StringBuffer expected = new StringBuffer();
-    int maxSize = 0;
-    for (int i = 0; i < expectedTokenSequences.length; i++) {
-      if (maxSize < expectedTokenSequences[i].length) {
-        maxSize = expectedTokenSequences[i].length;
+  String eol = System.getProperty("line.separator", "\n");
+  String expected = "expected ";
+  for (int i = 0; i < expectedTokenSequences.length; i++) {
+    expected += tokenImage[expectedTokenSequences[i][0]];
+    if (i < expectedTokenSequences.length-1) {
+      expected += ", ";
+      if (i == expectedTokenSequences.length-2) {
+        expected += "or ";
       }
-      for (int j = 0; j < expectedTokenSequences[i].length; j++) {
-        expected.append(tokenImage[expectedTokenSequences[i][j]]).append(' ');
-      }
-      if (expectedTokenSequences[i][expectedTokenSequences[i].length - 1] != 0) {
-        expected.append("...");
-      }
-      expected.append(eol).append("    ");
     }
-    String retval = "Encountered \"";
-    Token tok = currentToken.next;
-    for (int i = 0; i < maxSize; i++) {
-      if (i != 0) retval += " ";
-      if (tok.kind == 0) {
-        retval += tokenImage[0];
-        break;
-      }
-      retval += " " + tokenImage[tok.kind];
-      retval += " \"";
-      retval += add_escapes(tok.image);
-      retval += " \"";
-      tok = tok.next;
-    }
-    retval += "\" at line " + currentToken.next.beginLine + ", column " + currentToken.next.beginColumn;
-    retval += "." + eol;
-    if (expectedTokenSequences.length == 1) {
-      retval += "Was expecting:" + eol + "    ";
-    } else {
-      retval += "Was expecting one of:" + eol + "    ";
-    }
-    retval += expected.toString();
-    return retval;
   }
+  String got = " got \"" + currentToken.next.image;
+  String retval = "[" + currentToken.next.beginLine + ", " + currentToken.next.beginColumn + "]" +
+          " error: " + expected + got + "\".";
+
+  return retval;
+}
 
   /**
    * The end of line string for this machine.

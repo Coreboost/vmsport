@@ -123,7 +123,7 @@ ASTHandleParseException jjtn000 = new ASTHandleParseException(JJTHANDLEPARSEEXCE
 boolean jjtc000 = true;
 jjtree.openNodeScope(jjtn000);
 try {error_count += 1;
-  System.out.println(e.toString());
+  System.out.println(e.getMessage());
   Token t;
   do {
     t = getNextToken();

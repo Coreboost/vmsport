@@ -114,7 +114,7 @@ SimpleNode Start() : {}
 JAVACODE
 void HandleParseException(int skipTo, ParseException e) {
   error_count += 1;
-  System.out.println(e.toString());
+  System.out.println(e.getMessage());
   Token t;
   do {
     t = getNextToken();
