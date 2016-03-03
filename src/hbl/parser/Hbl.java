@@ -441,9 +441,13 @@ try {error_count += 1;
   boolean jjtc000 = true;
   jjtree.openNodeScope(jjtn000);
     try {
-      jj_consume_token(DD);
-      LegList();
-      jj_consume_token(PERIOD);
+      try {
+        jj_consume_token(DD);
+        LegList();
+        jj_consume_token(PERIOD);
+      } catch (ParseException e) {
+    HandleParseException(PERIOD, e);
+      }
     } catch (Throwable jjte000) {
     if (jjtc000) {
       jjtree.clearNodeScope(jjtn000);
@@ -497,9 +501,13 @@ try {error_count += 1;
   boolean jjtc000 = true;
   jjtree.openNodeScope(jjtn000);
     try {
-      jj_consume_token(V75);
-      LegList();
-      jj_consume_token(PERIOD);
+      try {
+        jj_consume_token(V75);
+        LegList();
+        jj_consume_token(PERIOD);
+      } catch (ParseException e) {
+    HandleParseException(PERIOD, e);
+      }
     } catch (Throwable jjte000) {
     if (jjtc000) {
       jjtree.clearNodeScope(jjtn000);
@@ -619,13 +627,15 @@ try {error_count += 1;
   boolean jjtc000 = true;
   jjtree.openNodeScope(jjtn000);Token leg;
     try {
-      jj_consume_token(LEG);
-      leg = jj_consume_token(NUMBER);
-      StartList();
-      jj_consume_token(PERIOD);
-    jjtree.closeNodeScope(jjtn000, true);
-    jjtc000 = false;
-    jjtn000.setLeg(Integer.parseInt(leg.image));
+      try {
+        jj_consume_token(LEG);
+        leg = jj_consume_token(NUMBER);
+        StartList();
+        jj_consume_token(PERIOD);
+      jjtn000.setLeg(Integer.parseInt(leg.image));
+      } catch (ParseException e) {
+    HandleParseException(PERIOD, e);
+      }
     } catch (Throwable jjte000) {
     if (jjtc000) {
       jjtree.clearNodeScope(jjtn000);
@@ -792,21 +802,23 @@ try {error_count += 1;
   boolean jjtc000 = true;
   jjtree.openNodeScope(jjtn000);Token leg;
     try {
-      jj_consume_token(LEG);
-      leg = jj_consume_token(NUMBER);
-      switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-      case LEFT_PAREN:
-      case NUMBER:
-        ResultList();
-        break;
-      default:
-        jj_la1[15] = jj_gen;
-        ;
+      try {
+        jj_consume_token(LEG);
+        leg = jj_consume_token(NUMBER);
+        switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+        case LEFT_PAREN:
+        case NUMBER:
+          ResultList();
+          break;
+        default:
+          jj_la1[15] = jj_gen;
+          ;
+        }
+        jj_consume_token(PERIOD);
+     jjtn000.setLeg(Integer.parseInt(leg.image));
+      } catch (ParseException e) {
+    HandleParseException(PERIOD, e);
       }
-      jj_consume_token(PERIOD);
-    jjtree.closeNodeScope(jjtn000, true);
-    jjtc000 = false;
-   jjtn000.setLeg(Integer.parseInt(leg.image));
     } catch (Throwable jjte000) {
     if (jjtc000) {
       jjtree.clearNodeScope(jjtn000);
@@ -1092,76 +1104,77 @@ try {error_count += 1;
   jjtree.openNodeScope(jjtn000);Token horse;
   Token reserve;
     try {
-      switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-      case ALL_HORSES:
-        jj_consume_token(ALL_HORSES);
-                 jjtn000.setAllHorses(true);
-        jj_consume_token(PERIOD);
-                                                         jjtree.closeNodeScope(jjtn000, true);
-                                                         jjtc000 = false;
-                                                         {if (true) return jjtn000;}
-        break;
-      case PERIOD:
-      case NUMBER:
-      case RESERVES:
-      case FORTUNA_SELECT:
-        label_14:
-        while (true) {
-          switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-          case NUMBER:
-            ;
-            break;
-          default:
-            jj_la1[26] = jj_gen;
-            break label_14;
-          }
-          horse = jj_consume_token(NUMBER);
-                     jjtn000.addHorse(Integer.parseInt(horse.image));
-        }
+      try {
         switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+        case ALL_HORSES:
+          jj_consume_token(ALL_HORSES);
+                   jjtn000.setAllHorses(true);
+          jj_consume_token(PERIOD);
+          break;
+        case PERIOD:
+        case NUMBER:
         case RESERVES:
         case FORTUNA_SELECT:
+          label_14:
+          while (true) {
+            switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+            case NUMBER:
+              ;
+              break;
+            default:
+              jj_la1[26] = jj_gen;
+              break label_14;
+            }
+            horse = jj_consume_token(NUMBER);
+                       jjtn000.addHorse(Integer.parseInt(horse.image));
+          }
           switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
           case RESERVES:
-            jj_consume_token(RESERVES);
-            label_15:
-            while (true) {
-              reserve = jj_consume_token(NUMBER);
-                                  jjtn000.addReserve(Integer.parseInt(reserve.image));
-              switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-              case NUMBER:
-                ;
-                break;
-              default:
-                jj_la1[27] = jj_gen;
-                break label_15;
+          case FORTUNA_SELECT:
+            switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+            case RESERVES:
+              jj_consume_token(RESERVES);
+              label_15:
+              while (true) {
+                reserve = jj_consume_token(NUMBER);
+                                    jjtn000.addReserve(Integer.parseInt(reserve.image));
+                switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+                case NUMBER:
+                  ;
+                  break;
+                default:
+                  jj_la1[27] = jj_gen;
+                  break label_15;
+                }
               }
+              break;
+            case FORTUNA_SELECT:
+              jj_consume_token(FORTUNA_SELECT);
+                       jjtn000.setFortunaSelect(true);
+              break;
+            default:
+              jj_la1[28] = jj_gen;
+              jj_consume_token(-1);
+              throw new ParseException();
             }
             break;
-          case FORTUNA_SELECT:
-            jj_consume_token(FORTUNA_SELECT);
-                     jjtn000.setFortunaSelect(true);
-            break;
           default:
-            jj_la1[28] = jj_gen;
-            jj_consume_token(-1);
-            throw new ParseException();
+            jj_la1[29] = jj_gen;
+            ;
           }
+          jj_consume_token(PERIOD);
           break;
         default:
-          jj_la1[29] = jj_gen;
-          ;
+          jj_la1[30] = jj_gen;
+          jj_consume_token(-1);
+          throw new ParseException();
         }
-        jj_consume_token(PERIOD);
-              jjtree.closeNodeScope(jjtn000, true);
-              jjtc000 = false;
-              {if (true) return jjtn000;}
-        break;
-      default:
-        jj_la1[30] = jj_gen;
-        jj_consume_token(-1);
-        throw new ParseException();
+      } catch (ParseException e) {
+    HandleParseException(PERIOD, e);
       }
+    jjtree.closeNodeScope(jjtn000, true);
+    jjtc000 = false;
+    {if (true) return jjtn000;}
     } finally {
     if (jjtc000) {
       jjtree.closeNodeScope(jjtn000, true);

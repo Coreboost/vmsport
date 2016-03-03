@@ -209,7 +209,12 @@ ASTDate Date() :
 
 void DDSpec() : {}
 {
-  <DD>LegList()<PERIOD>
+  try {
+    <DD>LegList()<PERIOD>
+  }
+  catch (ParseException e) {
+    HandleParseException(PERIOD, e);
+  }
 }
 
 void LegList() :
@@ -222,7 +227,12 @@ void LegList() :
 
 void V75Spec() : {}
 {
-  <V75>LegList()<PERIOD>
+  try {
+    <V75>LegList()<PERIOD>
+  }
+  catch (ParseException e) {
+    HandleParseException(PERIOD, e);
+  }
 }
 
 void PoolSpecs() : {}
@@ -243,8 +253,15 @@ void LegSpec() :
   Token leg;
 }
 {
-  <LEG>leg=<NUMBER>StartList()<PERIOD>
-  { jjtThis.setLeg(Integer.parseInt(leg.image)); }
+  try {
+    <LEG>leg=<NUMBER>
+    StartList()
+    <PERIOD>
+    { jjtThis.setLeg(Integer.parseInt(leg.image)); }
+  }
+  catch (ParseException e) {
+    HandleParseException(PERIOD, e);
+  }
 }
 
 void LegSpecs() : {}
@@ -288,8 +305,13 @@ void LegResult() :
   Token leg;
 }
 {
-  <LEG>leg=<NUMBER> [ResultList()] <PERIOD>
-  {jjtThis.setLeg(Integer.parseInt(leg.image));}
+  try {
+    <LEG>leg=<NUMBER> [ResultList()] <PERIOD>
+    {jjtThis.setLeg(Integer.parseInt(leg.image));}
+  }
+  catch (ParseException e) {
+    HandleParseException(PERIOD, e);
+  }
 }
 
 void ResultList() :
@@ -346,12 +368,17 @@ ASTHorseSelection HorseSelection() :
   Token reserve;
 }
 {
-  (<ALL_HORSES> {jjtThis.setAllHorses(true);} <PERIOD> { return jjtThis; }) |
-  ((horse=<NUMBER> { jjtThis.addHorse(Integer.parseInt(horse.image));})*
-  [(<RESERVES>  (reserve=<NUMBER>{jjtThis.addReserve(Integer.parseInt(reserve.image));})+) |
-  (<FORTUNA_SELECT> {jjtThis.setFortunaSelect(true);})]
-   <PERIOD> { return jjtThis; })
-
+  try {
+    (<ALL_HORSES> {jjtThis.setAllHorses(true);} <PERIOD>) |
+    ((horse=<NUMBER> { jjtThis.addHorse(Integer.parseInt(horse.image));})*
+    [(<RESERVES>  (reserve=<NUMBER>{jjtThis.addReserve(Integer.parseInt(reserve.image));})+) |
+    (<FORTUNA_SELECT> {jjtThis.setFortunaSelect(true);})]
+     <PERIOD>)
+  }
+  catch (ParseException e) {
+    HandleParseException(PERIOD, e);
+  }
+  { return jjtThis; }
 }
 
 void V75Bet() :
