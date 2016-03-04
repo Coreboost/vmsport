@@ -16,10 +16,18 @@ class ASTMeeting extends SimpleNode {
 
   public void setTrack(String t) {
     track = t;
+    if (!ASTTrackSpec.trackNames.contains(t)) {
+      ParseException.setSemanticError("The track " + t + " is not defined.");
+      parser.error(parser.generateParseException().getMessage());
+    }
   }
 
   public void setDate(String d) {
     date = d;
+    if (!ASTProgram.programExists(track, date)) {
+      ParseException.setSemanticError("No program is defined for " + track + " on " + date + ".");
+      parser.error(parser.generateParseException().getMessage());
+    }
   }
 
   public void generateSpecifics(JsonObjectBuilder builder) {

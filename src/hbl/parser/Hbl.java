@@ -713,14 +713,12 @@ try {error_count += 1;
     try {
       jj_consume_token(PROGRAM);
       track = Name();
+                jjtn000.setTrack(track.getName());
       date = Date();
+               jjtn000.setDate(date.toString());
       PoolSpecs();
       LegSpecs();
       jj_consume_token(PERIOD);
-    jjtree.closeNodeScope(jjtn000, true);
-    jjtc000 = false;
-    jjtn000.setTrack(track.getName());
-    jjtn000.setDate(date.toString());
     } catch (Throwable jjte000) {
     if (jjtc000) {
       jjtree.clearNodeScope(jjtn000);
@@ -751,7 +749,9 @@ try {error_count += 1;
     try {
       jj_consume_token(MEETING);
       track = Name();
+                jjtn000.setTrack(track.getName());
       date = Date();
+               jjtn000.setDate(date.toString());
       label_11:
       while (true) {
         switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
@@ -779,10 +779,6 @@ try {error_count += 1;
         }
       }
       jj_consume_token(PERIOD);
-    jjtree.closeNodeScope(jjtn000, true);
-    jjtc000 = false;
-    jjtn000.setTrack(track.getName());
-    jjtn000.setDate(date.toString());
     } catch (Throwable jjte000) {
     if (jjtc000) {
       jjtree.clearNodeScope(jjtn000);

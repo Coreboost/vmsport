@@ -283,14 +283,12 @@ void Program() :
   ASTDate date;
 }
 {
-  <PROGRAM> track=Name() date=Date()
+  <PROGRAM>
+  track=Name() {jjtThis.setTrack(track.getName());}
+  date=Date() {jjtThis.setDate(date.toString());}
   PoolSpecs()
   LegSpecs()
   <PERIOD>
-  {
-    jjtThis.setTrack(track.getName());
-    jjtThis.setDate(date.toString());
-  }
 }
 
 void Meeting() :
@@ -299,13 +297,11 @@ void Meeting() :
   ASTDate date;
 }
 {
-  <MEETING> track=Name() date=Date()
+  <MEETING>
+  track=Name() {jjtThis.setTrack(track.getName());}
+  date=Date() {jjtThis.setDate(date.toString());}
   ( (Bet()) | (LegResult()) )*
   <PERIOD>
-  {
-    jjtThis.setTrack(track.getName());
-    jjtThis.setDate(date.toString());
-  }
 }
 
 void LegResult() :
