@@ -18,6 +18,8 @@ public class ParseException extends Exception {
    */
   private static final long serialVersionUID = 1L;
 
+  private static String semanticError = null;
+
   /**
    * This constructor is used by the method "generateParseException"
    * in the generated parser.  Calling this constructor generates
@@ -86,23 +88,32 @@ public class ParseException extends Exception {
   private static String initialise(Token currentToken,
                            int[][] expectedTokenSequences,
                            String[] tokenImage) {
-  String eol = System.getProperty("line.separator", "\n");
-  String expected = "expected ";
-  for (int i = 0; i < expectedTokenSequences.length; i++) {
-    expected += tokenImage[expectedTokenSequences[i][0]];
-    if (i < expectedTokenSequences.length-1) {
-      expected += ", ";
-      if (i == expectedTokenSequences.length-2) {
-        expected += "or ";
+  if (semanticError == null) {
+    String ingress =   "[" + currentToken.next.beginLine + ", " + currentToken.next.beginColumn + "]" + " error: ";
+    String eol = System.getProperty("line.separator", "\n");
+    String expected = "expected ";
+    for (int i = 0; i < expectedTokenSequences.length; i++) {
+      expected += tokenImage[expectedTokenSequences[i][0]];
+      if (i < expectedTokenSequences.length-1) {
+        expected += ", ";
+        if (i == expectedTokenSequences.length-2) {
+          expected += "or ";
+        }
       }
     }
+    String got = " got \"" + currentToken.next.image;
+    return ingress + expected + got + "\".";
+  } else {
+    String ingress =   "[" + currentToken.beginLine + ", " + currentToken.beginColumn + "]" + " error: ";
+    String retval = ingress + semanticError;
+    semanticError = null;
+    return retval;
   }
-  String got = " got \"" + currentToken.next.image;
-  String retval = "[" + currentToken.next.beginLine + ", " + currentToken.next.beginColumn + "]" +
-          " error: " + expected + got + "\".";
-
-  return retval;
 }
+
+  public static void setSemanticError(String message) {
+    semanticError = message;
+  }
 
   /**
    * The end of line string for this machine.

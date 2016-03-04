@@ -9,6 +9,5 @@ class ASTAccounts extends SimpleNode {
   public ASTAccounts(Hbl p, int id) {
     super(p, id);
   }
-
 }
 /* JavaCC - OriginalChecksum=460d463d0782065dea026583045a0cb0 (do not edit this line) */
