@@ -19,7 +19,7 @@ class ASTAccountSpec extends SimpleNode {
   public void setName(String n) {
     name = n;
     if (accountNames.contains(name)) {
-      ParseException.setSemanticError("The account " + name + " is already defined.");
+      ParseException.setSemanticError("An account with name " + name + " is already defined.");
       parser.error(parser.generateParseException().getMessage());
     } else {
       accountNames.add(name);
