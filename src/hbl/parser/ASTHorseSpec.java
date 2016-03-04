@@ -6,24 +6,31 @@ public
 class ASTHorseSpec extends SimpleNode {
   private String name;
   private Integer rank;
-  public static HashSet<String> horseNames = new HashSet<String>();
+  public static HashSet<ASTHorseSpec> horses = new HashSet<ASTHorseSpec>();
+
+  public static Boolean horseExists(String name) {
+    return
+    horses.
+      stream().
+      anyMatch((h) -> {return name.equals(h.name);});
+  }
 
   public ASTHorseSpec(int id) {
     super(id);
+    horses.add(this);
   }
 
   public ASTHorseSpec(Hbl p, int id) {
     super(p, id);
+    horses.add(this);
   }
 
   public void setName(String n) {
-    name = n;
-    if (horseNames.contains(name)) {
-      ParseException.setSemanticError("A horse with name " + name + " is already defined.");
+    if (horseExists(n)) {
+      ParseException.setSemanticError("A horse with name " + n + " is already defined.");
       parser.error(parser.generateParseException().getMessage());
-    } else {
-      horseNames.add(name);
     }
+    name = n;
   }
 
   public void setRank(Integer r) {

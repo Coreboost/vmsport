@@ -15,6 +15,10 @@ class ASTStartList extends SimpleNode {
   }
 
   public void addHorse(String h) {
+    if (!ASTHorseSpec.horseExists(h)) {
+      ParseException.setSemanticError("The horse " + h + " is not defined.");
+      parser.error(parser.generateParseException().getMessage());
+    }
     if (!horses.contains(h)) {
       horses.add(h);
     } else {

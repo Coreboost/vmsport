@@ -9,7 +9,7 @@ class ASTProgram extends SimpleNode {
   private String track;
   private String date;
 
-  public static ArrayList<ASTProgram> programs = new ArrayList<ASTProgram>();
+  private static ArrayList<ASTProgram> programs = new ArrayList<ASTProgram>();
 
   public ASTProgram(int id) {
     super(id);
