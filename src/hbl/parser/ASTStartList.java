@@ -15,7 +15,12 @@ class ASTStartList extends SimpleNode {
   }
 
   public void addHorse(String h) {
-    horses.add(h);
+    if (!horses.contains(h)) {
+      horses.add(h);
+    } else {
+      ParseException.setSemanticError("A horse with name " + h + " is already on the start list for the leg.");
+      parser.error(parser.generateParseException().getMessage());
+    }
   }
 
   public void generateSpecifics(JsonObjectBuilder builder) {
