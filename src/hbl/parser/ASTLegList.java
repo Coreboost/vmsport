@@ -18,6 +18,21 @@ class ASTLegList extends SimpleNode {
     legs.add(l);
   }
 
+  public void validateLegs(Integer maxLegs) {
+    if (legs.size() > maxLegs) {
+      ParseException.setSemanticError("Too many legs, a maximum of " + maxLegs + " allowed, found " + legs.size() + ".");
+      parser.error(parser.generateParseException().getMessage());
+    }
+    if (legs.size() > 1) {
+      for (int i=1; i < legs.size(); i += 1) {
+        if (!(legs.get(i)>legs.get(i-1))) {
+          ParseException.setSemanticError("Leg numbers must be in increasing order.");
+          parser.error(parser.generateParseException().getMessage());
+        }
+      }
+    }
+  }
+
   public void generateSpecifics(JsonObjectBuilder builder) {
     JsonArrayBuilder myBuilder = Json.createArrayBuilder();
     legs.forEach((leg) -> {

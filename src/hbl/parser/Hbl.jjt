@@ -215,28 +215,35 @@ ASTDate Date() :
   }
 }
 
-void DDSpec() : {}
+void DDSpec() :
+{
+  ASTLegList legList;
+}
 {
   try {
-    <DD>LegList()<PERIOD>
+    <DD>legList=LegList() { legList.validateLegs(2); } <PERIOD>
   }
   catch (ParseException e) {
     HandleParseException(PERIOD, e);
   }
 }
 
-void LegList() :
+ASTLegList LegList() :
 {
   Token leg;
 }
 {
   (leg=<NUMBER>{ jjtThis.addLeg(Integer.parseInt(leg.image)); })+
+  { return jjtThis; }
 }
 
-void V75Spec() : {}
+void V75Spec() :
+{
+  ASTLegList legList;
+}
 {
   try {
-    <V75>LegList()<PERIOD>
+    <V75>legList=LegList(){ legList.validateLegs(7); }<PERIOD>
   }
   catch (ParseException e) {
     HandleParseException(PERIOD, e);

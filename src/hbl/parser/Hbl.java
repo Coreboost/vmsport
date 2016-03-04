@@ -444,14 +444,15 @@ try {error_count += 1;
   }
 
   static final public void DDSpec() throws ParseException {
-                 /*@bgen(jjtree) DDSpec */
+ /*@bgen(jjtree) DDSpec */
   ASTDDSpec jjtn000 = new ASTDDSpec(JJTDDSPEC);
   boolean jjtc000 = true;
-  jjtree.openNodeScope(jjtn000);
+  jjtree.openNodeScope(jjtn000);ASTLegList legList;
     try {
       try {
         jj_consume_token(DD);
-        LegList();
+        legList = LegList();
+                            legList.validateLegs(2);
         jj_consume_token(PERIOD);
       } catch (ParseException e) {
     HandleParseException(PERIOD, e);
@@ -477,7 +478,7 @@ try {error_count += 1;
     }
   }
 
-  static final public void LegList() throws ParseException {
+  static final public ASTLegList LegList() throws ParseException {
  /*@bgen(jjtree) LegList */
   ASTLegList jjtn000 = new ASTLegList(JJTLEGLIST);
   boolean jjtc000 = true;
@@ -496,22 +497,27 @@ try {error_count += 1;
           break label_7;
         }
       }
+    jjtree.closeNodeScope(jjtn000, true);
+    jjtc000 = false;
+    {if (true) return jjtn000;}
     } finally {
     if (jjtc000) {
       jjtree.closeNodeScope(jjtn000, true);
     }
     }
+    throw new Error("Missing return statement in function");
   }
 
   static final public void V75Spec() throws ParseException {
-                  /*@bgen(jjtree) V75Spec */
+ /*@bgen(jjtree) V75Spec */
   ASTV75Spec jjtn000 = new ASTV75Spec(JJTV75SPEC);
   boolean jjtc000 = true;
-  jjtree.openNodeScope(jjtn000);
+  jjtree.openNodeScope(jjtn000);ASTLegList legList;
     try {
       try {
         jj_consume_token(V75);
-        LegList();
+        legList = LegList();
+                            legList.validateLegs(7);
         jj_consume_token(PERIOD);
       } catch (ParseException e) {
     HandleParseException(PERIOD, e);
