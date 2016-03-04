@@ -6,7 +6,7 @@ public
 class ASTHorseSpec extends SimpleNode {
   private String name;
   private Integer rank;
-  public static HashSet<ASTHorseSpec> horses = new HashSet<ASTHorseSpec>();
+  private static HashSet<ASTHorseSpec> horses = new HashSet<ASTHorseSpec>();
 
   public static Boolean horseExists(String name) {
     return

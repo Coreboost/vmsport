@@ -5,7 +5,7 @@ import javax.json.*;
 public
 class ASTTrackSpec extends SimpleNode {
   private String name;
-  public static HashSet<String> trackNames = new HashSet<String>();
+  private static HashSet<String> trackNames = new HashSet<String>();
 
   public ASTTrackSpec(int id) {
     super(id);
@@ -15,9 +15,13 @@ class ASTTrackSpec extends SimpleNode {
     super(p, id);
   }
 
+  public static Boolean trackExists(String name) {
+    return trackNames.contains(name);
+  }
+
   public void setName(String n) {
     name = n;
-    if (trackNames.contains(name)) {
+    if (trackExists(name)) {
       ParseException.setSemanticError("A track with name " + name + " is already defined.");
       parser.error(parser.generateParseException().getMessage());
     } else {

@@ -6,7 +6,7 @@ public
 class ASTAccountSpec extends SimpleNode {
   private String name;
   private Integer amount;
-  public static HashSet<String> accountNames = new HashSet<String>();
+  private static HashSet<String> accountNames = new HashSet<String>();
 
   public ASTAccountSpec(int id) {
     super(id);
@@ -16,9 +16,13 @@ class ASTAccountSpec extends SimpleNode {
     super(p, id);
   }
 
+  public static Boolean accountExists(String name) {
+    return accountNames.contains(name);
+  }
+
   public void setName(String n) {
     name = n;
-    if (accountNames.contains(name)) {
+    if (accountExists(name)) {
       ParseException.setSemanticError("An account with name " + name + " is already defined.");
       parser.error(parser.generateParseException().getMessage());
     } else {

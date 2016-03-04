@@ -25,7 +25,7 @@ class AbstractBet extends SimpleNode {
 
   public void setAccountID(String id) {
     accountID = id;
-    if (!ASTAccountSpec.accountNames.contains(id)) {
+    if (!ASTAccountSpec.accountExists(id)) {
       ParseException.setSemanticError("The account " + id + " is not defined.");
       parser.error(parser.generateParseException().getMessage());
     }

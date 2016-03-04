@@ -46,7 +46,7 @@ class ASTProgram extends SimpleNode {
 
   public void setTrack(String t) {
     track = t;
-    if (!ASTTrackSpec.trackNames.contains(t)) {
+    if (!ASTTrackSpec.trackExists(t)) {
       ParseException.setSemanticError("The track " + t + " is not defined.");
       parser.error(parser.generateParseException().getMessage());
     }
