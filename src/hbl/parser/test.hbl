@@ -6,7 +6,8 @@ Accounts
   A1                  1000
   "Bengt Bengtsson"   2000
   Billy       777
-  Billy       779
+  AA3       777
+  Billy2       779
 .
 
 Horses
@@ -34,12 +35,12 @@ Program Solvalla 2016-02-01
 .
 
 Meeting Solvalla 2016-02-01
-  DD DDB1 10 Account AA1
+  DD DDB1 10 Account Billy2
     DD-1 2 3.
     DD-2 A.
   .
 
-  DD Fortuna 100  -- Bet ID is optional
+  DD DDB2 Fortuna 100  -- Bet ID is optional
     DD-1 2 3.
     DD-2 3 F.
   .
@@ -51,7 +52,7 @@ Meeting Solvalla 2016-02-01
                        --  bets as MDDB_1 MDDB_2...MDDB_100.
 
 
-  V75 V75B1 X2 Boost Account AA2
+  V75 V75B1 X2 Boost Account Billy
     V75-1 2 3 R 4 5.
     V75-2 1 R 2 3.
     V75-3 1 R 2 3.

@@ -10,14 +10,7 @@ PARSER_BEGIN(Hbl)
       try {
         SimpleNode node = parser.Start();
         if (error_count == 0) {
-          node.validate(validation_messages);
-          if (validation_messages.size() > 0) {
-            for (int i=0; i<validation_messages.size(); i+=1) {
-              System.out.println(validation_messages.get(i));
-            }
-          } else {
-            System.out.println(node.generate().toString());
-          }
+          System.out.println(node.generate().toString());
           System.exit(0);
         } else {
           System.exit(1);
@@ -26,6 +19,11 @@ PARSER_BEGIN(Hbl)
         System.out.println(e.getMessage());
         System.exit(2);
       }
+    }
+
+    public static void error(String message) {
+      System.out.println(message);
+      error_count++;
     }
   }
 PARSER_END(Hbl)
@@ -122,11 +120,13 @@ SimpleNode Start() : {}
 JAVACODE
 void HandleParseException(int skipTo, ParseException e) {
   error_count += 1;
-  System.out.println(e.getMessage());
-  Token t;
-  do {
-    t = getNextToken();
-  } while (t.kind != skipTo);
+  error(e.getMessage());
+  if (skipTo != -1) {
+    Token t;
+    do {
+      t = getNextToken();
+    } while (t.kind != skipTo);
+  }
 }
 
 ASTName Name() :
@@ -364,7 +364,7 @@ void DDBet() :
 }
 {
   <DD> [<REPEAT> repeatCount=<NUMBER>{ jjtThis.setRepeatCount(Integer.parseInt(repeatCount.image)); }] [betID=Name() {jjtThis.setBetID(betID.getName());}] [<FORTUNA> {jjtThis.setFortuna(true);}] amount=<NUMBER> {jjtThis.setAmount(Integer.parseInt(amount.image));}
-  [<ACCOUNT> accountID=Name() {jjtThis.setAccountID(accountID.getName());} ]
+  [<ACCOUNT> accountID=Name() { jjtThis.setAccountID(accountID.getName()); }]
   [<DD_1> selection=HorseSelection() { selection.setRace(1); }]
   [<DD_2> selection=HorseSelection() { selection.setRace(2); }]
   <PERIOD>

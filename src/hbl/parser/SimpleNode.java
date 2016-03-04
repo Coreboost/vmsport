@@ -111,9 +111,6 @@ class SimpleNode implements Node {
     return false;
   }
 
-  public void validate(java.util.List<String> messages) {
-    // Override in subclasses and add validation messages to messages
-  }
 }
 
 /* JavaCC - OriginalChecksum=7dd58bf17abf4df3dfb8f399b5a32381 (do not edit this line) */

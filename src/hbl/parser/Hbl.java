@@ -7,14 +7,7 @@
       try {
         SimpleNode node = parser.Start();
         if (error_count == 0) {
-          node.validate(validation_messages);
-          if (validation_messages.size() > 0) {
-            for (int i=0; i<validation_messages.size(); i+=1) {
-              System.out.println(validation_messages.get(i));
-            }
-          } else {
-            System.out.println(node.generate().toString());
-          }
+          System.out.println(node.generate().toString());
           System.exit(0);
         } else {
           System.exit(1);
@@ -23,6 +16,11 @@
         System.out.println(e.getMessage());
         System.exit(2);
       }
+    }
+
+    public static void error(String message) {
+      System.out.println(message);
+      error_count++;
     }
 
   static final public SimpleNode Start() throws ParseException {
@@ -131,11 +129,13 @@ ASTHandleParseException jjtn000 = new ASTHandleParseException(JJTHANDLEPARSEEXCE
 boolean jjtc000 = true;
 jjtree.openNodeScope(jjtn000);
 try {error_count += 1;
-  System.out.println(e.getMessage());
-  Token t;
-  do {
-    t = getNextToken();
-  } while (t.kind != skipTo);/*@bgen(jjtree)*/
+  error(e.getMessage());
+  if (skipTo != -1) {
+    Token t;
+    do {
+      t = getNextToken();
+    } while (t.kind != skipTo);
+  }/*@bgen(jjtree)*/
 } finally {
   if (jjtc000) {
     jjtree.closeNodeScope(jjtn000, true);
@@ -1057,7 +1057,7 @@ try {error_count += 1;
       case ACCOUNT:
         jj_consume_token(ACCOUNT);
         accountID = Name();
-                               jjtn000.setAccountID(accountID.getName());
+                                jjtn000.setAccountID(accountID.getName());
         break;
       default:
         jj_la1[23] = jj_gen;
