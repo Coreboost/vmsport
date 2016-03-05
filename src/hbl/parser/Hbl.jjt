@@ -221,7 +221,7 @@ void DDSpec() :
 }
 {
   try {
-    <DD>legList=LegList() { legList.validateLegs(2); } <PERIOD>
+    <DD>legList=LegList() { legList.validate(2); } <PERIOD>
   }
   catch (ParseException e) {
     HandleParseException(PERIOD, e);
@@ -243,7 +243,7 @@ void V75Spec() :
 }
 {
   try {
-    <V75>legList=LegList(){ legList.validateLegs(7); }<PERIOD>
+    <V75>legList=LegList(){ legList.validate(7); }<PERIOD>
   }
   catch (ParseException e) {
     HandleParseException(PERIOD, e);
@@ -371,6 +371,7 @@ void DDBet() :
   [<DD_1> selection=HorseSelection() { selection.setRace(1); }]
   [<DD_2> selection=HorseSelection() { selection.setRace(2); }]
   <PERIOD>
+  {jjtThis.validate();}
 }
 
 ASTHorseSelection HorseSelection() :

@@ -452,7 +452,7 @@ try {error_count += 1;
       try {
         jj_consume_token(DD);
         legList = LegList();
-                            legList.validateLegs(2);
+                            legList.validate(2);
         jj_consume_token(PERIOD);
       } catch (ParseException e) {
     HandleParseException(PERIOD, e);
@@ -517,7 +517,7 @@ try {error_count += 1;
       try {
         jj_consume_token(V75);
         legList = LegList();
-                            legList.validateLegs(7);
+                            legList.validate(7);
         jj_consume_token(PERIOD);
       } catch (ParseException e) {
     HandleParseException(PERIOD, e);
@@ -1086,6 +1086,9 @@ try {error_count += 1;
         ;
       }
       jj_consume_token(PERIOD);
+    jjtree.closeNodeScope(jjtn000, true);
+    jjtc000 = false;
+   jjtn000.validate();
     } catch (Throwable jjte000) {
     if (jjtc000) {
       jjtree.clearNodeScope(jjtn000);

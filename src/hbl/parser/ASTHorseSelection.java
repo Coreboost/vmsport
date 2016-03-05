@@ -27,6 +27,10 @@ class ASTHorseSelection extends SimpleNode {
     fortunaSelect = val;
   }
 
+  public Boolean getFortunaSelect() {
+      return fortunaSelect;
+  }
+
   public void addHorse(Integer h) {
     horses.add(h);
   }

@@ -2,6 +2,10 @@
 /* JavaCCOptions:MULTI=true,NODE_USES_PARSER=false,VISITOR=false,TRACK_TOKENS=false,NODE_PREFIX=AST,NODE_EXTENDS=,NODE_FACTORY=,SUPPORT_CLASS_VISIBILITY_PUBLIC=true */
 import java.util.HashSet;
 import javax.json.*;
+import java.util.Arrays;
+import java.util.List;
+import java.util.ArrayList;
+
 public
 class AbstractBet extends SimpleNode {
   private static HashSet<String> betIDs = new HashSet<String>();
@@ -21,6 +25,17 @@ class AbstractBet extends SimpleNode {
 
   public AbstractBet(Hbl p, int id) {
     super(p, id);
+  }
+
+  public List<ASTHorseSelection> getHorseSelections() {
+    ArrayList<ASTHorseSelection> selections = new ArrayList<ASTHorseSelection>();
+    Arrays.stream(children).
+    filter(
+      (c) -> { return c instanceof ASTHorseSelection; }
+    ).forEach((hs) -> {
+      selections.add((ASTHorseSelection)hs);
+    });
+    return selections;
   }
 
   public void setAccountID(String id) {
@@ -47,6 +62,10 @@ class AbstractBet extends SimpleNode {
 
   public void setFortuna(Boolean f) {
     fortuna = f;
+  }
+
+  public Boolean getFortuna() {
+    return fortuna;
   }
 
   public void setBoost(Boolean b) {

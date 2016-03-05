@@ -18,7 +18,7 @@ class ASTLegList extends SimpleNode {
     legs.add(l);
   }
 
-  public void validateLegs(Integer maxLegs) {
+  public void validate(Integer maxLegs) {
     if (legs.size() > maxLegs) {
       ParseException.setSemanticError("Too many legs, a maximum of " + maxLegs + " allowed, found " + legs.size() + ".");
       parser.error(parser.generateParseException().getMessage());
