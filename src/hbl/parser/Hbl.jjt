@@ -215,13 +215,13 @@ ASTDate Date() :
   }
 }
 
-void DDSpec() :
+void DDSpec(ASTLegSpecs legSpecs) :
 {
   ASTLegList legList;
 }
 {
   try {
-    <DD>legList=LegList() { legList.validate(2); } <PERIOD>
+    <DD>legList=LegList() { legList.validate(2, legSpecs); } <PERIOD>
   }
   catch (ParseException e) {
     HandleParseException(PERIOD, e);
@@ -237,22 +237,22 @@ ASTLegList LegList() :
   { return jjtThis; }
 }
 
-void V75Spec() :
+void V75Spec(ASTLegSpecs legSpecs) :
 {
   ASTLegList legList;
 }
 {
   try {
-    <V75>legList=LegList(){ legList.validate(7); }<PERIOD>
+    <V75>legList=LegList(){ legList.validate(7, legSpecs); }<PERIOD>
   }
   catch (ParseException e) {
     HandleParseException(PERIOD, e);
   }
 }
 
-void PoolSpecs() : {}
+void PoolSpecs(ASTLegSpecs legSpecs) : {}
 {
-  (DDSpec()|V75Spec())*
+  (DDSpec(legSpecs)|V75Spec(legSpecs))*
 }
 
 void StartList() :
@@ -279,22 +279,24 @@ void LegSpec() :
   }
 }
 
-void LegSpecs() : {}
+ASTLegSpecs LegSpecs() : {}
 {
     (LegSpec())+
+    { return jjtThis; }
 }
 
 void Program() :
 {
   ASTName track;
   ASTDate date;
+  ASTLegSpecs legSpecs;
 }
 {
   <PROGRAM>
   track=Name() {jjtThis.setTrack(track.getName());}
   date=Date() {jjtThis.setDate(date.toString());}
-  LegSpecs()
-  PoolSpecs()
+  legSpecs=LegSpecs()
+  PoolSpecs(legSpecs)
   <PERIOD>
 }
 

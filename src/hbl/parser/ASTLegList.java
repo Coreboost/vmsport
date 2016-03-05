@@ -18,7 +18,7 @@ class ASTLegList extends SimpleNode {
     legs.add(l);
   }
 
-  public void validate(Integer maxLegs) {
+  public void validate(Integer maxLegs, ASTLegSpecs legSpecs) {
     if (legs.size() > maxLegs) {
       ParseException.setSemanticError("Too many legs, a maximum of " + maxLegs + " allowed, found " + legs.size() + ".");
       parser.error(parser.generateParseException().getMessage());
@@ -29,6 +29,12 @@ class ASTLegList extends SimpleNode {
           ParseException.setSemanticError("Leg numbers must be in increasing order.");
           parser.error(parser.generateParseException().getMessage());
         }
+      }
+    }
+    for (int i=0; i < legs.size(); i += 1) {
+      if (!legSpecs.legExists(legs.get(i))) {
+        ParseException.setSemanticError(legs.get(i) + " is not a valid leg number.");
+        parser.error(parser.generateParseException().getMessage());
       }
     }
   }

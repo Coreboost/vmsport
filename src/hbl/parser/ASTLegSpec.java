@@ -16,6 +16,11 @@ class ASTLegSpec extends SimpleNode {
     leg = l;
   }
 
+  public Integer getLeg()
+  {
+    return leg;
+  }
+
   public void generateSpecifics(JsonObjectBuilder builder) {
     builder.add("leg", leg);
   }
