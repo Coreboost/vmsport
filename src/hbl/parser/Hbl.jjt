@@ -293,8 +293,8 @@ void Program() :
   <PROGRAM>
   track=Name() {jjtThis.setTrack(track.getName());}
   date=Date() {jjtThis.setDate(date.toString());}
-  PoolSpecs()
   LegSpecs()
+  PoolSpecs()
   <PERIOD>
 }
 

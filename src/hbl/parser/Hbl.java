@@ -722,8 +722,8 @@ try {error_count += 1;
                 jjtn000.setTrack(track.getName());
       date = Date();
                jjtn000.setDate(date.toString());
-      PoolSpecs();
       LegSpecs();
+      PoolSpecs();
       jj_consume_token(PERIOD);
     } catch (Throwable jjte000) {
     if (jjtc000) {
