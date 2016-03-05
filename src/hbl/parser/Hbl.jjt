@@ -296,6 +296,7 @@ void Program() :
   track=Name() {jjtThis.setTrack(track.getName());}
   date=Date() {jjtThis.setDate(date.toString());}
   legSpecs=LegSpecs()
+  {legSpecs.validate();}
   PoolSpecs(legSpecs)
   <PERIOD>
 }

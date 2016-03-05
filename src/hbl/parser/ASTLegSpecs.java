@@ -33,5 +33,23 @@ class ASTLegSpecs extends SimpleNode {
     });
   }
 
+  public void validate() {
+    List<ASTLegSpec> legSpecs = getLegSpecs();
+    if (legSpecs.size() != 0) {
+      if (!(legSpecs.get(0).getLeg() == 1)) {
+        ParseException.setSemanticError("Leg numbering must start at 1.");
+        parser.error(parser.generateParseException().getMessage());
+      }
+      if (legSpecs.size() > 1) {
+        for (int i=1; i < legSpecs.size(); i += 1) {
+          if (!(legSpecs.get(i).getLeg() == (legSpecs.get(i-1).getLeg() + 1))) {
+            ParseException.setSemanticError("Legs must be specfied in consecutive order.");
+            parser.error(parser.generateParseException().getMessage());
+          }
+        }
+      }
+    }
+  }
+
 }
 /* JavaCC - OriginalChecksum=ce7f760726cdf209f365cd3b65014cfb (do not edit this line) */

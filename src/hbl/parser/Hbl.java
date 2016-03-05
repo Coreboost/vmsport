@@ -728,6 +728,7 @@ try {error_count += 1;
       date = Date();
                jjtn000.setDate(date.toString());
       legSpecs = LegSpecs();
+   legSpecs.validate();
       PoolSpecs(legSpecs);
       jj_consume_token(PERIOD);
     } catch (Throwable jjte000) {
