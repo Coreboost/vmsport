@@ -30,11 +30,8 @@ abstract class AbstractBet extends SimpleNode {
   public List<ASTHorseSelection> getHorseSelections() {
     ArrayList<ASTHorseSelection> selections = new ArrayList<ASTHorseSelection>();
     Arrays.stream(children).
-    filter(
-      (c) -> { return c instanceof ASTHorseSelection; }
-    ).forEach((hs) -> {
-      selections.add((ASTHorseSelection)hs);
-    });
+      filter((c) -> c instanceof ASTHorseSelection).
+      forEach((hs) -> selections.add((ASTHorseSelection)hs));
     return selections;
   }
 

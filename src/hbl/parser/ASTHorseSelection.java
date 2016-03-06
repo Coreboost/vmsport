@@ -64,15 +64,11 @@ class ASTHorseSelection extends SimpleNode {
       builder.add("allHorses", allHorses);
     } else {
       JsonArrayBuilder myBuilder = Json.createArrayBuilder();
-      horses.forEach((horse) -> {
-        myBuilder.add(horse);
-      });
+      horses.forEach((horse) -> myBuilder.add(horse));
       builder.add("horses", myBuilder.build());
       if (reserves.size() > 0) {
         final JsonArrayBuilder myBuilder2 = Json.createArrayBuilder();
-        reserves.forEach((reserve) -> {
-          myBuilder2.add(reserve);
-        });
+        reserves.forEach((reserve) -> myBuilder2.add(reserve));
         builder.add("reserves", myBuilder2.build());
       }
     }

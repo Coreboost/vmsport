@@ -24,9 +24,10 @@ class ASTProgram extends SimpleNode {
   }
 
   public static ASTProgram getProgram(String track, String date) {
-    Optional found = programs.stream().filter(
-      (p) -> { return p.getDate().equals(date) && p.getTrack().equals(track); }
-    ).findAny();
+    Optional found = programs.
+      stream().
+      filter((p) -> p.getDate().equals(date) && p.getTrack().equals(track)).
+      findAny();
     if (found.isPresent()) {
         return (ASTProgram)found.get();
     } else {
@@ -35,15 +36,15 @@ class ASTProgram extends SimpleNode {
   }
 
   public static Boolean programExists(ASTProgram c) {
-    return programs.stream().anyMatch(
-      (p) -> { return c != p && (p.getDate().equals(c.getDate()) && p.getTrack().equals(c.getTrack())); }
-    );
+    return programs.
+            stream().
+            anyMatch((p) -> c != p && (p.getDate().equals(c.getDate()) && p.getTrack().equals(c.getTrack())));
   }
 
   public static Boolean programExists(String track, String date) {
-    return programs.stream().anyMatch(
-      (p) -> { return p.getDate().equals(date) && p.getTrack().equals(track); }
-    );
+    return programs.
+        stream().
+        anyMatch((p) -> p.getDate().equals(date) && p.getTrack().equals(track));
   }
 
   public void setTrack(String t) {
@@ -72,22 +73,24 @@ class ASTProgram extends SimpleNode {
 
   public List<ASTLegSpec> getLegSpecs() {
     ASTLegSpecs legSpecsObject = (ASTLegSpecs)Arrays.stream(children).
-      filter((c) -> {return c instanceof ASTLegSpecs;}).
-      findAny().get();
+      filter((c) -> c instanceof ASTLegSpecs).
+      findAny().
+      get();
     return legSpecsObject.getLegSpecs();
   }
 
   public List<AbstractPoolSpec> getPoolSpecs() {
     ASTPoolSpecs poolSpecsObject = (ASTPoolSpecs)Arrays.stream(children).
-      filter((c) -> {return c instanceof ASTPoolSpecs;}).
-      findAny().get();
+      filter((c) -> c instanceof ASTPoolSpecs).
+      findAny().
+      get();
     return poolSpecsObject.getPoolSpecs();
   }
 
   public ASTLegSpec getLeg(Integer legNo) {
     return getLegSpecs().
           stream().
-          filter((ls) -> { return ls.getLeg() == legNo;}).
+          filter((ls) -> ls.getLeg() == legNo).
           findAny().
           get();
   }

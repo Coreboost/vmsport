@@ -29,9 +29,7 @@ class ASTResultList extends SimpleNode {
         myBuilder.add(entry.get(0));
       } else {
         JsonArrayBuilder otherBuilder = Json.createArrayBuilder();
-        entry.forEach((horse) -> {
-          otherBuilder.add(horse);
-        });
+        entry.forEach((horse) -> otherBuilder.add(horse));
         myBuilder.add(otherBuilder.build());
       }
     });

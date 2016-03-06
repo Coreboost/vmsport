@@ -18,7 +18,7 @@ class ASTDDBet extends AbstractBet {
     return program.
               getPoolSpecs().
               stream().
-              filter((ps) -> {return ps instanceof ASTDDSpec;}).
+              filter((ps) -> ps instanceof ASTDDSpec).
               findAny().
               get();
   }
@@ -27,7 +27,7 @@ class ASTDDBet extends AbstractBet {
     super.validate(program);
     if (getFortuna()) {
       List<ASTHorseSelection> selections = getHorseSelections();
-      if (selections.size() == 2 && selections.stream().noneMatch((s) -> { return s.getFortunaSelect(); })) {
+      if (selections.size() == 2 && selections.stream().noneMatch((s) -> s.getFortunaSelect())) {
         ParseException.setSemanticError("At least one leg must be open for selections by Fortuna.");
         parser.error(parser.generateParseException().getMessage());
       }
