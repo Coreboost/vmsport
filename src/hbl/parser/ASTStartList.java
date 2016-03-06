@@ -29,7 +29,7 @@ class ASTStartList extends SimpleNode {
 
   public void generateSpecifics(JsonObjectBuilder builder) {
     JsonArrayBuilder myBuilder = Json.createArrayBuilder();
-    horses.forEach((horse) -> myBuilder.add(horse));
+    horses.forEach(horse -> myBuilder.add(horse));
     builder.add("horses", myBuilder.build());
   }
 

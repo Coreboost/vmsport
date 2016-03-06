@@ -16,7 +16,7 @@ class ASTV75Bet extends AbstractBet {
     return program.
               getPoolSpecs().
               stream().
-              filter((ps) -> ps instanceof ASTV75Spec).
+              filter(ps -> ps instanceof ASTV75Spec).
               findAny().
               get();
   }

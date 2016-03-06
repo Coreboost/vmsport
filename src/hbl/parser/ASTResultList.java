@@ -24,12 +24,12 @@ class ASTResultList extends SimpleNode {
 
   public void generateSpecifics(JsonObjectBuilder builder) {
     JsonArrayBuilder myBuilder = Json.createArrayBuilder();
-    entries.forEach((entry) -> {
+    entries.forEach(entry -> {
       if (entry.size() == 1) {
         myBuilder.add(entry.get(0));
       } else {
         JsonArrayBuilder otherBuilder = Json.createArrayBuilder();
-        entry.forEach((horse) -> otherBuilder.add(horse));
+        entry.forEach(horse -> otherBuilder.add(horse));
         myBuilder.add(otherBuilder.build());
       }
     });

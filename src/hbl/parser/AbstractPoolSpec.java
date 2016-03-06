@@ -29,7 +29,7 @@ class AbstractPoolSpec extends SimpleNode {
 
   public ASTLegList getLegList() {
     return (ASTLegList)Arrays.stream(children).
-      filter( (c) -> c instanceof ASTLegList ).
+      filter(c -> c instanceof ASTLegList).
       findAny().
       get();
   }

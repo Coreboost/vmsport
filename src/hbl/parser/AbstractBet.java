@@ -30,8 +30,8 @@ abstract class AbstractBet extends SimpleNode {
   public List<ASTHorseSelection> getHorseSelections() {
     ArrayList<ASTHorseSelection> selections = new ArrayList<ASTHorseSelection>();
     Arrays.stream(children).
-      filter((c) -> c instanceof ASTHorseSelection).
-      forEach((hs) -> selections.add((ASTHorseSelection)hs));
+      filter(c -> c instanceof ASTHorseSelection).
+      forEach(hs -> selections.add((ASTHorseSelection)hs));
     return selections;
   }
 
@@ -78,13 +78,13 @@ abstract class AbstractBet extends SimpleNode {
   }
 
   public void validate(ASTProgram program) {
-    getHorseSelections().forEach((hs) -> {
+    getHorseSelections().forEach(hs -> {
       Integer legInPool = hs.getLeg();
       ArrayList<Integer> allSelections = new ArrayList<Integer>(hs.getHorses());
       allSelections.addAll(hs.getReserves());
       AbstractPoolSpec poolSpec = getPoolSpec(program);
       Integer actualLeg = poolSpec.getActualLeg(legInPool);
-      allSelections.forEach((selected) -> {
+      allSelections.forEach(selected -> {
         if (!program.getLeg(actualLeg).isValidFinisher(selected)) {
           ParseException.setSemanticError(selected + " is not a valid selection for leg " + legInPool + "." );
           parser.error(parser.generateParseException().getMessage());

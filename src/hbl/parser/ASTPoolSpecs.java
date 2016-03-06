@@ -17,8 +17,8 @@ class ASTPoolSpecs extends SimpleNode {
     ArrayList<AbstractPoolSpec> poolSpecs = new ArrayList<AbstractPoolSpec>();
     if (children != null) {
       Arrays.stream(children).
-        filter((c) ->  c instanceof AbstractPoolSpec).
-        forEach((ls) -> poolSpecs.add((AbstractPoolSpec)ls));
+        filter(c ->  c instanceof AbstractPoolSpec).
+        forEach(ls -> poolSpecs.add((AbstractPoolSpec)ls));
     }
     return poolSpecs;
   }

@@ -59,7 +59,7 @@ class ASTLegList extends SimpleNode {
 
   public void generateSpecifics(JsonObjectBuilder builder) {
     JsonArrayBuilder myBuilder = Json.createArrayBuilder();
-    legs.forEach((leg) -> myBuilder.add(leg));
+    legs.forEach(leg -> myBuilder.add(leg));
     builder.add("legs", myBuilder.build());
   }
 

@@ -18,8 +18,8 @@ class ASTLegSpecs extends SimpleNode {
     ArrayList<ASTLegSpec> legSpecs = new ArrayList<ASTLegSpec>();
     if (children != null) {
       Arrays.stream(children).
-        filter((c) -> c instanceof ASTLegSpec).
-        forEach((ls) -> legSpecs.add((ASTLegSpec)ls));
+        filter(c -> c instanceof ASTLegSpec).
+        forEach(ls -> legSpecs.add((ASTLegSpec)ls));
     }
     return legSpecs;
   }
@@ -27,7 +27,7 @@ class ASTLegSpecs extends SimpleNode {
   public Boolean legExists(Integer legNo) {
     return getLegSpecs().
               stream().
-              anyMatch((l) -> l.getLeg()==legNo);
+              anyMatch(l -> l.getLeg()==legNo);
   }
 
   public void validate() {

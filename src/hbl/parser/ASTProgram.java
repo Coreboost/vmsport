@@ -26,7 +26,7 @@ class ASTProgram extends SimpleNode {
   public static ASTProgram getProgram(String track, String date) {
     Optional found = programs.
       stream().
-      filter((p) -> p.getDate().equals(date) && p.getTrack().equals(track)).
+      filter(p -> p.getDate().equals(date) && p.getTrack().equals(track)).
       findAny();
     if (found.isPresent()) {
         return (ASTProgram)found.get();
@@ -38,13 +38,13 @@ class ASTProgram extends SimpleNode {
   public static Boolean programExists(ASTProgram c) {
     return programs.
             stream().
-            anyMatch((p) -> c != p && (p.getDate().equals(c.getDate()) && p.getTrack().equals(c.getTrack())));
+            anyMatch(p -> c != p && (p.getDate().equals(c.getDate()) && p.getTrack().equals(c.getTrack())));
   }
 
   public static Boolean programExists(String track, String date) {
     return programs.
         stream().
-        anyMatch((p) -> p.getDate().equals(date) && p.getTrack().equals(track));
+        anyMatch(p -> p.getDate().equals(date) && p.getTrack().equals(track));
   }
 
   public void setTrack(String t) {
@@ -73,7 +73,7 @@ class ASTProgram extends SimpleNode {
 
   public List<ASTLegSpec> getLegSpecs() {
     ASTLegSpecs legSpecsObject = (ASTLegSpecs)Arrays.stream(children).
-      filter((c) -> c instanceof ASTLegSpecs).
+      filter(c -> c instanceof ASTLegSpecs).
       findAny().
       get();
     return legSpecsObject.getLegSpecs();
@@ -81,7 +81,7 @@ class ASTProgram extends SimpleNode {
 
   public List<AbstractPoolSpec> getPoolSpecs() {
     ASTPoolSpecs poolSpecsObject = (ASTPoolSpecs)Arrays.stream(children).
-      filter((c) -> c instanceof ASTPoolSpecs).
+      filter(c -> c instanceof ASTPoolSpecs).
       findAny().
       get();
     return poolSpecsObject.getPoolSpecs();

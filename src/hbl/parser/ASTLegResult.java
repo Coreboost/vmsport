@@ -20,7 +20,7 @@ class ASTLegResult extends SimpleNode {
   public ASTResultList getResultList() {
     if (children != null) {
       return (ASTResultList)Arrays.stream(children).
-              filter((c) -> c instanceof ASTResultList).
+              filter(c -> c instanceof ASTResultList).
               findFirst().
               get();
     } else {
@@ -31,8 +31,8 @@ class ASTLegResult extends SimpleNode {
   public void validate(ASTProgram program) {
     ASTResultList resultList = getResultList();
     if (resultList != null) {
-      resultList.getResults().forEach((inPlace) -> {
-        inPlace.forEach( (finishNo) -> {
+      resultList.getResults().forEach(inPlace -> {
+        inPlace.forEach(finishNo -> {
           if (!program.getLeg(leg).isValidFinisher(finishNo)) {
             ParseException.setSemanticError(finishNo + " is not a valid finisher for leg " + leg + "." );
             parser.error(parser.generateParseException().getMessage());
