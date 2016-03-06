@@ -23,10 +23,7 @@ class ASTLegSpec extends SimpleNode {
   }
 
   public ASTStartList getStartList() {
-    return (ASTStartList)Arrays.stream(children).
-      filter(c ->  c instanceof ASTStartList).
-      findAny().
-      orElse(null);
+    return (ASTStartList) getChild(c ->  c instanceof ASTStartList);
   }
 
   public Boolean isValidStartNumber(Integer no) {

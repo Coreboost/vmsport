@@ -68,19 +68,11 @@ class ASTProgram extends SimpleNode {
   }
 
   public List<ASTLegSpec> getLegSpecs() {
-    ASTLegSpecs legSpecsObject = (ASTLegSpecs)Arrays.stream(children).
-      filter(c -> c instanceof ASTLegSpecs).
-      findAny().
-      get();
-    return legSpecsObject.getLegSpecs();
+    return ( (ASTLegSpecs) getChild(c -> c instanceof ASTLegSpecs) ).getLegSpecs();
   }
 
   public List<AbstractPoolSpec> getPoolSpecs() {
-    ASTPoolSpecs poolSpecsObject = (ASTPoolSpecs)Arrays.stream(children).
-      filter(c -> c instanceof ASTPoolSpecs).
-      findAny().
-      get();
-    return poolSpecsObject.getPoolSpecs();
+    return ( (ASTPoolSpecs) getChild(c -> c instanceof ASTPoolSpecs) ).getPoolSpecs();
   }
 
   public ASTLegSpec getLeg(Integer legNo) {
