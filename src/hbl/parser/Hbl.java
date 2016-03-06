@@ -14,6 +14,7 @@
         }
       } catch (Exception e) {
         System.out.println(e.getMessage());
+        e.printStackTrace();
         System.exit(2);
       }
     }
@@ -758,12 +759,14 @@ try {error_count += 1;
   boolean jjtc000 = true;
   jjtree.openNodeScope(jjtn000);ASTName track;
   ASTDate date;
+  ASTProgram program;
     try {
       jj_consume_token(MEETING);
       track = Name();
                 jjtn000.setTrack(track.getName());
       date = Date();
                jjtn000.setDate(date.toString());
+   program=ASTProgram.getProgram(track.getName(), date.toString());
       label_11:
       while (true) {
         switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
@@ -779,10 +782,10 @@ try {error_count += 1;
         switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
         case DD:
         case V75:
-          Bet();
+          Bet(program);
           break;
         case LEG:
-          LegResult();
+          LegResult(program);
           break;
         default:
           jj_la1[14] = jj_gen;
@@ -812,7 +815,7 @@ try {error_count += 1;
     }
   }
 
-  static final public void LegResult() throws ParseException {
+  static final public void LegResult(ASTProgram program) throws ParseException {
  /*@bgen(jjtree) LegResult */
   ASTLegResult jjtn000 = new ASTLegResult(JJTLEGRESULT);
   boolean jjtc000 = true;
@@ -835,6 +838,9 @@ try {error_count += 1;
       } catch (ParseException e) {
     HandleParseException(PERIOD, e);
       }
+    jjtree.closeNodeScope(jjtn000, true);
+    jjtc000 = false;
+    jjtn000.validate(program);
     } catch (Throwable jjte000) {
     if (jjtc000) {
       jjtree.clearNodeScope(jjtn000);
@@ -980,18 +986,18 @@ try {error_count += 1;
     throw new Error("Missing return statement in function");
   }
 
-  static final public void Bet() throws ParseException {
-              /*@bgen(jjtree) Bet */
+  static final public void Bet(ASTProgram program) throws ParseException {
+                                /*@bgen(jjtree) Bet */
   ASTBet jjtn000 = new ASTBet(JJTBET);
   boolean jjtc000 = true;
   jjtree.openNodeScope(jjtn000);
     try {
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
       case DD:
-        DDBet();
+        DDBet(program);
         break;
       case V75:
-        V75Bet();
+        V75Bet(program);
         break;
       default:
         jj_la1[19] = jj_gen;
@@ -1019,7 +1025,7 @@ try {error_count += 1;
     }
   }
 
-  static final public void DDBet() throws ParseException {
+  static final public void DDBet(ASTProgram program) throws ParseException {
  /*@bgen(jjtree) DDBet */
   ASTDDBet jjtn000 = new ASTDDBet(JJTDDBET);
   boolean jjtc000 = true;
@@ -1075,7 +1081,7 @@ try {error_count += 1;
       case DD_1:
         jj_consume_token(DD_1);
         selection = HorseSelection();
-                                       selection.setRace(1);
+                                       selection.setLeg(1);
         break;
       default:
         jj_la1[24] = jj_gen;
@@ -1085,7 +1091,7 @@ try {error_count += 1;
       case DD_2:
         jj_consume_token(DD_2);
         selection = HorseSelection();
-                                       selection.setRace(2);
+                                       selection.setLeg(2);
         break;
       default:
         jj_la1[25] = jj_gen;
@@ -1094,7 +1100,7 @@ try {error_count += 1;
       jj_consume_token(PERIOD);
     jjtree.closeNodeScope(jjtn000, true);
     jjtc000 = false;
-   jjtn000.validate();
+   jjtn000.validate(program);
     } catch (Throwable jjte000) {
     if (jjtc000) {
       jjtree.clearNodeScope(jjtn000);
@@ -1202,7 +1208,7 @@ try {error_count += 1;
     throw new Error("Missing return statement in function");
   }
 
-  static final public void V75Bet() throws ParseException {
+  static final public void V75Bet(ASTProgram program) throws ParseException {
  /*@bgen(jjtree) V75Bet */
   ASTV75Bet jjtn000 = new ASTV75Bet(JJTV75BET);
   boolean jjtc000 = true;
@@ -1297,7 +1303,7 @@ try {error_count += 1;
       case V75_1:
         jj_consume_token(V75_1);
         selection = HorseSelection();
-                                        selection.setRace(1);
+                                        selection.setLeg(1);
         break;
       default:
         jj_la1[37] = jj_gen;
@@ -1307,7 +1313,7 @@ try {error_count += 1;
       case V75_2:
         jj_consume_token(V75_2);
         selection = HorseSelection();
-                                        selection.setRace(2);
+                                        selection.setLeg(2);
         break;
       default:
         jj_la1[38] = jj_gen;
@@ -1317,7 +1323,7 @@ try {error_count += 1;
       case V75_3:
         jj_consume_token(V75_3);
         selection = HorseSelection();
-                                        selection.setRace(3);
+                                        selection.setLeg(3);
         break;
       default:
         jj_la1[39] = jj_gen;
@@ -1327,7 +1333,7 @@ try {error_count += 1;
       case V75_4:
         jj_consume_token(V75_4);
         selection = HorseSelection();
-                                        selection.setRace(4);
+                                        selection.setLeg(4);
         break;
       default:
         jj_la1[40] = jj_gen;
@@ -1337,7 +1343,7 @@ try {error_count += 1;
       case V75_5:
         jj_consume_token(V75_5);
         selection = HorseSelection();
-                                        selection.setRace(5);
+                                        selection.setLeg(5);
         break;
       default:
         jj_la1[41] = jj_gen;
@@ -1347,7 +1353,7 @@ try {error_count += 1;
       case V75_6:
         jj_consume_token(V75_6);
         selection = HorseSelection();
-                                        selection.setRace(6);
+                                        selection.setLeg(6);
         break;
       default:
         jj_la1[42] = jj_gen;
@@ -1357,13 +1363,16 @@ try {error_count += 1;
       case V75_7:
         jj_consume_token(V75_7);
         selection = HorseSelection();
-                                        selection.setRace(7);
+                                        selection.setLeg(7);
         break;
       default:
         jj_la1[43] = jj_gen;
         ;
       }
       jj_consume_token(PERIOD);
+    jjtree.closeNodeScope(jjtn000, true);
+    jjtc000 = false;
+   jjtn000.validate(program);
     } catch (Throwable jjte000) {
     if (jjtc000) {
       jjtree.clearNodeScope(jjtn000);

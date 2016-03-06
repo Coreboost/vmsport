@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.ArrayList;
 
 public
-class AbstractBet extends SimpleNode {
+abstract class AbstractBet extends SimpleNode {
   private static HashSet<String> betIDs = new HashSet<String>();
 
   private String betID = null;
@@ -79,6 +79,24 @@ class AbstractBet extends SimpleNode {
   public void setRepeatCount(Integer r) {
     repeatCount = r;
   }
+
+  public void validate(ASTProgram program) {
+    getHorseSelections().forEach((hs) -> {
+      Integer legInPool = hs.getLeg();
+      ArrayList<Integer> allSelections = new ArrayList<Integer>(hs.getHorses());
+      allSelections.addAll(hs.getReserves());
+      AbstractPoolSpec poolSpec = getPoolSpec(program);
+      Integer actualLeg = poolSpec.getActualLeg(legInPool);
+      allSelections.forEach((selected) -> {
+        if (!program.getLeg(actualLeg).isValidFinisher(selected)) {
+          ParseException.setSemanticError(selected + " is not a valid selection for leg " + legInPool + "." );
+          parser.error(parser.generateParseException().getMessage());
+        }
+      });
+    });
+  }
+
+  protected abstract AbstractPoolSpec getPoolSpec(ASTProgram program);
 
   public void generateSpecifics(JsonObjectBuilder builder) {
     if (betID != null) {

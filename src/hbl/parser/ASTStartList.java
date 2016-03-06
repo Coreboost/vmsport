@@ -34,5 +34,14 @@ class ASTStartList extends SimpleNode {
     });
     builder.add("horses", myBuilder.build());
   }
+
+  public Boolean isValidStartNumber(Integer no) {
+    return (no > 0 && no <= horses.size());
+  }
+
+  public Boolean isValidFinisher(Integer no) {
+    // KSL: This must be changed when scratchings are added to the language.
+    return isValidStartNumber(no);
+  }
 }
 /* JavaCC - OriginalChecksum=4f5b803f8c0ff227a472baab8989a885 (do not edit this line) */

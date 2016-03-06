@@ -2,6 +2,7 @@
 /* JavaCCOptions:MULTI=true,NODE_USES_PARSER=false,VISITOR=false,TRACK_TOKENS=false,NODE_PREFIX=AST,NODE_EXTENDS=,NODE_FACTORY=,SUPPORT_CLASS_VISIBILITY_PUBLIC=true */
 import javax.json.*;
 import java.util.ArrayList;
+import java.util.List;
 public
 class ASTLegList extends SimpleNode {
   ArrayList<Integer> legs = new ArrayList<Integer>();
@@ -16,6 +17,23 @@ class ASTLegList extends SimpleNode {
 
   public void addLeg(Integer l) {
     legs.add(l);
+  }
+
+  public List<Integer> getLegs() {
+    return legs;
+  }
+
+  // Returns the actual leg number in the program corresponding to
+  // the pool leg given. i.e., if DD is specified as a pool forEach
+  // legs 8 and 10 in the program then 1->8 and 2->10.
+  public Integer getActualLeg(Integer poolLeg) {
+    if (poolLeg <= legs.size()) {
+      return legs.get(poolLeg-1);
+    } else {
+      // If the leg is not explicitly specified assumed that the pool legs
+      // are consecutive.
+      return legs.get(legs.size()-1) + poolLeg - legs.size();
+    }
   }
 
   public void validate(Integer maxLegs, ASTLegSpecs legSpecs) {

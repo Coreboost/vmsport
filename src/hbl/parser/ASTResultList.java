@@ -18,6 +18,10 @@ class ASTResultList extends SimpleNode {
     entries.add(entry);
   }
 
+  public List<List<Integer>> getResults() {
+    return entries;
+  }
+
   public void generateSpecifics(JsonObjectBuilder builder) {
     JsonArrayBuilder myBuilder = Json.createArrayBuilder();
     entries.forEach((entry) -> {

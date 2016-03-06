@@ -70,7 +70,7 @@ Meeting Solvalla 2016-02-01
     V75-2 1 R 2 3.
     V75-3 1 R 2 3.
     V75-4 2 3 R 6 7.
-    V75-5 2 3 R 6 7.
+    V75-5 2 3 R 6.
     V75-6 2 3 R 6 7.
     V75-7 2 3 R 6 7.
   .
@@ -81,10 +81,10 @@ Meeting Solvalla 2016-02-01
     V75-7 2 3 F.
   .
 
-  Leg 2 (3 4) 7 8 9. -- The parents mean that horse 3 and 4 are tied for first place.
+  Leg 2 (3 4) 7 8. -- The parents mean that horse 3 and 4 are tied for first place.
   Leg 3 .
-  Leg 4 9 10.
-  Leg 5 (3 4) 7 8 9.
+  Leg 4 1 2.
+  Leg 5 (3 4) 7 8.
 .
 
 ---

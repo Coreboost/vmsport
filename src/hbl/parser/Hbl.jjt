@@ -17,6 +17,7 @@ PARSER_BEGIN(Hbl)
         }
       } catch (Exception e) {
         System.out.println(e.getMessage());
+        e.printStackTrace();
         System.exit(2);
       }
     }
@@ -305,16 +306,18 @@ void Meeting() :
 {
   ASTName track;
   ASTDate date;
+  ASTProgram program;
 }
 {
   <MEETING>
   track=Name() {jjtThis.setTrack(track.getName());}
   date=Date() {jjtThis.setDate(date.toString());}
-  ( (Bet()) | (LegResult()) )*
+  {program=ASTProgram.getProgram(track.getName(), date.toString());}
+  ( (Bet(program)) | (LegResult(program)) )*
   <PERIOD>
 }
 
-void LegResult() :
+void LegResult(ASTProgram program) :
 {
   Token leg;
 }
@@ -326,6 +329,7 @@ void LegResult() :
   catch (ParseException e) {
     HandleParseException(PERIOD, e);
   }
+  { jjtThis.validate(program); }
 }
 
 void ResultList() :
@@ -355,12 +359,12 @@ ASTTie Tie() :
   { return jjtThis; }
 }
 
-void Bet() : {}
+void Bet(ASTProgram program) : {}
 {
-  DDBet()|V75Bet()
+  DDBet(program)|V75Bet(program)
 }
 
-void DDBet() :
+void DDBet(ASTProgram program) :
 {
   Token amount;
   Token repeatCount;
@@ -371,10 +375,10 @@ void DDBet() :
 {
   <DD> [<REPEAT> repeatCount=<NUMBER>{ jjtThis.setRepeatCount(Integer.parseInt(repeatCount.image)); }] [betID=Name() {jjtThis.setBetID(betID.getName());}] [<FORTUNA> {jjtThis.setFortuna(true);}] amount=<NUMBER> {jjtThis.setAmount(Integer.parseInt(amount.image));}
   [<ACCOUNT> accountID=Name() { jjtThis.setAccountID(accountID.getName()); }]
-  [<DD_1> selection=HorseSelection() { selection.setRace(1); }]
-  [<DD_2> selection=HorseSelection() { selection.setRace(2); }]
+  [<DD_1> selection=HorseSelection() { selection.setLeg(1); }]
+  [<DD_2> selection=HorseSelection() { selection.setLeg(2); }]
   <PERIOD>
-  {jjtThis.validate();}
+  {jjtThis.validate(program);}
 }
 
 ASTHorseSelection HorseSelection() :
@@ -396,7 +400,7 @@ ASTHorseSelection HorseSelection() :
   { return jjtThis; }
 }
 
-void V75Bet() :
+void V75Bet(ASTProgram program) :
 {
   Token amount;
   Token repeatCount;
@@ -413,14 +417,15 @@ void V75Bet() :
   ]
   [<BOOST>{jjtThis.setBoost(true);}]
   [<ACCOUNT> accountID=Name() {jjtThis.setAccountID(accountID.getName());} ]
-  [<V75_1> selection=HorseSelection() { selection.setRace(1); }]
-  [<V75_2> selection=HorseSelection() { selection.setRace(2); }]
-  [<V75_3> selection=HorseSelection() { selection.setRace(3); }]
-  [<V75_4> selection=HorseSelection() { selection.setRace(4); }]
-  [<V75_5> selection=HorseSelection() { selection.setRace(5); }]
-  [<V75_6> selection=HorseSelection() { selection.setRace(6); }]
-  [<V75_7> selection=HorseSelection() { selection.setRace(7); }]
+  [<V75_1> selection=HorseSelection() { selection.setLeg(1); }]
+  [<V75_2> selection=HorseSelection() { selection.setLeg(2); }]
+  [<V75_3> selection=HorseSelection() { selection.setLeg(3); }]
+  [<V75_4> selection=HorseSelection() { selection.setLeg(4); }]
+  [<V75_5> selection=HorseSelection() { selection.setLeg(5); }]
+  [<V75_6> selection=HorseSelection() { selection.setLeg(6); }]
+  [<V75_7> selection=HorseSelection() { selection.setLeg(7); }]
   <PERIOD>
+  {jjtThis.validate(program);}
 }
 
 ASTMultiplier Multiplier() :

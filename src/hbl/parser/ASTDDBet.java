@@ -14,7 +14,17 @@ class ASTDDBet extends AbstractBet {
     super(p, id);
   }
 
-  public void validate() {
+  public AbstractPoolSpec getPoolSpec(ASTProgram program) {
+    return program.
+              getPoolSpecs().
+              stream().
+              filter((ps) -> {return ps instanceof ASTDDSpec;}).
+              findAny().
+              get();
+  }
+
+  public void validate(ASTProgram program) {
+    super.validate(program);
     if (getFortuna()) {
       List<ASTHorseSelection> selections = getHorseSelections();
       if (selections.size() == 2 && selections.stream().noneMatch((s) -> { return s.getFortunaSelect(); })) {
