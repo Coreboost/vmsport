@@ -20,7 +20,7 @@ class ASTDDBet extends AbstractBet {
               stream().
               filter(ps -> ps instanceof ASTDDSpec).
               findAny().
-              get();
+              orElse(null);
   }
 
   public void validate(ASTProgram program) {

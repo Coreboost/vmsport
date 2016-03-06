@@ -24,15 +24,11 @@ class ASTProgram extends SimpleNode {
   }
 
   public static ASTProgram getProgram(String track, String date) {
-    Optional found = programs.
+    return (ASTProgram)programs.
       stream().
       filter(p -> p.getDate().equals(date) && p.getTrack().equals(track)).
-      findAny();
-    if (found.isPresent()) {
-        return (ASTProgram)found.get();
-    } else {
-      return null;
-    }
+      findAny().
+      orElse(null);
   }
 
   public static Boolean programExists(ASTProgram c) {
@@ -92,7 +88,7 @@ class ASTProgram extends SimpleNode {
           stream().
           filter((ls) -> ls.getLeg() == legNo).
           findAny().
-          get();
+          orElse(null);
   }
 
 

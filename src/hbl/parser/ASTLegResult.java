@@ -21,8 +21,8 @@ class ASTLegResult extends SimpleNode {
     if (children != null) {
       return (ASTResultList)Arrays.stream(children).
               filter(c -> c instanceof ASTResultList).
-              findFirst().
-              get();
+              findAny().
+              orElse(null);
     } else {
       return null;
     }

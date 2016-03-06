@@ -18,7 +18,7 @@ class ASTV75Bet extends AbstractBet {
               stream().
               filter(ps -> ps instanceof ASTV75Spec).
               findAny().
-              get();
+              orElse(null);
   }
 }
 /* JavaCC - OriginalChecksum=fe53fa5da73ef54c6f94e0a3224ac7a9 (do not edit this line) */
