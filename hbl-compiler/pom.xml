@@ -72,18 +72,33 @@
               <id>jjt</id>
               <phase>generate-sources</phase>
               <goals>
-                <goal>jjtree-javacc</goal>
+                <goal>jjtree</goal>
               </goals>
               <configuration>
                 <jdkVersion>1.8</jdkVersion>
-                <javadocFriendlyComments>true</javadocFriendlyComments>
+                <packageName>se.atg.tabs.hblcompiler</packageName>
+                <sourceDirectory>${basedir}/src/main/jjt</sourceDirectory>
+                <outputDirectory>${basedir}/src/main/java/se/atg/tabs/hblcompiler</outputDirectory>
+              </configuration>
+            </execution>
+            <!--
+            <execution>
+              <id>jcc</id>
+              <phase>generate-sources</phase>
+              <goals>
+                <goal>javacc</goal>
+              </goals>
+              <configuration>
+                <jdkVersion>1.8</jdkVersion>
                 <packageName>org.javacc.parser</packageName>
                 <sourceDirectory>${basedir}/src/main/jjt</sourceDirectory>
                 <outputDirectory>${basedir}/src/main/java/se/atg/tabs/hblcompiler</outputDirectory>
               </configuration>
             </execution>
+            -->
           </executions>
-        </plugin>    </plugins>
+        </plugin>
+      </plugins>
   </build>
   <pluginRepositories>
       <pluginRepository>
