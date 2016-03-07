@@ -63,7 +63,27 @@
             </execution>
           </executions>
         </plugin>
-    </plugins>
+        <plugin>
+          <groupId>com.helger.maven</groupId>
+          <artifactId>ph-javacc-maven-plugin</artifactId>
+          <version>2.8.0</version>
+          <executions>
+            <execution>
+              <id>jjt</id>
+              <phase>generate-sources</phase>
+              <goals>
+                <goal>jjtree-javacc</goal>
+              </goals>
+              <configuration>
+                <jdkVersion>1.8</jdkVersion>
+                <javadocFriendlyComments>true</javadocFriendlyComments>
+                <packageName>org.javacc.parser</packageName>
+                <sourceDirectory>${basedir}/src/main/jjt</sourceDirectory>
+                <outputDirectory>${basedir}/src/main/java/se/atg/tabs/hblcompiler</outputDirectory>
+              </configuration>
+            </execution>
+          </executions>
+        </plugin>    </plugins>
   </build>
   <pluginRepositories>
       <pluginRepository>
