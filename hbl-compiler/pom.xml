@@ -81,7 +81,6 @@
                 <outputDirectory>${basedir}/src/main/java/se/atg/tabs/hblcompiler</outputDirectory>
               </configuration>
             </execution>
-            <!--
             <execution>
               <id>jcc</id>
               <phase>generate-sources</phase>
@@ -90,12 +89,11 @@
               </goals>
               <configuration>
                 <jdkVersion>1.8</jdkVersion>
-                <packageName>org.javacc.parser</packageName>
-                <sourceDirectory>${basedir}/src/main/jjt</sourceDirectory>
+                <packageName>se.atg.tabs.hblcompiler</packageName>
+                <sourceDirectory>${basedir}/src/main/java/se/atg/tabs/hblcompiler</sourceDirectory>
                 <outputDirectory>${basedir}/src/main/java/se/atg/tabs/hblcompiler</outputDirectory>
               </configuration>
             </execution>
-            -->
           </executions>
         </plugin>
       </plugins>
