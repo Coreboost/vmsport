@@ -2,6 +2,12 @@
 *.so
 *.a
 *.class
+hbl-compiler/target/*.jar
+hbl-compiler/target/classes
+hbl-compiler/target/maven-archiver
+hbl-compiler/target/maven-status
+hbl-compiler/target/surefire-reports
+hbl-compiler/target/test-classes
 .vagrant/
 src/hbl/parser/Hbl.jj
 src/hbl/parser/*.class
