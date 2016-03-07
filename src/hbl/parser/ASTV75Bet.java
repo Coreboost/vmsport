@@ -12,5 +12,13 @@ class ASTV75Bet extends AbstractBet {
     super(p, id);
   }
 
+  public AbstractPoolSpec getPoolSpec(ASTProgram program) {
+    return program.
+              getPoolSpecs().
+              stream().
+              filter(ps -> ps instanceof ASTV75Spec).
+              findAny().
+              orElse(null);
+  }
 }
 /* JavaCC - OriginalChecksum=fe53fa5da73ef54c6f94e0a3224ac7a9 (do not edit this line) */

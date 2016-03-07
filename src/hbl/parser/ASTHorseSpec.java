@@ -12,7 +12,7 @@ class ASTHorseSpec extends SimpleNode {
     return
     horses.
       stream().
-      anyMatch((h) -> {return name.equals(h.name);});
+      anyMatch(h -> name.equals(h.name));
   }
 
   public ASTHorseSpec(int id) {

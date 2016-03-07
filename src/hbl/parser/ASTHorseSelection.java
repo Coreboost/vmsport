@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.ArrayList;
 public
 class ASTHorseSelection extends SimpleNode {
-  private Integer race;
+  private Integer leg;
   private List<Integer> horses = new ArrayList<Integer>();
   private List<Integer> reserves = new ArrayList<Integer>();
   private Boolean allHorses = false;
@@ -27,20 +27,36 @@ class ASTHorseSelection extends SimpleNode {
     fortunaSelect = val;
   }
 
+  public Boolean getFortunaSelect() {
+      return fortunaSelect;
+  }
+
   public void addHorse(Integer h) {
     horses.add(h);
+  }
+
+  public List<Integer> getHorses() {
+    return horses;
   }
 
   public void addReserve(Integer r) {
     reserves.add(r);
   }
 
-  public void setRace(Integer r) {
-    race = r;
+  public List<Integer> getReserves() {
+    return reserves;
+  }
+
+  public void setLeg(Integer l) {
+    leg = l;
+  }
+
+  public Integer getLeg() {
+    return leg;
   }
 
   public void generateSpecifics(JsonObjectBuilder builder) {
-    builder.add("race", race);
+    builder.add("leg", leg);
     if (fortunaSelect) {
       builder.add("fortunaSelect", fortunaSelect);
     }
@@ -48,15 +64,11 @@ class ASTHorseSelection extends SimpleNode {
       builder.add("allHorses", allHorses);
     } else {
       JsonArrayBuilder myBuilder = Json.createArrayBuilder();
-      horses.forEach((horse) -> {
-        myBuilder.add(horse);
-      });
+      horses.forEach(horse -> myBuilder.add(horse));
       builder.add("horses", myBuilder.build());
       if (reserves.size() > 0) {
         final JsonArrayBuilder myBuilder2 = Json.createArrayBuilder();
-        reserves.forEach((reserve) -> {
-          myBuilder2.add(reserve);
-        });
+        reserves.forEach(reserve -> myBuilder2.add(reserve));
         builder.add("reserves", myBuilder2.build());
       }
     }

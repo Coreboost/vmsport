@@ -36,8 +36,6 @@ Tracks
 .
 
 Program Solvalla 2016-02-01
-  DD 1 2.
-  V75 1 2 3 4 5 6 7.
   Leg 1 HH1_1 HH1_2 HH1_3 HH1_4 HH1_5 HH1_6 HH1_7 HH1_8.
   Leg 2 HH2_1 HH2_2 HH2_3 HH2_4 HH2_5 HH2_6 HH2_7 HH2_8.
   Leg 3 HH3_1 HH3_2 HH3_3 HH3_4 HH3_5 HH3_6 HH3_7 HH3_8.
@@ -45,6 +43,8 @@ Program Solvalla 2016-02-01
   Leg 5 HH5_1 HH5_2 HH5_3 HH5_4 HH5_5 HH5_6 HH5_7 HH5_8.
   Leg 6 HH6_1 HH6_2 HH6_3 HH6_4 HH6_5 HH6_6 HH6_7 HH6_8.
   Leg 7 HH7_1 HH7_2 HH7_3 HH7_4 HH7_5 HH7_6 HH7_7 HH7_8.
+  DD 1 2.
+  V75 1 2 3 4 5 6 7.
 .
 
 Meeting Solvalla 2016-02-01
@@ -70,7 +70,7 @@ Meeting Solvalla 2016-02-01
     V75-2 1 R 2 3.
     V75-3 1 R 2 3.
     V75-4 2 3 R 6 7.
-    V75-5 2 3 R 6 7.
+    V75-5 2 3 R 6.
     V75-6 2 3 R 6 7.
     V75-7 2 3 R 6 7.
   .
@@ -81,10 +81,10 @@ Meeting Solvalla 2016-02-01
     V75-7 2 3 F.
   .
 
-  Leg 2 (3 4) 7 8 9. -- The parents mean that horse 3 and 4 are tied for first place.
+  Leg 2 (3 4) 7 8. -- The parents mean that horse 3 and 4 are tied for first place.
   Leg 3 .
-  Leg 4 9 10.
-  Leg 5 (3 4) 7 8 9.
+  Leg 4 1 2.
+  Leg 5 (3 4) 7 8.
 .
 
 ---

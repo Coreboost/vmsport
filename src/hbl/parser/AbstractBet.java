@@ -2,8 +2,12 @@
 /* JavaCCOptions:MULTI=true,NODE_USES_PARSER=false,VISITOR=false,TRACK_TOKENS=false,NODE_PREFIX=AST,NODE_EXTENDS=,NODE_FACTORY=,SUPPORT_CLASS_VISIBILITY_PUBLIC=true */
 import java.util.HashSet;
 import javax.json.*;
+import java.util.Arrays;
+import java.util.List;
+import java.util.ArrayList;
+
 public
-class AbstractBet extends SimpleNode {
+abstract class AbstractBet extends SimpleNode {
   private static HashSet<String> betIDs = new HashSet<String>();
 
   private String betID = null;
@@ -21,6 +25,14 @@ class AbstractBet extends SimpleNode {
 
   public AbstractBet(Hbl p, int id) {
     super(p, id);
+  }
+
+  public List<ASTHorseSelection> getHorseSelections() {
+    ArrayList<ASTHorseSelection> selections = new ArrayList<ASTHorseSelection>();
+    Arrays.stream(children).
+      filter(c -> c instanceof ASTHorseSelection).
+      forEach(hs -> selections.add((ASTHorseSelection)hs));
+    return selections;
   }
 
   public void setAccountID(String id) {
@@ -49,6 +61,10 @@ class AbstractBet extends SimpleNode {
     fortuna = f;
   }
 
+  public Boolean getFortuna() {
+    return fortuna;
+  }
+
   public void setBoost(Boolean b) {
     boost = b;
   }
@@ -60,6 +76,24 @@ class AbstractBet extends SimpleNode {
   public void setRepeatCount(Integer r) {
     repeatCount = r;
   }
+
+  public void validate(ASTProgram program) {
+    getHorseSelections().forEach(hs -> {
+      Integer legInPool = hs.getLeg();
+      ArrayList<Integer> allSelections = new ArrayList<Integer>(hs.getHorses());
+      allSelections.addAll(hs.getReserves());
+      AbstractPoolSpec poolSpec = getPoolSpec(program);
+      Integer actualLeg = poolSpec.getActualLeg(legInPool);
+      allSelections.forEach(selected -> {
+        if (!program.getLeg(actualLeg).isValidFinisher(selected)) {
+          ParseException.setSemanticError(selected + " is not a valid selection for leg " + legInPool + "." );
+          parser.error(parser.generateParseException().getMessage());
+        }
+      });
+    });
+  }
+
+  protected abstract AbstractPoolSpec getPoolSpec(ASTProgram program);
 
   public void generateSpecifics(JsonObjectBuilder builder) {
     if (betID != null) {
