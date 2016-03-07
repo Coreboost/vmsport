@@ -37,8 +37,10 @@ Vagrant.configure(2) do |config|
     mv jdk1.8.0_73 /opt/java
     update-alternatives --install '/usr/bin/java' 'java' '/opt/java/jdk1.8.0_73/bin/java' 1
     update-alternatives --set java /opt/java/jdk1.8.0_73/bin/java
-    update-alternatives --install '/usr/bin/javac' 'java' '/opt/java/jdk1.8.0_73/bin/javac' 1
+    update-alternatives --install '/usr/bin/javac' 'javac' '/opt/java/jdk1.8.0_73/bin/javac' 1
     update-alternatives --set javac /opt/java/jdk1.8.0_73/bin/javac
+    update-alternatives --install '/usr/bin/jar' 'jar' '/opt/java/jdk1.8.0_73/bin/jar' 1
+    update-alternatives --set jar /opt/java/jdk1.8.0_73/bin/jar
     JAVA_HOME=/opt/java/jdk1.8.0_73
     export JAVA_HOME
     curl http://apache.mirrors.spacedump.net/maven/maven-3/3.3.9/binaries/apache-maven-3.3.9-bin.tar.gz | tar -C /opt/java -xzf -
