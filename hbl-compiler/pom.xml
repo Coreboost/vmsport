@@ -38,7 +38,7 @@
         <configuration>
           <archive>
             <manifest>
-              <mainClass>Hbl</mainClass>
+              <mainClass>se.atg.tabs.hblcompiler.Hbl</mainClass>
             </manifest>
           </archive>
         </configuration>
