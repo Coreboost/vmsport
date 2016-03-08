@@ -78,7 +78,7 @@
                 <jdkVersion>1.8</jdkVersion>
                 <packageName>se.atg.tabs.hblcompiler</packageName>
                 <sourceDirectory>${basedir}/src/main/jjt</sourceDirectory>
-                <outputDirectory>${basedir}/src/main/java/se/atg/tabs/hblcompiler</outputDirectory>
+                <outputDirectory>${basedir}/src/main/java</outputDirectory>
               </configuration>
             </execution>
             <execution>
