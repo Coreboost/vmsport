@@ -4,7 +4,7 @@
   <groupId>se.atg.tabs.hblcompiler</groupId>
   <artifactId>hbl-compiler</artifactId>
   <packaging>jar</packaging>
-  <version>1.0-SNAPSHOT</version>
+  <version>0.1</version>
   <name>hbl-compiler</name>
   <url>http://maven.apache.org</url>
   <dependencies>
@@ -17,7 +17,7 @@
         <groupId>org.glassfish</groupId>
         <artifactId>javax.json</artifactId>
         <version>1.0.4</version>
-    </dependency>    
+    </dependency>
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
@@ -26,6 +26,7 @@
     </dependency>
   </dependencies>
   <build>
+    <finalName>${project.artifactId}</finalName>
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
@@ -40,13 +41,21 @@
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-jar-plugin</artifactId>
         <version>2.6</version>
-        <configuration>
-          <archive>
-            <manifest>
-              <mainClass>se.atg.tabs.hblcompiler.Hbl</mainClass>
-            </manifest>
-          </archive>
-        </configuration>
+        <executions>
+           <execution>
+              <phase>package</phase>
+              <goals>
+                 <goal>jar</goal>
+              </goals>
+              <configuration>
+                 <archive>
+                   <manifest>
+                     <mainClass>se.atg.tabs.hblcompiler.Hbl</mainClass>
+                   </manifest>
+                 </archive>
+              </configuration>
+           </execution>
+         </executions>
       </plugin>
         <plugin>
           <groupId>org.dstovall</groupId>
