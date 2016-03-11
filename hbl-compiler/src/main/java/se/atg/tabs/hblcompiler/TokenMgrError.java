@@ -139,6 +139,12 @@ public class TokenMgrError extends Error
     errorCode = reason;
   }
 
+  /** Full Constructor.  with cast to fix a problem...*/
+  public TokenMgrError(boolean EOFSeen, int lexState, int errorLine, int errorColumn, String errorAfter, int curChar, int reason) {
+    this(EOFSeen, lexState, errorLine, errorColumn, errorAfter, (char)curChar, reason);
+  }
+
+
   /** Full Constructor. */
   public TokenMgrError(boolean EOFSeen, int lexState, int errorLine, int errorColumn, String errorAfter, char curChar, int reason) {
     this(LexicalError(EOFSeen, lexState, errorLine, errorColumn, errorAfter, curChar), reason);

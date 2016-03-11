@@ -12,14 +12,16 @@ PARSER_BEGIN(Hbl)
     private static Integer error_count = 0;
     private static String input_filename = null;
     private static String output_filename = null;
+    private static java.io.InputStream inputStream = System.in;
+    private static java.io.PrintStream outputStream = System.out;
     public static void main( String[] args ) {
       parse_options(args);
       if (error_count == 0) {
-        Hbl parser = new Hbl( System.in );
+        Hbl parser = new Hbl( inputStream );
         try {
           SimpleNode node = parser.Start();
           if (error_count == 0) {
-            System.out.println(node.generate().toString());
+            outputStream.println(node.generate().toString());
             System.exit(0);
           } else {
             System.exit(1);
@@ -42,7 +44,7 @@ PARSER_BEGIN(Hbl)
           if (ind < args.length) {
             input_filename = args[ind];
             ind += 1;
-            File f = new File(input_filename);
+            java.io.File f = new java.io.File(input_filename);
             if(!f.exists() || f.isDirectory()) {
               error("Error: " + input_filename + " is not a valid input file name.");
             }
@@ -54,7 +56,7 @@ PARSER_BEGIN(Hbl)
           if (ind < args.length) {
             output_filename = args[ind];
             ind += 1;
-            File f = new File(output_filename);
+            java.io.File f = new java.io.File(output_filename);
             if(!f.exists() || f.isDirectory()) {
               error("Error: " + output_filename + " is not a valid output file name.");
             }

@@ -51,7 +51,9 @@ Vagrant.configure(2) do |config|
     apt-get install -y nodejs
     npm config set proxy $HTTP_PROXY
     npm config set https-proxy $HTTPS_PROXY
-    npm config get proxy
+    npm config set strict-ssl false
+    npm config set registry "http://registry.npmjs.org/"
+     npm config get proxy
     npm config get https-proxy
     apt-get install -y build-essential
 #    npm install -g gulp

@@ -14,6 +14,11 @@
         <version>1.0</version>
     </dependency>
     <dependency>
+        <groupId>org.glassfish</groupId>
+        <artifactId>javax.json</artifactId>
+        <version>1.0.4</version>
+    </dependency>    
+    <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
       <version>3.8.1</version>
@@ -91,7 +96,7 @@
                 <jdkVersion>1.8</jdkVersion>
                 <packageName>se.atg.tabs.hblcompiler</packageName>
                 <sourceDirectory>${basedir}/src/main/java/se/atg/tabs/hblcompiler</sourceDirectory>
-                <outputDirectory>${basedir}/src/main/java/se/atg/tabs/hblcompiler</outputDirectory>
+                <outputDirectory>${basedir}/src/main/java</outputDirectory>
               </configuration>
             </execution>
           </executions>

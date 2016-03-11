@@ -117,12 +117,10 @@ class SimpleNode implements Node {
 
   public Node getChild(Predicate<Node> pred) {
     if (children != null) {
-      System.out.println(pred);
       Node c = Arrays.stream(children).
                 filter(pred).
                 findAny().
                 orElse(null);
-      System.out.println(c);
       return c;
     } else {
       return null;
