@@ -10,29 +10,78 @@ PARSER_BEGIN(Hbl)
 
   public class Hbl {
     private static Integer error_count = 0;
+    private static Integer exit_code = 0;
     private static String input_filename = null;
     private static String output_filename = null;
     private static java.io.InputStream inputStream = System.in;
     private static java.io.PrintStream outputStream = System.out;
+    private static Boolean inputStream_opened = false;
+    private static Boolean outputStream_opened = false;
     public static void main( String[] args ) {
       parse_options(args);
       if (error_count == 0) {
-        Hbl parser = new Hbl( inputStream );
-        try {
-          SimpleNode node = parser.Start();
-          if (error_count == 0) {
-            outputStream.println(node.generate().toString());
-            System.exit(0);
-          } else {
-            System.exit(1);
+        open_files();
+        if (exit_code == 0) {
+          try {
+            Hbl parser = new Hbl( inputStream );
+            SimpleNode node = parser.Start();
+            if (error_count == 0) {
+              outputStream.println(node.generate().toString());
+            } else {
+              exit_code = 1;
+            }
+          } catch (Exception e) {
+            System.err.println(e.getMessage());
+            e.printStackTrace();
+            exit_code = 2;
           }
-        } catch (Exception e) {
-          System.err.println(e.getMessage());
-          e.printStackTrace();
-          System.exit(2);
         }
       } else {
-        System.exit(3);
+        exit_code = 3;
+      }
+      close_files();
+      System.exit(exit_code);
+    }
+
+    public static void open_files() {
+      if (input_filename != null) {
+        try {
+          inputStream = new java.io.FileInputStream(new java.io.File(input_filename));
+          inputStream_opened = true;
+        }
+        catch (Exception e) {
+          error("Error: Could not open input file " + input_filename);
+          System.err.println(e.getMessage());
+          e.printStackTrace();
+          exit_code = 4;
+        }
+      }
+      if (output_filename != null) {
+        try {
+          outputStream = new java.io.PrintStream(new java.io.File(output_filename));
+          outputStream_opened = true;
+        }
+        catch (Exception e) {
+          error("Error: Could not open output file " + output_filename);
+          System.err.println(e.getMessage());
+          e.printStackTrace();
+          exit_code = 4;
+        }
+      }
+    }
+
+    public static void close_files() {
+      if (inputStream_opened) {
+        try {
+          inputStream.close();
+        }
+        catch (Exception e) { }
+      }
+      if (outputStream_opened) {
+        try {
+          outputStream.close();
+        }
+        catch (Exception e) { }
       }
     }
 
@@ -57,7 +106,7 @@ PARSER_BEGIN(Hbl)
             output_filename = args[ind];
             ind += 1;
             java.io.File f = new java.io.File(output_filename);
-            if(!f.exists() || f.isDirectory()) {
+            if(f.isDirectory()) {
               error("Error: " + output_filename + " is not a valid output file name.");
             }
           } else {
