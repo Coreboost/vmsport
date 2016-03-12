@@ -5,7 +5,27 @@
 ]
 'patterns': [
   {
-    'match': '(Accounts|Horses|Tracks|Program|Leg|DD|V75|Meeting|Account|R|F|DD\-1|DD\-2|V75\-1|V75\-2|V75\-3|V75\-4|V75\-5|V75\-6|V75\-7)(\\s)'
+    'match': '\\b(Accounts|Horses|Tracks|Program|Meeting)\\b'
+    'name': 'keyword.declarations.hbl'
+  }
+  {
+    'match': '\\b(Leg|DD|V75)(\\b)'
+    'name': 'keyword.declarations.hbl'
+  }
+  {
+    'match': '\\b(Account|Fortuna)(\\b)'
+    'name': 'keyword.declarations.hbl'
+  }
+  {
+    'match': '\\b(R|F)(\\b)'
+    'name': 'keyword.declarations.hbl'
+  }
+  {
+    'match': '\\b(DD\-1|DD\-2|V75\-1|V75\-2|V75\-3|V75\-4|V75\-5|V75\-6|V75\-7)(\\b)'
+    'name': 'keyword.declarations.hbl'
+  }
+  {
+    'match': '\\bInclude\\b'
     'name': 'keyword.declarations.hbl'
   }
   {
@@ -34,7 +54,7 @@
     'name': 'constant.time.hbl'
   }
   {
-    'match': '(\\s|^)+[0-9]+\\s+'
+    'match': '\\b[0-9]+\\b'
     'name': 'constant.numeric.hbl'
   }
   {

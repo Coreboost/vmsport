@@ -86,7 +86,7 @@ V3: 2, 3, 4.
 Below follows a few examples of how you use the Horse Betting Language.
 ------------------------------------------------------------------------------
 
-Accounts:
+Account
   AA1      : 100,  -- Create 1 account AA1 with 100 in funds.
   AA2      : 400,
   AA[4-10] : 600.  -- Create 7 accounts AA4, AA5...AA10 with 600 in funds.
