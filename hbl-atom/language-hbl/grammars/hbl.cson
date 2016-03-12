@@ -3,13 +3,11 @@
 'fileTypes': [
   'hbl'
 ]
+# Note that the order of the patterns have significance so don't
+# change it.
 'patterns': [
   {
     'match': '\\b(Accounts|Horses|Tracks|Program|Meeting)\\b'
-    'name': 'keyword.declarations.hbl'
-  }
-  {
-    'match': '\\b(Leg|DD|V75)(\\b)'
     'name': 'keyword.declarations.hbl'
   }
   {
@@ -21,7 +19,15 @@
     'name': 'keyword.declarations.hbl'
   }
   {
+    'match': '\\b[0-9]+\\b'
+    'name': 'constant.numeric.hbl'
+  }
+  {
     'match': '\\b(DD\-1|DD\-2|V75\-1|V75\-2|V75\-3|V75\-4|V75\-5|V75\-6|V75\-7)(\\b)'
+    'name': 'keyword.declarations.hbl'
+  }
+  {
+    'match': '\\b(Leg|DD|V75)(\\b)'
     'name': 'keyword.declarations.hbl'
   }
   {
@@ -52,10 +58,6 @@
   {
     'match': ''
     'name': 'constant.time.hbl'
-  }
-  {
-    'match': '\\b[0-9]+\\b'
-    'name': 'constant.numeric.hbl'
   }
   {
     'begin': '^---+$\\n'
