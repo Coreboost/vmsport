@@ -1,0 +1,544 @@
+options {
+  MULTI = true;
+  NODE_PACKAGE = "se.atg.tabs.hblcompiler";
+}
+
+
+PARSER_BEGIN(Hbl)
+
+  package se.atg.tabs.hblcompiler;
+
+  public class Hbl {
+    private static Integer error_count = 0;
+    private static Integer exit_code = 0;
+    private static String input_filename = null;
+    private static String output_filename = null;
+    private static java.io.InputStream inputStream = System.in;
+    private static java.io.PrintStream outputStream = System.out;
+    private static Boolean inputStream_opened = false;
+    private static Boolean outputStream_opened = false;
+    public static void main( String[] args ) {
+      parse_options(args);
+      if (error_count == 0) {
+        open_files();
+        if (exit_code == 0) {
+          try {
+            Hbl parser = new Hbl( inputStream );
+            SimpleNode node = parser.Start();
+            if (error_count == 0) {
+              outputStream.println(node.generate().toString());
+            } else {
+              exit_code = 1;
+            }
+          } catch (Exception e) {
+            System.err.println(e.getMessage());
+            e.printStackTrace();
+            exit_code = 2;
+          }
+        }
+      } else {
+        exit_code = 3;
+      }
+      close_files();
+      System.exit(exit_code);
+    }
+
+    public static void open_files() {
+      if (input_filename != null) {
+        try {
+          inputStream = new java.io.FileInputStream(new java.io.File(input_filename));
+          inputStream_opened = true;
+        }
+        catch (Exception e) {
+          error("Error: Could not open input file " + input_filename);
+          System.err.println(e.getMessage());
+          e.printStackTrace();
+          exit_code = 4;
+        }
+      }
+      if (output_filename != null) {
+        try {
+          outputStream = new java.io.PrintStream(new java.io.File(output_filename));
+          outputStream_opened = true;
+        }
+        catch (Exception e) {
+          error("Error: Could not open output file " + output_filename);
+          System.err.println(e.getMessage());
+          e.printStackTrace();
+          exit_code = 4;
+        }
+      }
+    }
+
+    public static void close_files() {
+      if (inputStream_opened) {
+        try {
+          inputStream.close();
+        }
+        catch (Exception e) { }
+      }
+      if (outputStream_opened) {
+        try {
+          outputStream.close();
+        }
+        catch (Exception e) { }
+      }
+    }
+
+    public static void parse_options(String[] args) {
+      int ind = 0;
+      while (ind < args.length) {
+        if (args[ind].equals("-i")) {
+          ind += 1;
+          if (ind < args.length) {
+            input_filename = args[ind];
+            ind += 1;
+            java.io.File f = new java.io.File(input_filename);
+            if(!f.exists() || f.isDirectory()) {
+              error("Error: " + input_filename + " is not a valid input file name.");
+            }
+          } else {
+            error("Error: The -i option must be followed by a valid file name.");
+          }
+        } else if (args[ind].equals("-o")) {
+          ind += 1;
+          if (ind < args.length) {
+            output_filename = args[ind];
+            ind += 1;
+            java.io.File f = new java.io.File(output_filename);
+            if(f.isDirectory()) {
+              error("Error: " + output_filename + " is not a valid output file name.");
+            }
+          } else {
+            error("Error: The -o option must be followed by a valid file name.");
+          }
+        } else if (args[ind].equals("-h")) {
+          error("Usage: java -jar hbl-compiler.jar -i <input_file> -o <output_file>");
+          ind += 1;
+        } else {
+          error("Error: Unknown option " + args[ind]);
+          ind += 1;
+        }
+      }
+    }
+
+    public static void error(String message) {
+      System.err.println(message);
+      error_count++;
+    }
+  }
+PARSER_END(Hbl)
+
+
+SKIP : { "---" : FirstlineMultilineComment }
+<FirstlineMultilineComment> SKIP : {"\n" : WithinMultilineComment}
+<FirstlineMultilineComment> SKIP : { <~[]> }
+<WithinMultilineComment> SKIP : { "---" : LastlineMultilineComment }
+<WithinMultilineComment> SKIP : { <~[]> }
+<LastlineMultilineComment> SKIP : {"\n" : DEFAULT}
+<LastlineMultilineComment> SKIP : { <~[]> }
+SKIP : { "--" : SinglelineComment }
+<SinglelineComment> SKIP : {"\n" : DEFAULT}
+<SinglelineComment> SKIP : { <~[]> }
+SKIP : { " " }
+SKIP : { "\n" | "\r" | "\r\n" }
+TOKEN : { < PERIOD : "." > }
+TOKEN : { < COMMA : "," > }
+TOKEN : { < COLON : ":" > }
+TOKEN : { < DASH : "-" > }
+TOKEN : { < LEFT_PAREN : "(" > }
+TOKEN : { < RIGHT_PAREN : ")" > }
+TOKEN : { < NUMBER : (["0"-"9"])+ > }
+TOKEN : { < ACCOUNTS : "Accounts" > }
+TOKEN : { < ACCOUNT : "Account" > }
+TOKEN : { < HORSES : "Horses" > }
+TOKEN : { < TRACKS : "Tracks" > }
+TOKEN : { < INCLUDE : "Include" > }
+TOKEN : { < PROGRAM : "Program" > }
+TOKEN : { < MEETING : "Meeting" > }
+TOKEN : { < LEG : "Leg" > }
+TOKEN : { < DD : "DD" > }
+TOKEN : { < V75 : "V75" > }
+TOKEN : { < BET : "Bet" > }
+TOKEN : { < DD_1 : "DD-1" > }
+TOKEN : { < DD_2 : "DD-2" > }
+TOKEN : { < V75_1 : "V75-1" > }
+TOKEN : { < V75_2 : "V75-2" > }
+TOKEN : { < V75_3 : "V75-3" > }
+TOKEN : { < V75_4 : "V75-4" > }
+TOKEN : { < V75_5 : "V75-5" > }
+TOKEN : { < V75_6 : "V75-6" > }
+TOKEN : { < V75_7 : "V75-7" > }
+TOKEN : { < X1 : "X1" > }
+TOKEN : { < X2 : "X2" > }
+TOKEN : { < X3 : "X3" > }
+TOKEN : { < X4 : "X4" > }
+TOKEN : { < X5 : "X5" > }
+TOKEN : { < X10 : "X10" > }
+TOKEN : { < X20 : "X20" > }
+TOKEN : { < X50 : "X50" > }
+TOKEN : { < X100 : "X100" > }
+TOKEN : { < REPEAT : "Repeat" > }
+TOKEN : { < FORTUNA : "Fortuna" > }
+TOKEN : { < RESERVES : "R" > }
+TOKEN : { < FORTUNA_SELECT : "F" > }
+TOKEN : { < ALL_HORSES : "A" > }
+TOKEN : { < BOOST : "Boost" > }
+TOKEN : { < IDENTIFIER : (["A"-"Z", "a"-"z", "_"])(["A"-"Z", "a"-"z", "0"-"9", "_"])* > }
+TOKEN : { < STRING_LITERAL : ("\"")(~["\""])*("\"") > }
+TOKEN : { < UNKNOWN : ~[] > }
+
+SimpleNode Start() : {}
+{
+    (
+      try {
+        Accounts() | Horses() | Tracks() | Include()
+      }
+      catch (ParseException e) {
+        HandleParseException(PERIOD, e);
+      }
+    )*
+    (
+      try {
+        Program()
+      }
+      catch (ParseException e) {
+        HandleParseException(PERIOD, e);
+      }
+    )*
+    (
+      try {
+        Meeting()
+      }
+      catch (ParseException e) {
+        HandleParseException(PERIOD, e);
+      }
+    )*
+    <EOF>
+  { return jjtThis; }
+}
+
+JAVACODE
+void HandleParseException(int skipTo, ParseException e) {
+  error_count += 1;
+  error(e.getMessage());
+  if (skipTo != -1) {
+    Token t;
+    do {
+      t = getNextToken();
+    } while (t.kind != skipTo);
+  }
+}
+
+ASTName Name() :
+{
+  Token name;
+}
+{
+  (name=<IDENTIFIER>{jjtThis.setName(name.image);return jjtThis;})|(name=<STRING_LITERAL>{jjtThis.setName(name.image.substring(1, name.image.length()-1));return jjtThis;})
+}
+
+void Include() :
+{
+  Token path;
+}
+{
+  <INCLUDE> path=<STRING_LITERAL>{jjtThis.setPath(path.image.substring(1, path.image.length()-1));}
+}
+
+void AccountSpec() :
+{
+  Token amount;
+  ASTName name;
+}
+{
+  name=Name() amount=<NUMBER>
+  {
+    jjtThis.setName(name.getName());
+    jjtThis.setAmount(Integer.parseInt(amount.image));
+  }
+}
+
+void Accounts() : {}
+{
+  <ACCOUNTS>
+  (AccountSpec())+<PERIOD>
+}
+
+void HorseSpec() :
+{
+  Token rank;
+  ASTName name;
+}
+{
+  name=Name() rank=<NUMBER>
+  {
+    jjtThis.setName(name.getName());
+    jjtThis.setRank(Integer.parseInt(rank.image));
+  }
+}
+
+void Horses() : {}
+{
+  <HORSES>
+  (HorseSpec())+<PERIOD>
+}
+
+void TrackSpec() :
+{
+  ASTName name;
+}
+{
+  name=Name()
+  {
+    jjtThis.setName(name.getName());
+  }
+}
+
+void Tracks() : {}
+{
+  <TRACKS>
+  (TrackSpec())*
+  <PERIOD>
+}
+
+ASTDate Date() :
+{
+  Token year;
+  Token month;
+  Token day;
+}
+{
+  year=<NUMBER><DASH>month=<NUMBER><DASH>day=<NUMBER>
+  {
+    jjtThis.setDate(Integer.parseInt(year.image), Integer.parseInt(month.image), Integer.parseInt(day.image));
+    return jjtThis;
+  }
+}
+
+void DDSpec(ASTLegSpecs legSpecs) :
+{
+  ASTLegList legList;
+}
+{
+  try {
+    <DD>legList=LegList() { legList.validate(2, legSpecs); } <PERIOD>
+  }
+  catch (ParseException e) {
+    HandleParseException(PERIOD, e);
+  }
+}
+
+ASTLegList LegList() :
+{
+  Token leg;
+}
+{
+  (leg=<NUMBER>{ jjtThis.addLeg(Integer.parseInt(leg.image)); })+
+  { return jjtThis; }
+}
+
+void V75Spec(ASTLegSpecs legSpecs) :
+{
+  ASTLegList legList;
+}
+{
+  try {
+    <V75>legList=LegList(){ legList.validate(7, legSpecs); }<PERIOD>
+  }
+  catch (ParseException e) {
+    HandleParseException(PERIOD, e);
+  }
+}
+
+void PoolSpecs(ASTLegSpecs legSpecs) : {}
+{
+  (DDSpec(legSpecs)|V75Spec(legSpecs))*
+}
+
+void StartList() :
+{
+  ASTName name;
+}
+{
+  (name=Name(){ jjtThis.addHorse(name.getName()); })+
+}
+
+void LegSpec() :
+{
+  Token leg;
+}
+{
+  try {
+    <LEG>leg=<NUMBER>
+    StartList()
+    <PERIOD>
+    { jjtThis.setLeg(Integer.parseInt(leg.image)); }
+  }
+  catch (ParseException e) {
+    HandleParseException(PERIOD, e);
+  }
+}
+
+ASTLegSpecs LegSpecs() : {}
+{
+    (LegSpec())+
+    { return jjtThis; }
+}
+
+void Program() :
+{
+  ASTName track;
+  ASTDate date;
+  ASTLegSpecs legSpecs;
+}
+{
+  <PROGRAM>
+  track=Name() {jjtThis.setTrack(track.getName());}
+  date=Date() {jjtThis.setDate(date.toString());}
+  legSpecs=LegSpecs()
+  {legSpecs.validate();}
+  PoolSpecs(legSpecs)
+  <PERIOD>
+}
+
+void Meeting() :
+{
+  ASTName track;
+  ASTDate date;
+  ASTProgram program;
+}
+{
+  <MEETING>
+  track=Name() {jjtThis.setTrack(track.getName());}
+  date=Date() {jjtThis.setDate(date.toString());}
+  {program=ASTProgram.getProgram(track.getName(), date.toString());}
+  ( (Bet(program)) | (LegResult(program)) )*
+  <PERIOD>
+}
+
+void LegResult(ASTProgram program) :
+{
+  Token leg;
+}
+{
+  try {
+    <LEG>leg=<NUMBER> [ResultList()] <PERIOD>
+    {jjtThis.setLeg(Integer.parseInt(leg.image));}
+  }
+  catch (ParseException e) {
+    HandleParseException(PERIOD, e);
+  }
+  { jjtThis.validate(program); }
+}
+
+void ResultList() :
+{
+  ASTResultEntry entry;
+}
+{
+  entry=ResultEntry(){ jjtThis.addEntry(entry.getHorses()); } (entry=ResultEntry(){ jjtThis.addEntry(entry.getHorses()); })*
+}
+
+ASTResultEntry ResultEntry() :
+{
+  Token number;
+  ASTTie tie;
+}
+{
+  (number=<NUMBER>{jjtThis.setEntry(Integer.parseInt(number.image)); return jjtThis; } | tie=Tie()  { jjtThis.setEntry(tie.getHorses()); return jjtThis; }
+)
+}
+
+ASTTie Tie() :
+{
+  Token horse;
+}
+{
+  <LEFT_PAREN> horse=<NUMBER>{ jjtThis.addHorse(Integer.parseInt(horse.image)); } (horse=<NUMBER> { jjtThis.addHorse(Integer.parseInt(horse.image)); })* <RIGHT_PAREN>
+  { return jjtThis; }
+}
+
+void Bet(ASTProgram program) : {}
+{
+  DDBet(program)|V75Bet(program)
+}
+
+void DDBet(ASTProgram program) :
+{
+  Token amount;
+  Token repeatCount;
+  ASTName betID;
+  ASTName accountID;
+  ASTHorseSelection selection;
+}
+{
+  <DD> [<REPEAT> repeatCount=<NUMBER>{ jjtThis.setRepeatCount(Integer.parseInt(repeatCount.image)); }] [betID=Name() {jjtThis.setBetID(betID.getName());}] [<FORTUNA> {jjtThis.setFortuna(true);}] amount=<NUMBER> {jjtThis.setAmount(Integer.parseInt(amount.image));}
+  [<ACCOUNT> accountID=Name() { jjtThis.setAccountID(accountID.getName()); }]
+  [<DD_1> selection=HorseSelection() { selection.setLeg(1); }]
+  [<DD_2> selection=HorseSelection() { selection.setLeg(2); }]
+  <PERIOD>
+  {jjtThis.validate(program);}
+}
+
+ASTHorseSelection HorseSelection() :
+{
+  Token horse;
+  Token reserve;
+}
+{
+  try {
+    (<ALL_HORSES> {jjtThis.setAllHorses(true);} <PERIOD>) |
+    ((horse=<NUMBER> { jjtThis.addHorse(Integer.parseInt(horse.image));})*
+    [(<RESERVES>  (reserve=<NUMBER>{jjtThis.addReserve(Integer.parseInt(reserve.image));})+) |
+    (<FORTUNA_SELECT> {jjtThis.setFortunaSelect(true);})]
+     <PERIOD>)
+  }
+  catch (ParseException e) {
+    HandleParseException(PERIOD, e);
+  }
+  { return jjtThis; }
+}
+
+void V75Bet(ASTProgram program) :
+{
+  Token amount;
+  Token repeatCount;
+  ASTName betID;
+  ASTName accountID;
+  ASTMultiplier mult;
+  ASTHorseSelection selection;
+}
+{
+  <V75> [<REPEAT> repeatCount=<NUMBER>{ jjtThis.setRepeatCount(Integer.parseInt(repeatCount.image)); }] [betID=Name(){jjtThis.setBetID(betID.getName());}]
+  [
+   (mult=Multiplier(){jjtThis.setMultiplier(mult.getValue());}) |
+   (<FORTUNA> {jjtThis.setFortuna(true);} amount=<NUMBER> {jjtThis.setAmount(Integer.parseInt(amount.image));})
+  ]
+  [<BOOST>{jjtThis.setBoost(true);}]
+  [<ACCOUNT> accountID=Name() {jjtThis.setAccountID(accountID.getName());} ]
+  [<V75_1> selection=HorseSelection() { selection.setLeg(1); }]
+  [<V75_2> selection=HorseSelection() { selection.setLeg(2); }]
+  [<V75_3> selection=HorseSelection() { selection.setLeg(3); }]
+  [<V75_4> selection=HorseSelection() { selection.setLeg(4); }]
+  [<V75_5> selection=HorseSelection() { selection.setLeg(5); }]
+  [<V75_6> selection=HorseSelection() { selection.setLeg(6); }]
+  [<V75_7> selection=HorseSelection() { selection.setLeg(7); }]
+  <PERIOD>
+  {jjtThis.validate(program);}
+}
+
+ASTMultiplier Multiplier() :
+{}
+{
+  (<X1>{ jjtThis.setValue(1); }|
+  <X2>{ jjtThis.setValue(2); }|
+  <X3>{ jjtThis.setValue(3); }|
+  <X4>{ jjtThis.setValue(4); }|
+  <X5>{ jjtThis.setValue(5); }|
+  <X10>{ jjtThis.setValue(10); }|
+  <X20>{ jjtThis.setValue(20); }|
+  <X50>{ jjtThis.setValue(50); }|
+  <X100>{ jjtThis.setValue(100); })
+  { return jjtThis; }
+}
