@@ -26,7 +26,7 @@ def pop():
   global stack
   popped = stack.pop()
   if len(stack) == 0:
-    popped.generate_js(0)
+    popped.generate_js()
   return popped
 
 %%

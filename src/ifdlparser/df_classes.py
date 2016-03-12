@@ -1,3 +1,9 @@
+key_code_by_name = {}
+key_code_by_name["%F7"] = 118
+key_code_by_name["%F8"] = 119
+key_code_by_name["%KP_PERIOD"] = 110
+key_code_by_name["%SELECT"] = 110
+
 class Clause:
     def generate(self, indent):
         raise NotImplementedError("Error: generate/ must be implemented for sub-classes.")
@@ -17,9 +23,9 @@ class Container_clause(Clause):
         for item in self.contents:
             item.generate(indent+1)
         return self
-    def generate_children_js(self, indent):
+    def generate_children_js(self, parent_obj):
         for item in self.contents:
-            item.generate_js(indent+1)
+            item.generate_js(parent_obj)
         return self
 
 class Named_clause(Clause):
@@ -38,11 +44,11 @@ class Form_decl(Named_clause, Container_clause):
         self.print_indented("Form " + self.name, indent)
         self.generate_children(indent)
         self.print_indented("End Form", indent)
-    def generate_js(self, indent):
-        self.print_indented("var " + self.name + "_form =  { // Form " + self.name, indent)
-        self.print_indented("name: '" + self.name + "',", indent+1)
-        self.generate_children_js(indent)
-        self.print_indented("}; // End Form", indent)
+    def generate_js(self):
+        form_obj = {};
+        form_obj["name"] = self.name
+        self.generate_children_js(form_obj)
+        print form_obj
 
 class Form_data_decl(Container_clause):
     def __init__(self):
@@ -52,10 +58,9 @@ class Form_data_decl(Container_clause):
         self.generate_children(indent)
         self.print_indented("End Data", indent)
         return self
-    def generate_js(self, indent):
-        self.print_indented("formData: { // Form Data", indent)
-        self.generate_children_js(indent)
-        self.print_indented("}, // End Data", indent)
+    def generate_js(self, parent_obj):
+        parent_obj["formData"] = []
+        self.generate_children_js(parent_obj["formData"])
         return self
 
 class Longword_integer(Named_clause, Container_clause):
@@ -67,7 +72,10 @@ class Longword_integer(Named_clause, Container_clause):
         self.generate_children(indent)
         return self
     def generate_js(self, indent):
-        self.print_indented(self.name + ": undefined, // Longword Integer", indent)
+        item = {}
+        item["name"] = self.name
+        item["type"] = "Longword Integer"
+        parent_obj.append(item)
         self.generate_children(indent)
         return self
 
@@ -80,7 +88,10 @@ class Unsigned_longword(Named_clause, Container_clause):
         self.generate_children(indent)
         return self
     def generate_js(self, indent):
-        self.print_indented(self.name + ": undefined, // Unsigned Longword", indent)
+        item = {}
+        item["name"] = self.name
+        item["type"] = "Unsigned Longword"
+        parent_obj.append(item)
         self.generate_children(indent)
         return self
 
@@ -93,9 +104,13 @@ class Character_data(Named_clause, Container_clause):
         self.print_indented(self.name + " Character(" + self.length + ")", indent)
         self.generate_children(indent)
         return self
-    def generate_js(self, indent):
-        self.print_indented(self.name + ": undefined, // Character(" + self.length + ")", indent)
-        self.generate_children(indent)
+    def generate_js(self, parent_obj):
+        item = {}
+        item["name"] = self.name
+        item["multiplicity"] = self.length
+        item["type"] = "Character"
+        parent_obj.append(item)
+        self.generate_children(item)
         return self
 
 class Integer_data(Named_clause, Container_clause):
@@ -107,8 +122,11 @@ class Integer_data(Named_clause, Container_clause):
         self.print_indented(self.name + " Integer(" + self.length + ")", indent)
         self.generate_children(indent)
         return self
-    def generate_js(self, indent):
-        self.print_indented(self.name + ": undefined, // Integer(" + self.length + ")", indent)
+    def generate_js(self, parent_obj):
+        item = {}
+        item["name"] = self.name
+        item["type"] = "Integer"
+        parent_obj.append(item)
         self.generate_children(indent)
         return self
 
@@ -122,7 +140,10 @@ class Datetime_data(Named_clause, Container_clause):
         self.generate_children(indent)
         return self
     def generate_js(self, indent):
-        self.print_indented(self.name + ": undefined, // Datetime(" + self.int_value + ")", indent)
+        item = {}
+        item["name"] = self.name
+        item["type"] = "Datetime"
+        parent_obj.append(item)
         self.generate_children(indent)
         return self
 
@@ -159,11 +180,13 @@ class Layout_decl(Named_clause, Container_clause):
         self.generate_children(indent)
         self.print_indented("End Layout", indent)
         return self
-    def generate_js(self, indent):
-        self.print_indented("var " + self.name + "_layout =  { // Layout " + self.name, indent)
-        self.print_indented("name: '" + self.name + "',", indent+1)
-        self.generate_children_js(indent)
-        self.print_indented("}; // End Layout", indent)
+    def generate_js(self, parent_obj):
+        if not "layouts" in parent_obj:
+            parent_obj["layouts"] = []
+        layout = {}
+        layout["name"] = self.name
+        parent_obj["layouts"].append(layout)
+        self.generate_children_js(layout)
         return self
 
 class Device_decl(Named_clause):
@@ -182,8 +205,10 @@ class Device_decl(Named_clause):
         self.print_indented("Type " + self.type, indent+1)
         self.print_indented("End Device", indent)
         return self
-    def generate_js(self, indent):
-        self.print_indented("devices: ", indent)
+    def generate_js(self, parent_obj):
+        device = {}
+        device["terminal_type"] = self.type
+        parent_obj["device"] = device
         return self
 
 class Size_decl(Clause):
@@ -193,7 +218,9 @@ class Size_decl(Clause):
     def generate(self, indent):
         self.print_indented("Size " + self.lines + " Lines By " + self.columns + " Columns", indent)
         return self
-    def generate_js(self, indent):
+    def generate_js(self, parent_obj):
+        parent_obj["lines"] = self.lines
+        parent_obj["columns"] = self.columns
         return self
 
 class List_decl(Named_clause):
@@ -209,7 +236,16 @@ class List_decl(Named_clause):
             self.print_indented('"' + item + '"', indent+1)
         self.print_indented("End List", indent)
         return self
-    def generate_js(self, indent):
+    def generate_js(self, parent_obj):
+        if not "lists" in parent_obj:
+            parent_obj["lists"] = []
+        list = {}
+        list["name"] = self.name
+        values = []
+        list["values"] = values
+        for item in self.list_items:
+            values.append(item)
+        parent_obj["lists"].append(list)
         return self
 
 class Viewport_decl(Named_clause):
@@ -225,7 +261,16 @@ class Viewport_decl(Named_clause):
         self.print_indented("Columns " + self.columns_start + " Through " + self.columns_end, indent+1)
         self.print_indented("End Viewport", indent)
         return self
-    def generate_js(self, indent):
+    def generate_js(self, parent_obj):
+        if not "viewports" in parent_obj:
+            parent_obj["viewports"] = []
+        viewport = {}
+        viewport["name"] = self.name
+        viewport["line_from"] = self.lines_start
+        viewport["line_to"] = self.lines_end
+        viewport["col_from"] = self.columns_start
+        viewport["col_to"] = self.columns_end
+        parent_obj["viewports"].append(viewport)
         return self
 
 class Panel_group_decl(Group_decl):
@@ -327,7 +372,24 @@ class Function_decl(Named_clause):
                 self.print_indented ("(" + sequence[0] + " " + sequence[1] + ")", indent+1)
         self.print_indented("End Function", indent)
         return self
-    def generate_js(self, indent):
+    def generate_js(self, parent_obj):
+        seq = None
+        for sequence in self.key_sequences:
+            if (len(sequence) == 1):
+                seq = sequence
+                break
+        if seq is None:
+            print "*** Warning: No single key sequence mapped to function " + self.name
+        else:
+            if not "key_bindings" in parent_obj:
+                parent_obj["key_bindings"] = []
+            binding = {}
+            binding["handler"] = self.name
+            binding["key_code"] = key_code_by_name[seq[0]]
+            binding["key"] = seq[0]
+            parent_obj["key_bindings"].append(binding)
+            if len(self.key_sequences) > 1:
+                print "*** Warning: Only the first single key sequence was mapped to function " + self.name
         return self
 
 class Internal_response_decl(Named_clause, Container_clause):
@@ -339,7 +401,18 @@ class Internal_response_decl(Named_clause, Container_clause):
         self.generate_children(indent)
         self.print_indented("End Response", indent)
         return self
-    def generate_js(self, indent):
+    def generate_js(self, parent_obj):
+        if not "functions" in parent_obj:
+            parent_obj["functions"] = []
+        function = {}
+        function["name"] = self.name
+        code = []
+        code.append("(function(context, widget) {")
+        for step in self.contents:
+            code.append(step.to_js())
+        code.append("})")
+        function["behavior"] = ''.join(code)
+        parent_obj["functions"].append(function)
         return self
 
 class Response_decl(Container_clause):
@@ -446,8 +519,8 @@ class Message_step(Clause):
         for line in self.lines:
             self.print_indented('"' + line + '"', indent+1)
         return self
-    def generate_js(self, indent):
-        return self
+    def to_js(self):
+        return "context.display_message('" + self.lines[0] + "');"
 
 class Signal_step(Clause):
     def __init__(self):
@@ -464,8 +537,11 @@ class Signal_step(Clause):
         else:
             self.print_indented("Signal %Reverse", indent)
         return self
-    def generate_js(self, indent):
-        return self
+    def to_js(self):
+        if self.bell:
+            return "context.signal();"
+        else:
+            return ""
 
 class Position_step(Clause):
     def __init__(self):
@@ -489,8 +565,9 @@ class Position_step(Clause):
         }
         target_types.get(self.target_type, undefined_target_type)()
         return self
-    def generate_js(self, indent):
-        return self
+    def to_js(self):
+        Need to think aboyt this abit...
+
 
 class Reset_step(Clause):
     def __init__(self):
@@ -502,8 +579,11 @@ class Reset_step(Clause):
         if self.all:
             self.print_indented("Reset All", indent)
         return self
-    def generate_js(self, indent):
-        return self
+    def to_js(self):
+        if self.all:
+            return "context.reset_all();"
+        else:
+            return ""
 
 class Remove_step(Clause):
     def __init__(self):

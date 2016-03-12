@@ -40,7 +40,7 @@
       "lists": [
         {
           "name": "LOCATION_CODES",
-          "value": ["ACT", "BXB", "LTN", "MKO", "ZKO"]
+          "values": ["ACT", "BXB", "LTN", "MKO", "ZKO"]
         }
       ],
       "viewports": [

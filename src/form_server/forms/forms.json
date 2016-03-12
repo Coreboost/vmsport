@@ -9,6 +9,6 @@
     "key": "mileage",
     "name": "Mileage reimbursement",
     "description": "The full Mileage reimbursement example from the DecForms documentation.",
-    "path": "forms/minimal.json"
+    "path": "forms/mileage.json"
   }
 ]
