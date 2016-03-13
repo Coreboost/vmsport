@@ -157,8 +157,10 @@ TOKEN : { < INCLUDE : "Include" > }
 TOKEN : { < PROGRAM : "Program" > }
 TOKEN : { < MEETING : "Meeting" > }
 TOKEN : { < LEG : "Leg" > }
-TOKEN : { < DD : "DD" > }
-TOKEN : { < V75 : "V75" > }
+TOKEN : { < DD_BET : "DD-Bet" > }
+TOKEN : { < V75_BET : "V75-Bet" > }
+TOKEN : { < DD_LEGS : "DD-Legs" > }
+TOKEN : { < V75_LEGS : "V75-Legs" > }
 TOKEN : { < BET : "Bet" > }
 TOKEN : { < DD_1 : "DD-1" > }
 TOKEN : { < DD_2 : "DD-2" > }
@@ -322,7 +324,7 @@ void DDSpec(ASTLegSpecs legSpecs) :
 }
 {
   try {
-    <DD>legList=LegList() { legList.validate(2, legSpecs); } <PERIOD>
+    <DD_LEGS>legList=LegList() { legList.validate(2, legSpecs); } <PERIOD>
   }
   catch (ParseException e) {
     HandleParseException(PERIOD, e);
@@ -344,7 +346,7 @@ void V75Spec(ASTLegSpecs legSpecs) :
 }
 {
   try {
-    <V75>legList=LegList(){ legList.validate(7, legSpecs); }<PERIOD>
+    <V75_LEGS>legList=LegList(){ legList.validate(7, legSpecs); }<PERIOD>
   }
   catch (ParseException e) {
     HandleParseException(PERIOD, e);
@@ -473,7 +475,7 @@ void DDBet(ASTProgram program) :
   ASTHorseSelection selection;
 }
 {
-  <DD> [<REPEAT> repeatCount=<NUMBER>{ jjtThis.setRepeatCount(Integer.parseInt(repeatCount.image)); }] [betID=Name() {jjtThis.setBetID(betID.getName());}] [<FORTUNA> {jjtThis.setFortuna(true);}] amount=<NUMBER> {jjtThis.setAmount(Integer.parseInt(amount.image));}
+  <DD_BET> [<REPEAT> repeatCount=<NUMBER>{ jjtThis.setRepeatCount(Integer.parseInt(repeatCount.image)); }] [betID=Name() {jjtThis.setBetID(betID.getName());}] [<FORTUNA> {jjtThis.setFortuna(true);}] amount=<NUMBER> {jjtThis.setAmount(Integer.parseInt(amount.image));}
   [<ACCOUNT> accountID=Name() { jjtThis.setAccountID(accountID.getName()); }]
   [<DD_1> selection=HorseSelection() { selection.setLeg(1); }]
   [<DD_2> selection=HorseSelection() { selection.setLeg(2); }]
@@ -510,7 +512,7 @@ void V75Bet(ASTProgram program) :
   ASTHorseSelection selection;
 }
 {
-  <V75> [<REPEAT> repeatCount=<NUMBER>{ jjtThis.setRepeatCount(Integer.parseInt(repeatCount.image)); }] [betID=Name(){jjtThis.setBetID(betID.getName());}]
+  <V75_BET> [<REPEAT> repeatCount=<NUMBER>{ jjtThis.setRepeatCount(Integer.parseInt(repeatCount.image)); }] [betID=Name(){jjtThis.setBetID(betID.getName());}]
   [
    (mult=Multiplier(){jjtThis.setMultiplier(mult.getValue());}) |
    (<FORTUNA> {jjtThis.setFortuna(true);} amount=<NUMBER> {jjtThis.setAmount(Integer.parseInt(amount.image));})

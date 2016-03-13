@@ -41,65 +41,69 @@ public interface HblConstants {
   /** RegularExpression Id. */
   int LEG = 29;
   /** RegularExpression Id. */
-  int DD = 30;
+  int DD_BET = 30;
   /** RegularExpression Id. */
-  int V75 = 31;
+  int V75_BET = 31;
   /** RegularExpression Id. */
-  int BET = 32;
+  int DD_LEGS = 32;
   /** RegularExpression Id. */
-  int DD_1 = 33;
+  int V75_LEGS = 33;
   /** RegularExpression Id. */
-  int DD_2 = 34;
+  int BET = 34;
   /** RegularExpression Id. */
-  int V75_1 = 35;
+  int DD_1 = 35;
   /** RegularExpression Id. */
-  int V75_2 = 36;
+  int DD_2 = 36;
   /** RegularExpression Id. */
-  int V75_3 = 37;
+  int V75_1 = 37;
   /** RegularExpression Id. */
-  int V75_4 = 38;
+  int V75_2 = 38;
   /** RegularExpression Id. */
-  int V75_5 = 39;
+  int V75_3 = 39;
   /** RegularExpression Id. */
-  int V75_6 = 40;
+  int V75_4 = 40;
   /** RegularExpression Id. */
-  int V75_7 = 41;
+  int V75_5 = 41;
   /** RegularExpression Id. */
-  int X1 = 42;
+  int V75_6 = 42;
   /** RegularExpression Id. */
-  int X2 = 43;
+  int V75_7 = 43;
   /** RegularExpression Id. */
-  int X3 = 44;
+  int X1 = 44;
   /** RegularExpression Id. */
-  int X4 = 45;
+  int X2 = 45;
   /** RegularExpression Id. */
-  int X5 = 46;
+  int X3 = 46;
   /** RegularExpression Id. */
-  int X10 = 47;
+  int X4 = 47;
   /** RegularExpression Id. */
-  int X20 = 48;
+  int X5 = 48;
   /** RegularExpression Id. */
-  int X50 = 49;
+  int X10 = 49;
   /** RegularExpression Id. */
-  int X100 = 50;
+  int X20 = 50;
   /** RegularExpression Id. */
-  int REPEAT = 51;
+  int X50 = 51;
   /** RegularExpression Id. */
-  int FORTUNA = 52;
+  int X100 = 52;
   /** RegularExpression Id. */
-  int RESERVES = 53;
+  int REPEAT = 53;
   /** RegularExpression Id. */
-  int FORTUNA_SELECT = 54;
+  int FORTUNA = 54;
   /** RegularExpression Id. */
-  int ALL_HORSES = 55;
+  int RESERVES = 55;
   /** RegularExpression Id. */
-  int BOOST = 56;
+  int FORTUNA_SELECT = 56;
   /** RegularExpression Id. */
-  int IDENTIFIER = 57;
+  int ALL_HORSES = 57;
   /** RegularExpression Id. */
-  int STRING_LITERAL = 58;
+  int BOOST = 58;
   /** RegularExpression Id. */
-  int UNKNOWN = 59;
+  int IDENTIFIER = 59;
+  /** RegularExpression Id. */
+  int STRING_LITERAL = 60;
+  /** RegularExpression Id. */
+  int UNKNOWN = 61;
 
   /** Lexical state. */
   int DEFAULT = 0;
@@ -144,8 +148,10 @@ public interface HblConstants {
     "\"Program\"",
     "\"Meeting\"",
     "\"Leg\"",
-    "\"DD\"",
-    "\"V75\"",
+    "\"DD-Bet\"",
+    "\"V75-Bet\"",
+    "\"DD-Legs\"",
+    "\"V75-Legs\"",
     "\"Bet\"",
     "\"DD-1\"",
     "\"DD-2\"",
