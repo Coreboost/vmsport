@@ -16,7 +16,7 @@ Horses
   HH3             5
   Winnie 2
 -- Here comes a bunch of additional horses....
-HH1_1 42 HH1_2 42 HH1_3 42 HH1_4 42 HH1_5 42 HH1_6 42 HH1_7 42 HH1_8 6
+HH1_1 42 HH1_2 42 HH1_3 42 HH1_4 42 --- This is also a comment --- HH1_5 42 HH1_6 42 HH1_7 42 HH1_8 6
 HH2_1 42 HH2_2 42 HH2_3 42 HH2_4 42 HH2_5 42 HH2_6 42 HH2_7 42 HH2_8 6
 HH3_1 42 HH3_2 42 HH3_3 42 HH3_4 42 HH3_5 42 HH3_6 42 HH3_7 42 HH3_8 6
 HH4_1 42 HH4_2 42 HH4_3 42 HH4_4 42 HH4_5 42 HH4_6 42 HH4_7 42 HH4_8 6
@@ -31,6 +31,7 @@ Tracks
   "Bergsåker"
 .
 
+
 Program Solvalla 2016-02-01
   Leg 1 HH1_1 HH1_2 HH1_3 HH1_4 HH1_5 HH1_6 HH1_7 HH1_8.
   Leg 2 HH2_1 HH2_2 HH2_3 HH2_4 HH2_5 HH2_6 HH2_7 HH2_8.
@@ -39,28 +40,28 @@ Program Solvalla 2016-02-01
   Leg 5 HH5_1 HH5_2 HH5_3 HH5_4 HH5_5 HH5_6 HH5_7 HH5_8.
   Leg 6 HH6_1 HH6_2 HH6_3 HH6_4 HH6_5 HH6_6 HH6_7 HH6_8.
   Leg 7 HH7_1 HH7_2 HH7_3 HH7_4 HH7_5 HH7_6 HH7_7 HH7_8.
-  DD 1 2.
-  V75 1 2 3 4 5 6 7.
+  DD-Legs 1 2.
+  V75-Legs 1 2 3 4 5 6 7.
 .
 
 Meeting Solvalla 2016-02-01
-  DD DDB1 10 Account Billy2
+  DD-Bet DDB1 10 Account Billy2
     DD-1 2 3.
     DD-2 A.
   .
 
-  DD DDB2 Fortuna 100  -- Bet ID is optional
+  DD-Bet DDB2 Fortuna 100  -- Bet ID is optional
     DD-1 2 3.
     DD-2 3 F.
   .
 
-  DD Repeat 100 MDDB 100  -- You can add a repeat after the Bet keyword to indicate,
+  DD-Bet Repeat 100 MDDB 100  -- You can add a repeat after the Bet keyword to indicate,
     DD-1 2 3.          -- in this case, that you want to make 100 equal bets.
     DD-2 5.            -- If you have specified a name for the bet, you can later on,
   .                    -- when you specify Check statements refer to the individual
                        --  bets as MDDB_1 MDDB_2...MDDB_100.
 
-  V75 V75B1 X2 Boost Account Billy
+  V75-Bet V75B1 X2 Boost Account Billy
     V75-1 2 3 R 4 5.
     V75-2 1 R 2 3.
     V75-3 1 R 2 3.
@@ -70,7 +71,7 @@ Meeting Solvalla 2016-02-01
     V75-7 2 3 R 6 7.
   .
 
-  V75 Repeat 10 Fortuna 100 Boost Account AA3  -- Bet ID is optional.
+  V75-Bet Repeat 10 Fortuna 100 Boost Account AA3  -- Bet ID is optional.
     V75-1 2 3.
     V75-2 1.
     V75-7 2 3 F.

@@ -7,84 +7,223 @@
 # change it.
 'patterns': [
   {
-    'match': '\\b(Accounts|Horses|Tracks|Program|Meeting)\\b'
-    'name': 'keyword.control'
+    'include': '#comments'
+  }
+  {
+    'begin': '\\b(Include)(\\b)'
+    'beginCaptures':
+      '0':
+        'name': 'keyword.other.special-method'
+    'end': '\\n'
+    'endCaptures':
+      '0':
+        'name': 'keyword.control'
+    'name': ''
+    'patterns': [
+      {
+        'include': '#comments'
+      }
+    ]
+  }
+  {
+    'begin': '\\b(Accounts|Horses|Tracks)\\b'
+    'beginCaptures':
+      '0':
+        'name': 'keyword.control'
+    'end': '\\.'
+    'endCaptures':
+      '0':
+        'name': 'keyword.control'
+    'name': 'constant.other-color'
+    'patterns': [
+      {
+        'include': '#comments'
+      }
+      {
+        'include': '#quotedstring'
+      }
+      {
+        'include': '#number'
+      }
+    ]
+  }
+  {
+    'begin': '\\b(Program)\\b'
+    'beginCaptures':
+      '0':
+        'name': 'keyword.control'
+    'end': '\\b([0-9]+)(\-)([0-9]+)(\-)([0-9]+)\\b'
+    'endCaptures':
+      '0':
+        'name': 'constant.numeric'
+    'name': 'constant.other-color'
+    'patterns': [
+      {
+        'include': '#comments'
+      }
+    ]
+  }
+  {
+    'begin': '\\b(Leg)(\\s)+[0-9]+\\b'
+    'beginCaptures':
+      '0':
+        'name': 'keyword.control'
+    'end': '\\.'
+    'endCaptures':
+      '0':
+        'name': 'keyword.control'
+    'name': 'constant.other-color'
+    'patterns': [
+      {
+        'include': '#comments'
+      }
+      {
+        'include': '#number'
+      }
+    ]
+  }
+  {
+    'begin': '\\b(DD\-Legs|V75\-Legs)(\\b)'
+    'beginCaptures':
+      '0':
+        'name': 'keyword.control'
+    'end': '\\.'
+    'endCaptures':
+      '0':
+        'name': 'keyword.control'
+    'name': ''
+    'patterns': [
+      {
+        'include': '#comments'
+      }
+      {
+        'include': '#number'
+      }
+    ]
+  }
+  {
+    'begin': '\\b(Meeting)\\b'
+    'beginCaptures':
+      '0':
+        'name': 'keyword.control'
+    'end': '\\b([0-9]+)(\-)([0-9]+)(\-)([0-9]+)\\b'
+    'endCaptures':
+      '0':
+        'name': 'constant.numeric'
+    'name': 'constant.other-color'
+    'patterns': [
+      {
+        'include': '#comments'
+      }
+    ]
+  }
+  {
+    'begin': '\\b(DD\-Bet|V75\-Bet)(\\b)'
+    'beginCaptures':
+      '0':
+        'name': 'keyword.control'
+    'end': '\\n'
+    'endCaptures':
+      '0':
+        'name': ''
+    'name': 'constant.other-color'
+    'patterns': [
+      {
+        'include': '#comments'
+      }
+      {
+        'include': '#number'
+      }
+      {
+        'match': '\\b(X1|X2|X3|X4|X5|X10|X20|X50|X100)(\\b)'
+        'name': 'keyword.other.special-method'
+      }
+      {
+        'match': '\\b(Repeat|Fortuna|Boost)(\\b)'
+        'name': 'keyword.other.special-method'
+      }
+      {
+        'match': '\\b(Account)(\\b)'
+        'name': 'keyword.control'
+      }
+    ]
+  }
+  {
+    'begin': '\\b(DD\-1|DD\-2|V75\-1|V75\-2|V75\-3|V75\-4|V75\-5|V75\-6|V75\-7)(\\b)'
+    'beginCaptures':
+      '0':
+        'name': 'keyword.control'
+    'end': '\\.'
+    'endCaptures':
+      '0':
+        'name': 'keyword.control'
+    'name': 'constant.numeric'
+    'patterns': [
+      {
+        'include': '#comments'
+      }
+      {
+        'match': '\\b[0-9]+\\b'
+        'name': 'constant.numeric'
+      }
+      {
+        'match': '\\b(R|F|A)(\\b)'
+        'name': 'keyword.other.special-method'
+      }
+    ]
   }
   {
     'match': '\\.'
     'name': 'keyword.control'
   }
-  {
-    'match': '\\b(Account|Fortuna|Boost)(\\b)'
-    'name': 'keyword.control'
-  }
-  {
-    'match': '\\b(R|F)(\\b)'
-    'name': 'keyword.other.special-method'
-  }
-  {
-    'match': '\\b(Repeat)(\\b)'
-    'name': 'keyword.other.special-method'
-  }
-  {
-    'match': '\\b(X1|X2|X3|X4|X5|X10|X20|X50|X100)(\\b)'
-    'name': 'keyword.other.special-method'
-  }
-  {
-    'match': '\\b[0-9]+\\b'
-    'name': 'constant.numeric'
-  }
-  {
-    'match': '\\b(DD\-1|DD\-2|V75\-1|V75\-2|V75\-3|V75\-4|V75\-5|V75\-6|V75\-7)(\\b)'
-    'name': 'keyword.declarations'
-  }
-  {
-    'match': '\\b(Leg|DD|V75)(\\b)'
-    'name': 'keyword.declarations'
-  }
-  {
-    'match': '\\bInclude\\b'
-    'name': 'keyword.other.special-method'
-  }
-  {
-    'begin': '\''
-    'beginCaptures':
-      '0':
-        'name': 'punctuation.definition.string.begin.cql'
-    'end': '\''
-    'endCaptures':
-      '0':
-        'name': 'punctuation.definition.string.end.cql'
-    'name': 'string.quoted.single.cql'
+]
+'repository':
+  'unquotedstring':
     'patterns': [
       {
-        'match': '\\\\(x\\h{2}|[0-2][0-7]{,2}|3[0-6][0-7]?|37[0-7]?|[4-7][0-7]?|.)'
-        'name': 'constant.character.escape.cql'
+        'begin' : '\\s+'
+        'end': '\\s+'
+        'name': 'comment.block'
       }
     ]
-  }
-  {
-    'match': ''
-    'name': 'constant.date.hbl'
-  }
-  {
-    'match': ''
-    'name': 'constant.time.hbl'
-  }
-  {
-    'begin': '^---+$\\n'
-    'captures':
-      '0':
-        'name': 'punctuation.definition.comment.hbl'
-    'end': '^---+$\\n'
-    'name': 'comment.block.hbl'
-  }
-  {
-    'begin': '--'
-    'captures':
-      '1':
-        'name': 'punctuation.definition.comment.hbl'
-    'end': '$\\n?'
-    'name': 'comment.line.double-hyphen.hbl'
-  }
-]
+  'number':
+    'patterns': [
+      {
+        'match': '\\b[0-9]+\\b'
+        'name': 'constant.numeric'
+      }
+    ]
+  'quotedstring':
+    'patterns': [
+      {
+        'begin' : '\\"'
+        'beginCaptures':
+          '0':
+            'name': 'constant.other.color'
+        'end': '\\"'
+        'endCaptures':
+          '0':
+            'name': 'constant.other.color'
+        'name': 'constant.other.color'
+      }
+    ]
+
+  'comments':
+    'patterns': [
+      {
+        'begin': '---+'
+        'captures':
+          '0':
+            'name': 'punctuation.definition.comment'
+        'end': '---+'
+        'name': 'comment.block'
+      }
+      {
+        'begin': '--'
+        'captures':
+          '1':
+            'name': 'punctuation.definition.comment'
+        'end': '$'
+        'name': 'comment.line'
+      }
+    ]
