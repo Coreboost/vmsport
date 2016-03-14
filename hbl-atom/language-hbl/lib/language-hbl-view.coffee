@@ -4,12 +4,7 @@ class LanguageHblView
     # Create root element
     @element = document.createElement('div')
     @element.classList.add('language-hbl')
-
-    # Create message element
-    message = document.createElement('div')
-    message.textContent = "The Language Hbl package is Alive! It's ALIVE!"
-    message.classList.add('message')
-    @element.appendChild(message)
+    this.addMessage("Hey ho, let's go!")
 
   # Returns an object that can be retrieved when package is activated
   serialize: ->
@@ -20,3 +15,13 @@ class LanguageHblView
 
   getElement: ->
     @element
+
+  clearMessages: ->
+    while @element.childElementCount > 0
+      @element.firstChild.remove()
+
+  addMessage: (mess) ->
+    message = document.createElement('div')
+    message.textContent = mess
+    message.classList.add('message')
+    @element.appendChild(message)

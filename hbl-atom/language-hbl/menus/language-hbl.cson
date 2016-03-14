@@ -1,21 +1,13 @@
 # See https://atom.io/docs/latest/hacking-atom-package-word-count#menus for more details
 'context-menu':
   'atom-text-editor': [
-    {
-      'label': 'Toggle'
-      'command': 'language-hbl:toggle'
-    },
-    {
-      'label': 'Validate HBL'
-      'command': 'language-hbl:validate'
-    }
   ]
 'menu': [
   {
-    'label': 'HBL'
+    'label': 'Hbl'
     'submenu': [
       {
-        'label': 'Toggle'
+        'label': 'Toggle error pane'
         'command': 'language-hbl:toggle'
       }
       {

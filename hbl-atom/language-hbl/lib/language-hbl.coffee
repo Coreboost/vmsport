@@ -8,16 +8,17 @@ module.exports = LanguageHbl =
 
   activate: (state) ->
     @languageHblView = new LanguageHblView(state.languageHblViewState)
-    @modalPanel = atom.workspace.addModalPanel(item: @languageHblView.getElement(), visible: false)
+    @errorPane = atom.workspace.addBottomPanel(item: @languageHblView.getElement(), visible: false, className:'atom-hbl-pane')
 
     # Events subscribed to in atom's system can be easily cleaned up with a CompositeDisposable
     @subscriptions = new CompositeDisposable
 
     # Register command that toggles this view
     @subscriptions.add atom.commands.add 'atom-workspace', 'language-hbl:toggle': => @toggle()
+    @subscriptions.add atom.commands.add 'atom-workspace', 'language-hbl:validate': => @validate()
 
   deactivate: ->
-    @modalPanel.destroy()
+    @errorPane.destroy()
     @subscriptions.dispose()
     @languageHblView.destroy()
 
@@ -25,9 +26,18 @@ module.exports = LanguageHbl =
     languageHblViewState: @languageHblView.serialize()
 
   toggle: ->
-    console.log 'LanguageHbl was toggled!'
 
-    if @modalPanel.isVisible()
-      @modalPanel.hide()
+    if @errorPane.isVisible()
+      @errorPane.hide()
     else
-      @modalPanel.show()
+      @errorPane.show()
+
+  validate: ->
+      if not @errorPane.isVisible() then @errorPane.show()
+      @languageHblView.clearMessages()
+      hblView = @languageHblView
+      spawn = require('child_process').spawn
+      child = spawn('ls', ['/'])
+      child.stdout.on('data', (data) -> hblView.addMessage(data.toString()) )
+      child.stderr.on('data', (data) -> hblView.addMessage(data.toString()) )
+      child.on('close', (code) -> hblView.addMessage("Finished with exit code " + code) )
