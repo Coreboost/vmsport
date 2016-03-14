@@ -1,0 +1,2 @@
+#!/bin/sh
+java -jar /home/vagrant/vmsport/hbl-compiler/target/hbl-compiler.one-jar.jar $1 $2 $3 $4 $5 $6

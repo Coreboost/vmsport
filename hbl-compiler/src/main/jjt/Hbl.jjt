@@ -13,8 +13,8 @@ PARSER_BEGIN(Hbl)
     private static Integer exit_code = 0;
     private static String input_filename = null;
     private static String output_filename = null;
-    private static java.io.InputStream inputStream = System.in;
-    private static java.io.PrintStream outputStream = System.out;
+    private static java.io.InputStream inputStream = null;
+    private static java.io.PrintStream outputStream = null;
     private static Boolean inputStream_opened = false;
     private static Boolean outputStream_opened = false;
     public static void main( String[] args ) {
@@ -23,9 +23,15 @@ PARSER_BEGIN(Hbl)
         open_files();
         if (exit_code == 0) {
           try {
+            SimpleNode node = null;
             Hbl parser = new Hbl( inputStream );
-            SimpleNode node = parser.Start();
-            if (error_count == 0) {
+            try {
+              node = parser.Start();
+            } catch (Exception e) {
+              error_count += 1;
+              error(e.getMessage());
+            }
+            if (error_count == 0 && outputStream != null) {
               outputStream.println(node.generate().toString());
             } else {
               exit_code = 1;
@@ -45,27 +51,38 @@ PARSER_BEGIN(Hbl)
 
     public static void open_files() {
       if (input_filename != null) {
-        try {
-          inputStream = new java.io.FileInputStream(new java.io.File(input_filename));
-          inputStream_opened = true;
+        if (input_filename.equals("-")) {
+          inputStream = System.in;
+        } else {
+          try {
+            inputStream = new java.io.FileInputStream(new java.io.File(input_filename));
+            inputStream_opened = true;
+          }
+          catch (Exception e) {
+            error("Error: Could not open input file " + input_filename);
+            System.err.println(e.getMessage());
+            e.printStackTrace();
+            exit_code = 4;
+          }
         }
-        catch (Exception e) {
-          error("Error: Could not open input file " + input_filename);
-          System.err.println(e.getMessage());
-          e.printStackTrace();
-          exit_code = 4;
-        }
+      } else {
+        error("Error: No input given.");
+        exit_code = 4;
       }
       if (output_filename != null) {
-        try {
-          outputStream = new java.io.PrintStream(new java.io.File(output_filename));
-          outputStream_opened = true;
-        }
-        catch (Exception e) {
-          error("Error: Could not open output file " + output_filename);
-          System.err.println(e.getMessage());
-          e.printStackTrace();
-          exit_code = 4;
+        if (output_filename.equals("-")) {
+          outputStream = System.out;
+        } else {
+          try {
+            outputStream = new java.io.PrintStream(new java.io.File(output_filename));
+            outputStream_opened = true;
+          }
+          catch (Exception e) {
+            error("Error: Could not open output file " + output_filename);
+            System.err.println(e.getMessage());
+            e.printStackTrace();
+            exit_code = 4;
+          }
         }
       }
     }
@@ -113,13 +130,17 @@ PARSER_BEGIN(Hbl)
             error("Error: The -o option must be followed by a valid file name.");
           }
         } else if (args[ind].equals("-h")) {
-          error("Usage: java -jar hbl-compiler.jar -i <input_file> -o <output_file>");
+          usage();
           ind += 1;
         } else {
           error("Error: Unknown option " + args[ind]);
           ind += 1;
         }
       }
+    }
+
+    public static void usage() {
+      error("Usage: hblc -i <input_file> [-o <output_file>]");
     }
 
     public static void error(String message) {
