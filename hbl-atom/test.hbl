@@ -86,36 +86,36 @@ V3: 2, 3, 4.
 Below follows a few examples of how you use the Horse Betting Language.
 ------------------------------------------------------------------------------
 
-Account
-  AA1      : 100,  -- Create 1 account AA1 with 100 in funds.
-  AA2      : 400,
-  AA[4-10] : 600.  -- Create 7 accounts AA4, AA5...AA10 with 600 in funds.
+Accounts
+  AA1       100  -- Create 1 account AA1 with 100 in funds.
+  AA2       400
+  AA[4-10]  600.  -- Create 7 accounts AA4, AA5...AA10 with 600 in funds.
 
-Horses:
-  HH1   : 1,  -- The number is the relative ranking, if two horses have the same
-  HH2   : 3,  -- rank then the start number in the race will be used as their
-  HH3   : 5.  -- relative rank.
+Horses
+  HH1    1  -- The number is the relative ranking, if two horses have the same
+  HH2    3  -- rank then the start number in the race will be used as their
+  HH3    5.  -- relative rank.
 
-Tracks:
-  Solvalla,   -- If the name of the track contains spaces they must be quoted
-  "Åby",      -- otherwise quoting is optional.
+Tracks
+  Solvalla   -- If the name of the track contains spaces they must be quoted
+  "Åby"      -- otherwise quoting is optional.
   Bergsåker.
 
-Race: Solvalla 2016-02-01
-  Tvilling: 2.
-  Trio:     1.
-  DD:       1, 2.
-  V3:       3, 4, 5.
-  V5:       1, 2, 3, 4, 5.
-  V64:      1, 2, 3, 4, 5, 6.
-  V65:      1, 2, 3, 4, 5, 6.
-  V75:      1, 2, 3, 4, 5, 6, 7.
-  V86:      1, 2, 3, 4, 5, 6, 7, 8.
+Program Solvalla 2016-02-01
+  Tvilling-Legs 2.
+  Trio-Legs     1.
+  DD-Legs       1, 2.
+  V3-Legs       3, 4, 5.
+  V5-Legs       1, 2, 3, 4, 5.
+  V64-Legs      1, 2, 3, 4, 5, 6.
+  V65-Legs      1, 2, 3, 4, 5, 6.
+  V75-Legs      1, 2, 3, 4, 5, 6, 7.
+  V86-Legs      1, 2, 3, 4, 5, 6, 7, 8.
 
-  Leg 1: HH1, HH2, HH3.
-  Leg 2:
+  Leg 1 HH1, HH2, HH3.
+  Leg 2 .
 
-RaceDay: Solvalla 2016-02-01
+Meeting Solvalla 2016-02-01
 
 --------------------------------------------------------------------------------
                                 Double
@@ -131,10 +131,9 @@ Finally you specify the selected horses for each of the legs in the DD. You can
 also specify an A to indicate that you select all the horses in the particular
 leg.
 --------------------------------------------------------------------------------
-  Bet DD: DDB1, 10.
-    Account: AA1.
-    DD-1: 2, 3.
-    DD-2: A.
+  DD-Bet DDB1 10 Account AA1
+    DD-1 2, 3.
+    DD-2 A.
 
 --------------------------------------------------------------------------------
                            Double Fortuna
@@ -150,9 +149,9 @@ DD with the following differences:
     for the leg. In this case you add an O to the end of the list of horses.
   * Specify an A to select all of the horses in the race.
 --------------------------------------------------------------------------------
-  Bet DD: DDB2, Fortuna 100.
-    DD-1: 2, 3.
-    DD-2: 3 O.
+  DD-Bet DDB2 Fortuna 100
+    DD-1 2, 3.
+    DD-2 3 O.
 
 --------------------------------------------------------------------------------
                     Lunch Double and Lunch Double Fortuna
