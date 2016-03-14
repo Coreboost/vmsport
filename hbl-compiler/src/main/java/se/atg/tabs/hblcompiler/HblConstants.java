@@ -11,124 +11,116 @@ public interface HblConstants {
   /** End of File. */
   int EOF = 0;
   /** RegularExpression Id. */
-  int PERIOD = 15;
+  int PERIOD = 11;
   /** RegularExpression Id. */
-  int COMMA = 16;
+  int COMMA = 12;
   /** RegularExpression Id. */
-  int COLON = 17;
+  int COLON = 13;
   /** RegularExpression Id. */
-  int DASH = 18;
+  int DASH = 14;
   /** RegularExpression Id. */
-  int LEFT_PAREN = 19;
+  int LEFT_PAREN = 15;
   /** RegularExpression Id. */
-  int RIGHT_PAREN = 20;
+  int RIGHT_PAREN = 16;
   /** RegularExpression Id. */
-  int NUMBER = 21;
+  int NUMBER = 17;
   /** RegularExpression Id. */
-  int ACCOUNTS = 22;
+  int ACCOUNTS = 18;
   /** RegularExpression Id. */
-  int ACCOUNT = 23;
+  int ACCOUNT = 19;
   /** RegularExpression Id. */
-  int HORSES = 24;
+  int HORSES = 20;
   /** RegularExpression Id. */
-  int TRACKS = 25;
+  int TRACKS = 21;
   /** RegularExpression Id. */
-  int INCLUDE = 26;
+  int INCLUDE = 22;
   /** RegularExpression Id. */
-  int PROGRAM = 27;
+  int PROGRAM = 23;
   /** RegularExpression Id. */
-  int MEETING = 28;
+  int MEETING = 24;
   /** RegularExpression Id. */
-  int LEG = 29;
+  int LEG = 25;
   /** RegularExpression Id. */
-  int DD_BET = 30;
+  int DD_BET = 26;
   /** RegularExpression Id. */
-  int V75_BET = 31;
+  int V75_BET = 27;
   /** RegularExpression Id. */
-  int DD_LEGS = 32;
+  int DD_LEGS = 28;
   /** RegularExpression Id. */
-  int V75_LEGS = 33;
+  int V75_LEGS = 29;
   /** RegularExpression Id. */
-  int BET = 34;
+  int BET = 30;
   /** RegularExpression Id. */
-  int DD_1 = 35;
+  int DD_1 = 31;
   /** RegularExpression Id. */
-  int DD_2 = 36;
+  int DD_2 = 32;
   /** RegularExpression Id. */
-  int V75_1 = 37;
+  int V75_1 = 33;
   /** RegularExpression Id. */
-  int V75_2 = 38;
+  int V75_2 = 34;
   /** RegularExpression Id. */
-  int V75_3 = 39;
+  int V75_3 = 35;
   /** RegularExpression Id. */
-  int V75_4 = 40;
+  int V75_4 = 36;
   /** RegularExpression Id. */
-  int V75_5 = 41;
+  int V75_5 = 37;
   /** RegularExpression Id. */
-  int V75_6 = 42;
+  int V75_6 = 38;
   /** RegularExpression Id. */
-  int V75_7 = 43;
+  int V75_7 = 39;
   /** RegularExpression Id. */
-  int X1 = 44;
+  int X1 = 40;
   /** RegularExpression Id. */
-  int X2 = 45;
+  int X2 = 41;
   /** RegularExpression Id. */
-  int X3 = 46;
+  int X3 = 42;
   /** RegularExpression Id. */
-  int X4 = 47;
+  int X4 = 43;
   /** RegularExpression Id. */
-  int X5 = 48;
+  int X5 = 44;
   /** RegularExpression Id. */
-  int X10 = 49;
+  int X10 = 45;
   /** RegularExpression Id. */
-  int X20 = 50;
+  int X20 = 46;
   /** RegularExpression Id. */
-  int X50 = 51;
+  int X50 = 47;
   /** RegularExpression Id. */
-  int X100 = 52;
+  int X100 = 48;
   /** RegularExpression Id. */
-  int REPEAT = 53;
+  int REPEAT = 49;
   /** RegularExpression Id. */
-  int FORTUNA = 54;
+  int FORTUNA = 50;
   /** RegularExpression Id. */
-  int RESERVES = 55;
+  int RESERVES = 51;
   /** RegularExpression Id. */
-  int FORTUNA_SELECT = 56;
+  int FORTUNA_SELECT = 52;
   /** RegularExpression Id. */
-  int ALL_HORSES = 57;
+  int ALL_HORSES = 53;
   /** RegularExpression Id. */
-  int BOOST = 58;
+  int BOOST = 54;
   /** RegularExpression Id. */
-  int IDENTIFIER = 59;
+  int IDENTIFIER = 55;
   /** RegularExpression Id. */
-  int STRING_LITERAL = 60;
+  int STRING_LITERAL = 56;
   /** RegularExpression Id. */
-  int UNKNOWN = 61;
+  int UNKNOWN = 57;
 
   /** Lexical state. */
   int DEFAULT = 0;
   /** Lexical state. */
-  int FirstlineMultilineComment = 1;
+  int WithinMultilineComment = 1;
   /** Lexical state. */
-  int WithinMultilineComment = 2;
-  /** Lexical state. */
-  int LastlineMultilineComment = 3;
-  /** Lexical state. */
-  int SinglelineComment = 4;
+  int SinglelineComment = 2;
 
   /** Literal token values. */
   String[] tokenImage = {
     "<EOF>",
     "\"---\"",
-    "\"\\n\"",
-    "<token of kind 3>",
     "\"---\"",
-    "<token of kind 5>",
-    "\"\\n\"",
-    "<token of kind 7>",
+    "<token of kind 3>",
     "\"--\"",
     "\"\\n\"",
-    "<token of kind 10>",
+    "<token of kind 6>",
     "\" \"",
     "\"\\n\"",
     "\"\\r\"",

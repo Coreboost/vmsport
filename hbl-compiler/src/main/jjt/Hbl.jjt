@@ -130,13 +130,9 @@ PARSER_BEGIN(Hbl)
 PARSER_END(Hbl)
 
 
-SKIP : { "---" : FirstlineMultilineComment }
-<FirstlineMultilineComment> SKIP : {"\n" : WithinMultilineComment}
-<FirstlineMultilineComment> SKIP : { <~[]> }
-<WithinMultilineComment> SKIP : { "---" : LastlineMultilineComment }
+SKIP : { "---" : WithinMultilineComment }
+<WithinMultilineComment> SKIP : { "---" : DEFAULT }
 <WithinMultilineComment> SKIP : { <~[]> }
-<LastlineMultilineComment> SKIP : {"\n" : DEFAULT}
-<LastlineMultilineComment> SKIP : { <~[]> }
 SKIP : { "--" : SinglelineComment }
 <SinglelineComment> SKIP : {"\n" : DEFAULT}
 <SinglelineComment> SKIP : { <~[]> }
