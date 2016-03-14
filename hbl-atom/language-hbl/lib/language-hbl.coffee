@@ -37,7 +37,8 @@ module.exports = LanguageHbl =
       @languageHblView.clearMessages()
       hblView = @languageHblView
       spawn = require('child_process').spawn
-      child = spawn('ls', ['/'])
+      child = spawn('hblc', ['-i', '/home/vagrant/vmsport/hbl-compiler/test.hbl'])
       child.stdout.on('data', (data) -> hblView.addMessage(data.toString()) )
+# Multiple messages come in one burst so we need to split and possibly buffer.
       child.stderr.on('data', (data) -> hblView.addMessage(data.toString()) )
       child.on('close', (code) -> hblView.addMessage("Finished with exit code " + code) )
