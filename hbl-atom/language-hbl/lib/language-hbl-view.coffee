@@ -6,7 +6,7 @@ class LanguageHblView
     @messageCount = 0
     @element = document.createElement('div')
     @element.classList.add('language-hbl')
-    this.addMessages("Hey ho, let's go!\n")
+    this.addMessages("Validation messages will appear here.\n")
 
   # Returns an object that can be retrieved when package is activated
   serialize: ->
