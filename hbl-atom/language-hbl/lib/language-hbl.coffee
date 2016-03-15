@@ -1,5 +1,7 @@
 LanguageHblView = require './language-hbl-view'
 {CompositeDisposable} = require 'atom'
+child_process = require 'child_process'
+
 
 module.exports = LanguageHbl =
   languageHblView: null
@@ -34,9 +36,10 @@ module.exports = LanguageHbl =
   validate: ->
     @errorPane.show()
     @languageHblView.clearMessages()
-    hblView = @languageHblView
-    spawn = require('child_process').spawn
-    child = spawn('hblc', ['-i', '/home/vagrant/vmsport/hbl-compiler/test.hbl'])
-    child.stdout.on('data', (data) -> hblView.addMessages(data.toString()) )
-    child.stderr.on('data', (data) -> hblView.addMessages(data.toString()) )
-    child.on('close', (code) -> if code is 0 then hblView.addMessages("Success!!\n")  )
+    editor = atom.workspace.getActiveTextEditor();
+    if editor
+      childProcess = child_process.spawnSync('hblc', ['-i', '-'], { input: editor.getText() })
+      if childProcess.status == 0
+        @languageHblView.addMessages("Success!!\n")
+      else
+        @languageHblView.addMessages(String.fromCharCode.apply(null, childProcess.stderr))
