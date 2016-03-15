@@ -26,18 +26,17 @@ module.exports = LanguageHbl =
     languageHblViewState: @languageHblView.serialize()
 
   toggle: ->
-
     if @errorPane.isVisible()
       @errorPane.hide()
     else
       @errorPane.show()
 
   validate: ->
-      if not @errorPane.isVisible() then @errorPane.show()
-      @languageHblView.clearMessages()
-      hblView = @languageHblView
-      spawn = require('child_process').spawn
-      child = spawn('hblc', ['-i', '/home/vagrant/vmsport/hbl-compiler/test.hbl'])
-      child.stdout.on('data', (data) -> hblView.addMessages(data.toString()) )
-      child.stderr.on('data', (data) -> hblView.addMessages(data.toString()) )
-      child.on('close', (code) -> hblView.addMessages("Finished with exit code " + code + "\n")  )
+    @errorPane.show()
+    @languageHblView.clearMessages()
+    hblView = @languageHblView
+    spawn = require('child_process').spawn
+    child = spawn('hblc', ['-i', '/home/vagrant/vmsport/hbl-compiler/test.hbl'])
+    child.stdout.on('data', (data) -> hblView.addMessages(data.toString()) )
+    child.stderr.on('data', (data) -> hblView.addMessages(data.toString()) )
+    child.on('close', (code) -> hblView.addMessages("Finished with exit code " + code + "\n")  )
