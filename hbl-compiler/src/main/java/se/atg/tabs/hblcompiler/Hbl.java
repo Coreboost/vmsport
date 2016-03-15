@@ -104,9 +104,11 @@
           if (ind < args.length) {
             input_filename = args[ind];
             ind += 1;
-            java.io.File f = new java.io.File(input_filename);
-            if(!f.exists() || f.isDirectory()) {
-              error("Error: " + input_filename + " is not a valid input file name.");
+            if (input_filename != "-") {
+              java.io.File f = new java.io.File(input_filename);
+              if(!f.exists() || f.isDirectory()) {
+                error("Error: " + input_filename + " is not a valid input file name.");
+              }
             }
           } else {
             error("Error: The -i option must be followed by a valid file name.");
