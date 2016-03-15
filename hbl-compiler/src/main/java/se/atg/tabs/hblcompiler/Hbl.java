@@ -25,10 +25,10 @@
               error_count += 1;
               error(e.getMessage());
             }
-            if (error_count == 0 && outputStream != null) {
-              outputStream.println(node.generate().toString());
-            } else {
+            if (error_count > 0) {
               exit_code = 1;
+            } else if (outputStream != null) {
+              outputStream.println(node.generate().toString());
             }
           } catch (Exception e) {
             System.err.println(e.getMessage());
