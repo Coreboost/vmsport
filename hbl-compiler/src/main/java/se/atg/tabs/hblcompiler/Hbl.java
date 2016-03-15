@@ -104,7 +104,7 @@
           if (ind < args.length) {
             input_filename = args[ind];
             ind += 1;
-            if (input_filename != "-") {
+            if (!input_filename.equals("-")) {
               java.io.File f = new java.io.File(input_filename);
               if(!f.exists() || f.isDirectory()) {
                 error("Error: " + input_filename + " is not a valid input file name.");
