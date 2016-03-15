@@ -39,4 +39,4 @@ module.exports = LanguageHbl =
     child = spawn('hblc', ['-i', '/home/vagrant/vmsport/hbl-compiler/test.hbl'])
     child.stdout.on('data', (data) -> hblView.addMessages(data.toString()) )
     child.stderr.on('data', (data) -> hblView.addMessages(data.toString()) )
-    child.on('close', (code) -> hblView.addMessages("Finished with exit code " + code + "\n")  )
+    child.on('close', (code) -> if code is 0 then hblView.addMessages("Success!!\n")  )
