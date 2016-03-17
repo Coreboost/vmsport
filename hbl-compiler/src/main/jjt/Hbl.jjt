@@ -20,6 +20,7 @@ PARSER_BEGIN(Hbl)
     private static PrintStream errorStream = System.err;
     private static Boolean inputStream_opened = false;
     private static Boolean outputStream_opened = false;
+    public static Hbl parser = null;
 
     public static void main( String[] args ) {
       parse_options(args);
@@ -38,7 +39,11 @@ PARSER_BEGIN(Hbl)
     public static void parse() {
     try {
       SimpleNode node = null;
-      Hbl parser = new Hbl( inputStream );
+      if (parser == null) {
+        parser = new Hbl( inputStream );
+      } else {
+        parser.ReInit(inputStream);
+      }
       try {
         node = parser.Start();
       } catch (Exception e) {
