@@ -53,6 +53,25 @@ PARSER_BEGIN(Hbl)
             node = parser.Start();
           } else {
             node = parser.Preprocess();
+            /*
+            TODO:
+            Next the following needs to get done.
+            - In the first release we will only handle one level of Includes and
+              will throw an error if we find more includes. We can probably just
+              let the parser throw an error that the Include was unexpexted in
+              this case. I.e., no special handling of the error.
+            - Update the Include() rule in the grammar below so that it adds
+              FileNodes for all found includes.
+            - Create a temp file and write out the complete contents to this file.
+            - Now invoke the parser again on the tempfile.
+            - Modify ParserException so that we replace the line,column with the
+              original filename, line and column by using the IncludeManager.
+            - Should also refactor everything so that we don't have so much
+              Java code in this jjt-file, clean up the code also.
+            - Should also add to the Jira backlog that some docs for the parser
+              and the Atom customizations so that it is reasonable to modify/extend
+              the grammar later on.
+            */
           }
         } catch (Exception e) {
           error_count += 1;
@@ -244,6 +263,14 @@ SimpleNode Preprocess() : {}
    { return jjtThis; }
 }
 
+void Include() :
+{
+  Token path;
+}
+{
+  <INCLUDE> path=<STRING_LITERAL>{jjtThis.setPath(path.image.substring(1, path.image.length()-1));}
+}
+
 void AnyNonIncludeToken() : {}
 {
   <PERIOD>|
@@ -339,14 +366,6 @@ ASTName Name() :
 }
 {
   (name=<IDENTIFIER>{jjtThis.setName(name.image);return jjtThis;})|(name=<STRING_LITERAL>{jjtThis.setName(name.image.substring(1, name.image.length()-1));return jjtThis;})
-}
-
-void Include() :
-{
-  Token path;
-}
-{
-  <INCLUDE> path=<STRING_LITERAL>{jjtThis.setPath(path.image.substring(1, path.image.length()-1));}
 }
 
 void AccountSpec() :

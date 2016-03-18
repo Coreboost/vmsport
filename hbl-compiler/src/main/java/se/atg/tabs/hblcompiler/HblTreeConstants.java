@@ -4,11 +4,11 @@ package se.atg.tabs.hblcompiler;
 public interface HblTreeConstants
 {
   public int JJTPREPROCESS = 0;
-  public int JJTANYNONINCLUDETOKEN = 1;
-  public int JJTSTART = 2;
-  public int JJTHANDLEPARSEEXCEPTION = 3;
-  public int JJTNAME = 4;
-  public int JJTINCLUDE = 5;
+  public int JJTINCLUDE = 1;
+  public int JJTANYNONINCLUDETOKEN = 2;
+  public int JJTSTART = 3;
+  public int JJTHANDLEPARSEEXCEPTION = 4;
+  public int JJTNAME = 5;
   public int JJTACCOUNTSPEC = 6;
   public int JJTACCOUNTS = 7;
   public int JJTHORSESPEC = 8;
@@ -38,11 +38,11 @@ public interface HblTreeConstants
 
   public String[] jjtNodeName = {
     "Preprocess",
+    "Include",
     "AnyNonIncludeToken",
     "Start",
     "HandleParseException",
     "Name",
-    "Include",
     "AccountSpec",
     "Accounts",
     "HorseSpec",
@@ -70,4 +70,4 @@ public interface HblTreeConstants
     "Multiplier",
   };
 }
-/* JavaCC - OriginalChecksum=235f73d80a9ba19fef5484089a9dd432 (do not edit this line) */
+/* JavaCC - OriginalChecksum=03a1bd302646b70ad348168f2d927af8 (do not edit this line) */

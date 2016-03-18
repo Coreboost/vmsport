@@ -48,6 +48,25 @@
             node = parser.Start();
           } else {
             node = parser.Preprocess();
+            /*
+            TODO:
+            Next the following needs to get done.
+            - In the first release we will only handle one level of Includes and
+              will throw an error if we find more includes. We can probably just
+              let the parser throw an error that the Include was unexpexted in
+              this case. I.e., no special handling of the error.
+            - Update the Include() rule in the grammar below so that it adds
+              FileNodes for all found includes.
+            - Create a temp file and write out the complete contents to this file.
+            - Now invoke the parser again on the tempfile.
+            - Modify ParserException so that we replace the line,column with the
+              original filename, line and column by using the IncludeManager.
+            - Should also refactor everything so that we don't have so much
+              Java code in this jjt-file, clean up the code also.
+            - Should also add to the Jira backlog that some docs for the parser
+              and the Atom customizations so that it is reasonable to modify/extend
+              the grammar later on.
+            */
           }
         } catch (Exception e) {
           error_count += 1;
@@ -314,6 +333,23 @@ if (jjtc000) {
      }
     }
     throw new Error("Missing return statement in function");
+  }
+
+  static final public void Include() throws ParseException {/*@bgen(jjtree) Include */
+  ASTInclude jjtn000 = new ASTInclude(JJTINCLUDE);
+  boolean jjtc000 = true;
+  jjtree.openNodeScope(jjtn000);Token path;
+    try {
+      jj_consume_token(INCLUDE);
+      path = jj_consume_token(STRING_LITERAL);
+jjtree.closeNodeScope(jjtn000, true);
+                                   jjtc000 = false;
+jjtn000.setPath(path.image.substring(1, path.image.length()-1));
+    } finally {
+if (jjtc000) {
+      jjtree.closeNodeScope(jjtn000, true);
+    }
+    }
   }
 
   static final public void AnyNonIncludeToken() throws ParseException {/*@bgen(jjtree) AnyNonIncludeToken */
@@ -657,23 +693,6 @@ if (jjtc000) {
     }
     }
     throw new Error("Missing return statement in function");
-  }
-
-  static final public void Include() throws ParseException {/*@bgen(jjtree) Include */
-  ASTInclude jjtn000 = new ASTInclude(JJTINCLUDE);
-  boolean jjtc000 = true;
-  jjtree.openNodeScope(jjtn000);Token path;
-    try {
-      jj_consume_token(INCLUDE);
-      path = jj_consume_token(STRING_LITERAL);
-jjtree.closeNodeScope(jjtn000, true);
-                                   jjtc000 = false;
-jjtn000.setPath(path.image.substring(1, path.image.length()-1));
-    } finally {
-if (jjtc000) {
-      jjtree.closeNodeScope(jjtn000, true);
-    }
-    }
   }
 
   static final public void AccountSpec() throws ParseException {/*@bgen(jjtree) AccountSpec */
