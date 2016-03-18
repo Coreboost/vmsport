@@ -91,7 +91,7 @@ public class ParseException extends Exception {
                            int[][] expectedTokenSequences,
                            String[] tokenImage) {
   if (semanticError == null) {
-    String ingress =   "[" + currentToken.next.beginLine + ", " + currentToken.next.beginColumn + "]" + " error: ";
+    String ingress =   "[" + currentToken.next.beginLine + ", " + currentToken.next.beginColumn + "]" + " Error: ";
     String eol = System.getProperty("line.separator", "\n");
     String expected = "expected ";
     for (int i = 0; i < expectedTokenSequences.length; i++) {

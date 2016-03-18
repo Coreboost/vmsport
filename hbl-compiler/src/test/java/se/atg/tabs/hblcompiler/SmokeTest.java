@@ -5,11 +5,11 @@ import org.testng.annotations.Test;
 
 import java.io.FileNotFoundException;
 
-public class AccountTest {
+public class SmokeTest {
 
 	@Test()
-	public void testAccountsSuccess() throws FileNotFoundException {
-		String errors = Helpers.parseFileReturnErrors("Accounts.hbl");
+	public void testHorsesSuccess() throws FileNotFoundException {
+		String errors = Helpers.parseFileReturnErrors("SmokeTest.hbl");
 		Assert.assertEquals(errors, "");
 	}
 

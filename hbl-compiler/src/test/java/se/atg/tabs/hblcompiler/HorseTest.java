@@ -10,7 +10,7 @@ public class HorseTest {
 	@Test()
 	public void testHorsesSuccess() throws FileNotFoundException {
 		String errors = Helpers.parseFileReturnErrors("Horses.hbl");
-		Assert.assertEquals(errors.length(), 0);
+		Assert.assertEquals(errors, "");
 	}
 
 }
