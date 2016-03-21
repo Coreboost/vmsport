@@ -1,6 +1,8 @@
 package se.atg.tabs.hblcompiler;
 
 import java.util.ArrayList;
+import java.io.File;
+
 
 public class FileNode {
   private String fileName;
@@ -16,19 +18,30 @@ public class FileNode {
     return this.fileName;
   }
 
-    public void setLength(Integer l) {
-      this.length = l;
-    }
+  public void addIncludedFileAfterLine(String fileName, Integer lineNumber) {
+    FileNode includedFile = new FileNode(fileName);
+    includedFile.setIncludedAfterLine(lineNumber);
+    includes.add(includedFile);
+  }
 
-    public Integer getLength() {
-      return this.length;
-    }
+  public ArrayList<FileNode> getIncludes() {
+    return includes;
+  }
 
-    public void setIncludedAfterLine(Integer l) {
-      this.includedAfterLine = l;
-    }
+  public void setLength(Integer l) {
+    this.length = l;
+  }
 
-    public Integer getIncludedAfterLine() {
-      return this.includedAfterLine;
-    }
+  public Integer getLength() {
+    return this.length;
+  }
+
+  public void setIncludedAfterLine(Integer l) {
+    this.includedAfterLine = l;
+  }
+
+  public Integer getIncludedAfterLine() {
+    return this.includedAfterLine;
+  }
+
 }

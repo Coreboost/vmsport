@@ -27,7 +27,7 @@ PARSER_BEGIN(Hbl)
       if (error_count == 0) {
         open_files();
         if (exit_code == 0) {
-          includeManager.setRoot(new FileNode(input_filename));
+          includeManager.setRoot(input_filename, inputStream);
           parse(true);
           if (exit_code == 0) {
             parse(false);
@@ -56,6 +56,7 @@ PARSER_BEGIN(Hbl)
             /*
             TODO:
             Next the following needs to get done.
+            - Write some tests for the include stuff
             - In the first release we will only handle one level of Includes and
               will throw an error if we find more includes. We can probably just
               let the parser throw an error that the Include was unexpexted in
@@ -268,7 +269,8 @@ void Include() :
   Token path;
 }
 {
-  <INCLUDE> path=<STRING_LITERAL>{jjtThis.setPath(path.image.substring(1, path.image.length()-1));}
+  <INCLUDE> path=<STRING_LITERAL>
+  {IncludeManager.getInstance().getRoot().addIncludedFileAfterLine(path.image.substring(1, path.image.length()-1), path.endLine);}
 }
 
 void AnyNonIncludeToken() : {}

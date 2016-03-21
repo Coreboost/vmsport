@@ -343,8 +343,8 @@ if (jjtc000) {
       jj_consume_token(INCLUDE);
       path = jj_consume_token(STRING_LITERAL);
 jjtree.closeNodeScope(jjtn000, true);
-                                   jjtc000 = false;
-jjtn000.setPath(path.image.substring(1, path.image.length()-1));
+    jjtc000 = false;
+IncludeManager.getInstance().getRoot().addIncludedFileAfterLine(path.image.substring(1, path.image.length()-1), path.endLine);
     } finally {
 if (jjtc000) {
       jjtree.closeNodeScope(jjtn000, true);
