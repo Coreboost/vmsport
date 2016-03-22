@@ -7,7 +7,7 @@ import java.io.File;
 public class FileNode {
   private String fileName;
   private Integer length;
-  private Integer includedAfterLine;
+  private Integer includedInPlaceOfLine;
   private ArrayList<FileNode> includes = new ArrayList<FileNode>();
 
   public FileNode(String fileName) {
@@ -20,7 +20,7 @@ public class FileNode {
 
   public void addIncludedFileInPlaceOfLine(String fileName, Integer lineNumber) {
     FileNode includedFile = new FileNode(fileName);
-    includedFile.setIncludedAfterLine(lineNumber);
+    includedFile.setIncludedInPlaceOfLine(lineNumber);
     includes.add(includedFile);
   }
 
@@ -36,12 +36,12 @@ public class FileNode {
     return this.length;
   }
 
-  public void setIncludedAfterLine(Integer l) {
-    this.includedAfterLine = l;
+  public void setIncludedInPlaceOfLine(Integer l) {
+    this.includedInPlaceOfLine = l;
   }
 
-  public Integer getIncludedAfterLine() {
-    return this.includedAfterLine;
+  public Integer getIncludedInPlaceOfLine() {
+    return this.includedInPlaceOfLine;
   }
 
 }

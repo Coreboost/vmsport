@@ -59,13 +59,14 @@ public class IncludeManager {
       Integer ind = 0;
       Integer linesReadFromRoot = 0;
       while (ind < includes.size()) {
-        while (linesReadFromRoot < includes.get(ind).getIncludedAfterLine()) {
+        while (linesReadFromRoot < includes.get(ind).getIncludedInPlaceOfLine()) {
           String rootLine = rootReader.readLine();
           pStream.println(rootLine);
           linesReadFromRoot += 1;
         }
         // Skip past the line that should be replaced
         rootReader.readLine();
+        linesReadFromRoot += 1;
 
         // Insert the contents to be included
         BufferedReader includeReader = new BufferedReader(new FileReader(new File(includes.get(ind).getFileName())));

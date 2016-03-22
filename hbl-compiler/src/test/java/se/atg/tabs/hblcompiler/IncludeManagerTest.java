@@ -10,7 +10,7 @@ import java.io.InputStream;
 import java.util.Scanner;
 
 
-public class IncludeTest {
+public class IncludeManagerTest {
 
 	private String getExpandedContent() throws FileNotFoundException, IOException {
     InputStream inStream = IncludeManager.getInstance().getExpandedStream();
@@ -39,5 +39,22 @@ public class IncludeTest {
 		IncludeManager.getInstance().getRoot().addIncludedFileInPlaceOfLine("Included.hbl", 1);
 		String expanded = getExpandedContent();
     Assert.assertEquals(expanded.trim(), "First Line\nIncluded Line");
+	}
+
+	@Test()
+	public void testIncludeMiddle() throws FileNotFoundException, IOException {
+		IncludeManager.getInstance().setRoot("IncludeMiddle.hbl", new FileInputStream("IncludeMiddle.hbl"));
+		IncludeManager.getInstance().getRoot().addIncludedFileInPlaceOfLine("Included.hbl", 1);
+		String expanded = getExpandedContent();
+    Assert.assertEquals(expanded.trim(), "First Line\nIncluded Line\nThird Line");
+	}
+
+	@Test()
+	public void testIncludeMultiple() throws FileNotFoundException, IOException {
+		IncludeManager.getInstance().setRoot("IncludeMultiple.hbl", new FileInputStream("IncludeMultiple.hbl"));
+		IncludeManager.getInstance().getRoot().addIncludedFileInPlaceOfLine("Included.hbl", 1);
+		IncludeManager.getInstance().getRoot().addIncludedFileInPlaceOfLine("AnotherIncluded.hbl", 2);
+		String expanded = getExpandedContent();
+    Assert.assertEquals(expanded.trim(), "First Line\nIncluded Line\nAnother Included Line\nFourth Line");
 	}
 }
