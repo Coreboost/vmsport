@@ -32,4 +32,12 @@ public class IncludeTest {
 		String expanded = getExpandedContent();
     Assert.assertEquals(expanded.trim(), "Included Line\nSecond Line");
 	}
+
+	@Test()
+	public void testIncludeLast() throws FileNotFoundException, IOException {
+		IncludeManager.getInstance().setRoot("IncludeLast.hbl", new FileInputStream("IncludeLast.hbl"));
+		IncludeManager.getInstance().getRoot().addIncludedFileInPlaceOfLine("Included.hbl", 1);
+		String expanded = getExpandedContent();
+    Assert.assertEquals(expanded.trim(), "First Line\nIncluded Line");
+	}
 }
