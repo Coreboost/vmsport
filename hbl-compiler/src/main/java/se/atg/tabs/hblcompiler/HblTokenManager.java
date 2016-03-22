@@ -3,6 +3,8 @@
 package se.atg.tabs.hblcompiler;
 import java.io.InputStream;
 import java.io.PrintStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 
 /** Token Manager. */
 @SuppressWarnings("unused")public class HblTokenManager implements HblConstants {

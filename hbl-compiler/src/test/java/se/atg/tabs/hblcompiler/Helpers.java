@@ -1,5 +1,6 @@
 package se.atg.tabs.hblcompiler;
 
+import java.io.IOException;
 import java.io.FileNotFoundException;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
@@ -8,7 +9,7 @@ import java.io.File;
 
 public class Helpers {
 
-	static public String parseFileReturnErrors(String fileName) throws FileNotFoundException {
+	static public String parseFileReturnErrors(String fileName) throws FileNotFoundException, IOException {
 		ByteArrayOutputStream baoStream = new ByteArrayOutputStream();
 		PrintStream errorStream = new PrintStream(baoStream);
 		FileInputStream inStream = new FileInputStream(new File(fileName));
