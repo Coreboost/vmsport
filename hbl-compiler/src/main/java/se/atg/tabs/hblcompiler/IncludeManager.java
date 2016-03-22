@@ -60,9 +60,14 @@ public class IncludeManager {
       Integer linesReadFromRoot = 0;
       while (ind < includes.size()) {
         while (linesReadFromRoot < includes.get(ind).getIncludedAfterLine()) {
-          pStream.println(rootReader.readLine());
+          String rootLine = rootReader.readLine();
+          pStream.println(rootLine);
           linesReadFromRoot += 1;
         }
+        // Skip past the line that should be replaced
+        rootReader.readLine();
+
+        // Insert the contents to be included
         BufferedReader includeReader = new BufferedReader(new FileReader(new File(includes.get(ind).getFileName())));
         String includedLine = includeReader.readLine();
         while (includedLine != null) {
@@ -74,6 +79,7 @@ public class IncludeManager {
       String trailingRootLine = rootReader.readLine();
       while (trailingRootLine != null) {
         pStream.println(trailingRootLine);
+        trailingRootLine = rootReader.readLine();
       }
       pStream.close();
       return new FileInputStream(expandedFile);

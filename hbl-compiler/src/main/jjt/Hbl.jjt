@@ -282,7 +282,7 @@ void Include() :
 }
 {
   <INCLUDE> path=<STRING_LITERAL>
-  {IncludeManager.getInstance().getRoot().addIncludedFileAfterLine(path.image.substring(1, path.image.length()-1), path.endLine);}
+  {IncludeManager.getInstance().getRoot().addIncludedFileInPlaceOfLine(path.image.substring(1, path.image.length()-1), path.endLine);}
 }
 
 void AnyNonIncludeToken() : {}

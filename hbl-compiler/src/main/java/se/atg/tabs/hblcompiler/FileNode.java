@@ -18,7 +18,7 @@ public class FileNode {
     return this.fileName;
   }
 
-  public void addIncludedFileAfterLine(String fileName, Integer lineNumber) {
+  public void addIncludedFileInPlaceOfLine(String fileName, Integer lineNumber) {
     FileNode includedFile = new FileNode(fileName);
     includedFile.setIncludedAfterLine(lineNumber);
     includes.add(includedFile);
