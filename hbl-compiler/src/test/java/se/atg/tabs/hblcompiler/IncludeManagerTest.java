@@ -28,7 +28,7 @@ public class IncludeManagerTest {
 	@Test()
 	public void testIncludeFirst() throws FileNotFoundException, IOException {
 		IncludeManager.getInstance().setRoot("IncludeFirst.hbl", new FileInputStream("IncludeFirst.hbl"));
-		IncludeManager.getInstance().getRoot().addIncludedFileInPlaceOfLine("Included.hbl", 0);
+		IncludeManager.getInstance().getRoot().addIncludedFileInPlaceOfLine("Included.hbl", 1);
 		String expanded = getExpandedContent();
     Assert.assertEquals(expanded.trim(), "Included Line\nSecond Line");
 	}
@@ -36,7 +36,7 @@ public class IncludeManagerTest {
 	@Test()
 	public void testIncludeLast() throws FileNotFoundException, IOException {
 		IncludeManager.getInstance().setRoot("IncludeLast.hbl", new FileInputStream("IncludeLast.hbl"));
-		IncludeManager.getInstance().getRoot().addIncludedFileInPlaceOfLine("Included.hbl", 1);
+		IncludeManager.getInstance().getRoot().addIncludedFileInPlaceOfLine("Included.hbl", 2);
 		String expanded = getExpandedContent();
     Assert.assertEquals(expanded.trim(), "First Line\nIncluded Line");
 	}
@@ -44,7 +44,7 @@ public class IncludeManagerTest {
 	@Test()
 	public void testIncludeMiddle() throws FileNotFoundException, IOException {
 		IncludeManager.getInstance().setRoot("IncludeMiddle.hbl", new FileInputStream("IncludeMiddle.hbl"));
-		IncludeManager.getInstance().getRoot().addIncludedFileInPlaceOfLine("Included.hbl", 1);
+		IncludeManager.getInstance().getRoot().addIncludedFileInPlaceOfLine("Included.hbl", 2);
 		String expanded = getExpandedContent();
     Assert.assertEquals(expanded.trim(), "First Line\nIncluded Line\nThird Line");
 	}
@@ -52,9 +52,10 @@ public class IncludeManagerTest {
 	@Test()
 	public void testIncludeMultiple() throws FileNotFoundException, IOException {
 		IncludeManager.getInstance().setRoot("IncludeMultiple.hbl", new FileInputStream("IncludeMultiple.hbl"));
-		IncludeManager.getInstance().getRoot().addIncludedFileInPlaceOfLine("Included.hbl", 1);
-		IncludeManager.getInstance().getRoot().addIncludedFileInPlaceOfLine("AnotherIncluded.hbl", 2);
+		IncludeManager.getInstance().getRoot().addIncludedFileInPlaceOfLine("Included.hbl", 2);
+		IncludeManager.getInstance().getRoot().addIncludedFileInPlaceOfLine("AnotherIncluded.hbl", 3);
 		String expanded = getExpandedContent();
     Assert.assertEquals(expanded.trim(), "First Line\nIncluded Line\nAnother Included Line\nFourth Line");
 	}
+
 }

@@ -57,16 +57,16 @@ public class IncludeManager {
       File expandedFile = File.createTempFile("__hblc__", ".hbl");
       PrintStream pStream = new PrintStream(expandedFile);
       Integer ind = 0;
-      Integer linesReadFromRoot = 0;
+      Integer nextLineFromRoot = 1;
       while (ind < includes.size()) {
-        while (linesReadFromRoot < includes.get(ind).getIncludedInPlaceOfLine()) {
+        while (nextLineFromRoot < includes.get(ind).getIncludedInPlaceOfLine()) {
           String rootLine = rootReader.readLine();
           pStream.println(rootLine);
-          linesReadFromRoot += 1;
+          nextLineFromRoot += 1;
         }
         // Skip past the line that should be replaced
         rootReader.readLine();
-        linesReadFromRoot += 1;
+        nextLineFromRoot += 1;
 
         // Insert the contents to be included
         BufferedReader includeReader = new BufferedReader(new FileReader(new File(includes.get(ind).getFileName())));
