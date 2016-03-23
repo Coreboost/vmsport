@@ -21,10 +21,10 @@ Vagrant.configure(2) do |config|
   config.proxy.no_proxy = "localhost,127.0.0.1,*.atg.se"
 
   config.vm.provision "shell" do |s|
-    s.env = {'HTTP_PROXY' => ENV['http_proxy'], 'HTTPS_PROXY' => ENV['https_proxy']}
+    s.env = {'HTTP_PROXY' => ENV['http_proxy'], 'HTTPS_PROXY' => ENV['https_proxy'],  'MVN_PROXY_HOST' => ENV['proxy_host'], 'MVN_PROXY_PORT' => ENV['proxy_port']}
     s.inline = <<-SHELL
-    echo $HTTP_PROXY
-    echo $HTTPS_PROXY
+#    echo $HTTP_PROXY
+#    echo $HTTPS_PROXY
     apt-get update
     apt-get upgrade
     apt-get install -y curl
@@ -45,15 +45,29 @@ Vagrant.configure(2) do |config|
     export JAVA_HOME
     curl http://apache.mirrors.spacedump.net/maven/maven-3/3.3.9/binaries/apache-maven-3.3.9-bin.tar.gz | tar -C /opt/java -xzf -
     sed -i '$a export PATH=$PATH:/opt/java/apache-maven-3.3.9/bin' /etc/profile
-    curl https://java.net/downloads/javacc/javacc-6.0.zip > javacc.zip
-    unzip javacc.zip
+    echo "<settings><proxies><proxy><active>true</active><protocol>http</protocol><host>"$MVN_PROXY_HOST"</host><port>"$MVN_PROXY_PORT"</port></proxy></proxies></settings>" > ~/.m2/settings.xml
+    <settings>
+      <proxies>
+        <proxy>
+          <active>true</active>
+          <protocol>http</protocol>
+          <host>10.159.59.39</host>
+          <port>7171</port>
+        </proxy>
+      </proxies>
+    </settings>
+
+
+
+#    curl https://java.net/downloads/javacc/javacc-6.0.zip > javacc.zip
+#    unzip javacc.zip
     curl -sL https://deb.nodesource.com/setup_4.x | bash -
     apt-get install -y nodejs
     npm config set proxy $HTTP_PROXY
     npm config set https-proxy $HTTPS_PROXY
     npm config set strict-ssl false
     npm config set registry "http://registry.npmjs.org/"
-     npm config get proxy
+    npm config get proxy
     npm config get https-proxy
     apt-get install -y build-essential
 #    npm install -g gulp
@@ -65,7 +79,7 @@ Vagrant.configure(2) do |config|
     pip install flask-openid
     pip install python-socketio
     pip install 'git+https://github.com/mk-fg/yapps.git#egg=yapps'
-    curl --fail --silent --show-error https://storage.googleapis.com/golang/go1.5.2.linux-amd64.tar.gz | tar -C /usr/local -xzf -
+    curl --fail --silent --show-error https://storage.googleapis.com/golang/go1.6.linux-amd64.tar.gz | tar -C /usr/local -xzf -
     sed -i '$a export PATH=$PATH:/usr/local/go/bin' /etc/profile
     apt-get install -y libtool
     apt-get install -y build-essential
@@ -83,7 +97,7 @@ Vagrant.configure(2) do |config|
 #    make
 #    make install
 #    cd ..
-    curl --fail --silent --show-error -o atom.deb https://atom-installer.github.com/v1.3.2/atom-amd64.deb
+    curl --fail --silent --show-error -o atom.deb https://atom-installer.github.com/v1.6.0/atom-amd64.deb
     dpkg -i atom.deb
   SHELL
 end
